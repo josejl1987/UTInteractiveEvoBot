@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+  <appender name="ConsoleAppender" class="org.apache.log4j.ConsoleAppender">
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %p - %m%n"/>
+    </layout>
+   <filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Updating time" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Signalling time" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Test value" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Cond value" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="matchesCondition" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Will atempt to fire" />
+	</filter>
+
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Could not instantiate" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="WaitLTime" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Attempting resolution of" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Attempting resolution of" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Instantiating" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Enqueueing Output" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Adding [ChunkTyp" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Adding org.jactr.core.production.action." />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="adding slot" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Setting chunk" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="is an owner" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="wants time to be" />
+	</filter>
+  </appender>
+    <appender name="appender" class="org.apache.log4j.FileAppender">
+    <param name="File" value="C:/devel/pojactr.log"/>
+    <param name="Append" value="false"/>
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%d [%t] %p - %m%n"/>
+    </layout>
+<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Updating time" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Signalling time" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Test value" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Cond value" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="matchesCondition" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Will atempt to fire" />
+	</filter>
+
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Could not instantiate" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="WaitLTime" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Attempting resolution of" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Attempting resolution of" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Instantiating" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Enqueueing Output" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Adding [ChunkTyp" />
+	</filter>
+ 	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Adding org.jactr.core.production.action." />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="adding slot" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="Setting chunk" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="is an owner" />
+	</filter>
+	<filter class="org.apache.log4j.varia.StringMatchFilter">
+			<param name="acceptOnMatch" value="false" />
+			<param name="stringToMatch" value="wants time to be" />
+	</filter>
+
+  </appender>
+
+  <category name="com.springinaction.chapter01">
+    <priority value="debug"/>
+  </category><root><priority value="debug"/>
+  <!--  <appender-ref ref="ConsoleAppender"/> -->
+    <appender-ref ref="appender"/>
+  </root>
+</log4j:configuration>

@@ -1,0 +1,5 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="../capturetheflag/UT2004CaptureTheFlagResult.html" title="cz.cuni.amis.pogamut.ut2004.tournament.capturetheflag.UT2004CaptureTheFlagResult" alt="" coords="15,113,209,138"/>
+<area shape="rect" id="node2_1" href="../deathmatch/UT2004DeathMatchResult.html" title="cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatchResult" alt="" coords="254,113,426,138"/>
+<area shape="rect" id="node3_2" href="./UT2004MatchResult.html" title="cz.cuni.amis.pogamut.ut2004.tournament.match.UT2004MatchResult" alt="" coords="157,17,294,42"/>
+</map>

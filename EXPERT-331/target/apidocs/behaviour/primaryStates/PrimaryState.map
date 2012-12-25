@@ -1,0 +1,8 @@
+<map id="G" name="G">
+<area shape="rect" id="node1_0" href="./Retreat.html" title="behaviour.primaryStates.Retreat" alt="" coords="15,113,78,138"/>
+<area shape="rect" id="node2_1" href="./PrimaryState.html" title="behaviour.primaryStates.PrimaryState" alt="" coords="205,17,299,42"/>
+<area shape="rect" id="node3_2" href="./Hunt.html" title="behaviour.primaryStates.Hunt" alt="" coords="125,113,173,138"/>
+<area shape="rect" id="node4_3" href="./Greedy.html" title="behaviour.primaryStates.Greedy" alt="" coords="221,113,283,138"/>
+<area shape="rect" id="node5_4" href="./Camp.html" title="behaviour.primaryStates.Camp" alt="" coords="329,113,383,138"/>
+<area shape="rect" id="node6_5" href="./Attack.html" title="behaviour.primaryStates.Attack" alt="" coords="429,113,488,138"/>
+</map>

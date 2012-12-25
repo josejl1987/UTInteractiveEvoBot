@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<root>
+  
+    <Individual>
+        <type>
+            <name>IndividualV1</name>
+        </type>
+        <attributes>
+            <attribute>
+                <name>Posición&#160;</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Generación</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Victorias</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Derrotas</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Daño recibido</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Daño ocasionado</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Nº de super-escudos</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Nº de escudos</name>
+                <group></group>
+            </attribute>
+                        <attribute>
+                <name>Tiempo shock</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Tiempo sniper</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Actual</name>
+                <group></group>
+            </attribute>
+            <chromosomes>
+                <chromosome>
+                    <name>Distancia corta</name>
+                    <group>Distancia</group>
+                </chromosome>
+                <chromosome>
+                    <name>Distancia media</name>
+                    <group>Distancia</group>
+                </chromosome>
+                <chromosome>
+                    <name>Distancia larga</name>
+                    <group>Distancia</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Shield Gun</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Assault Rifle</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Link Gun</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+
+
+                <chromosome>
+                    <name>Prioridad Bio Rifle </name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Minigun</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Rocket Launcher</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Shock Rifle </name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad Lightning Gun</name>
+                    <group>Prioridad armas</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Umbral salud defensivo</name>
+                    <group>Salud</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Umbral salud neutro</name>
+                    <group>Salud</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Riesgo 1</name>
+                    <group>Riesgo</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Riesgo 1</name>
+                    <group>Riesgo</group>
+                </chromosome>
+                <chromosome>
+                    <name>Riesgo 2</name>
+                    <group>Riesgo</group>
+                </chromosome>
+                <chromosome>
+                    <name>Riesgo 3</name>
+                    <group>Riesgo</group>
+                </chromosome>
+                <chromosome>
+                    <name>Riesgo 4</name>
+                    <group>Riesgo</group>
+                </chromosome>
+                <chromosome>
+                    <name>Riesgo 5</name>
+                    <group>Riesgo</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Tiempo huida</name>
+                    <group>Tiempo</group>
+                </chromosome>
+
+
+                <chromosome>
+                    <name>Prioridad recogida Superescudo</name>
+                    <group>Items</group>
+                </chromosome>
+
+
+                <chromosome>
+                    <name>Prioridad recogida escudo</name>
+                    <group>Items</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad recogida Lightning Gun</name>
+                    <group>Items</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad recogida Shock Rifle</name>
+                    <group>Items</group>
+                </chromosome>
+
+
+                <chromosome>
+                    <name>Prioridad recogida Flak/Rocket</name>
+                    <group>Items</group>
+                </chromosome>
+
+                <chromosome>
+                    <name>Prioridad recogida Minigun</name>
+                    <group>Items</group>
+                </chromosome>
+
+
+            </chromosomes>
+        </attributes>
+    </Individual>
+</root>
