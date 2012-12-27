@@ -390,7 +390,6 @@ public class EvolutionMain {
                         }
                     }
                 }
-
                 try {
                     Thread.sleep(500);
 
@@ -417,9 +416,9 @@ public class EvolutionMain {
 
             LogCategory log = new LogCategory("DeathMatch1v1");
             UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-//            log.setLevel(Level.ALL);
-//                log.addConsoleHandler();
-//            match.setLog(log);
+            log.setLevel(Level.ALL);
+            log.addConsoleHandler();
+            match.setLog(log);
 
             // GAME CONFIGURATION
             match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);
@@ -464,7 +463,7 @@ public class EvolutionMain {
     public void initMemoria() {
 
         String botpath = botsGUIMainWindow.bot1PathField.getText();
-        String botfolder = botpath.substring(0, botpath.lastIndexOf("\\") + 1);
+        String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
         this.getServer().setMemoria(this.getMem());
         this.getServer().updateRemainingList(true);

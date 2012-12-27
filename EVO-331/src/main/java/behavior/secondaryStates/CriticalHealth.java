@@ -14,13 +14,7 @@
 
 package behavior.secondaryStates;
 
-import org.apache.log4j.Logger;
-
 import behavior.primaryStates.PrimaryState;
-import knowledge.Memoria;
-import exceptions.SubStatusException;
-import utilities.Arithmetic;
-
 import cz.cuni.amis.pogamut.base.agent.navigation.IPathFuture;
 import cz.cuni.amis.pogamut.base.agent.navigation.IPathPlanner;
 import cz.cuni.amis.pogamut.base.communication.command.IAct;
@@ -38,8 +32,11 @@ import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.SetCrouch;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.AutoTraceRay;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Item;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
-
+import exceptions.SubStatusException;
 import java.util.Set;
+import knowledge.Memoria;
+import org.apache.log4j.Logger;
+import utilities.Arithmetic;
 
 
 /**

@@ -128,7 +128,7 @@ public class T800 extends UT2004BotModuleController {
     /**
      * Genetic algorithm being used
      */
-    private GeneticAlg geneticAlg;
+
     /**
      * Enemy's information (it is null when we are not seeing the enemy)
      */

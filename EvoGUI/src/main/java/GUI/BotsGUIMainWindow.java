@@ -5,17 +5,6 @@
 package GUI;
 
 import evolutionaryComputation.*;
-import knowledge.Memoria;
-import net.miginfocom.swing.MigLayout;
-import org.apache.log4j.Logger;
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
-import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
-
-import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,6 +13,16 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import knowledge.Memoria;
+import net.miginfocom.swing.MigLayout;
+import org.apache.log4j.Logger;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 
 /**
  * @author Jose
@@ -39,13 +38,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private void initComboBox() {
         SubClassFinder finder = new SubClassFinder();
 
-        Vector<Class<?>> v1 = finder.findSubclasses(CrossoverType.class
-                .getName());
-        Vector<Class<?>> v3 = finder.findSubclasses(CrossoverType.class
-                .getName());
 
-        Vector<Class<?>> v2 = finder.findSubclasses(CrossoverType.class
-                .getName());
 
 
         Set<Class<?>> v4 = new HashSet<Class<?>>();
