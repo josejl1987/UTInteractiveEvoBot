@@ -16,7 +16,6 @@ package evolutionaryComputation;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
-import java.util.Random;
 import knowledge.Memoria;
 import synchro.WorkQueueClient;
 import utilities.Arithmetic;
@@ -127,7 +126,8 @@ public class ExtremeElitism extends GeneticAlg {
      * Select the best Individuals for the next population, mate them and mutate
      * them
      */
-    @Deprecated
+    @Override
+	@Deprecated
     public void selection() {
         if (logger.isDebugEnabled()) {
             logger.debug("selection() - start"); //$NON-NLS-1$
@@ -287,7 +287,8 @@ public class ExtremeElitism extends GeneticAlg {
      *
      * @param memory Data Base controller.
      */
-    public void store(Memoria memory) {
+    @Override
+	public void store(Memoria memory) {
         if (logger.isDebugEnabled()) {
             logger.debug("store(Memoria) - start"); //$NON-NLS-1$
         }

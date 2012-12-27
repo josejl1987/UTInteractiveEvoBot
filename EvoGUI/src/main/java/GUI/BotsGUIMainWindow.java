@@ -4,49 +4,28 @@
  */
 package GUI;
 
+import evolutionaryComputation.*;
+import knowledge.Memoria;
+import net.miginfocom.swing.MigLayout;
 import org.apache.log4j.Logger;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
 
-import evolutionaryComputation.CrossoverType;
-import evolutionaryComputation.Individual;
-import evolutionaryComputation.IndividualStats;
-import evolutionaryComputation.IndividualV1;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Vector;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.table.DefaultTableModel;
-import knowledge.Memoria;
-import org.uncommons.watchmaker.framework.SelectionStrategy;
-import net.miginfocom.swing.MigLayout;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
-import javax.swing.JScrollPane;
-import javax.swing.JPanel;
-import javax.swing.JComboBox;
-import javax.swing.JSeparator;
-import javax.swing.SwingWorker;
-
-import java.awt.Color;
-import javax.swing.JLabel;
-import javax.swing.JTextPane;
-import javax.swing.JTextField;
-import java.awt.Dimension;
-import java.util.HashSet;
-import java.util.Set;
-import javax.swing.JTable;
-import javax.swing.DefaultComboBoxModel;
 
 /**
- *
  * @author Jose
  */
 public class BotsGUIMainWindow extends javax.swing.JFrame {
@@ -60,27 +39,30 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private void initComboBox() {
         SubClassFinder finder = new SubClassFinder();
 
-        Vector<Class<?>> v = finder.findSubclasses(SelectionStrategy.class
+        Vector<Class<?>> v1 = finder.findSubclasses(CrossoverType.class
                 .getName());
-        Vector<Class<?>> v2 = finder.findSubclasses(CrossoverType.class
-                .getName());
-        Vector<Class<?>> v3 = finder.findSubclasses(IndividualStats.class
+        Vector<Class<?>> v3 = finder.findSubclasses(CrossoverType.class
                 .getName());
 
-        Set<Class<?>> v4 = new HashSet<Class<?>>(v);
+        Vector<Class<?>> v2 = finder.findSubclasses(CrossoverType.class
+                .getName());
+
+
+        Set<Class<?>> v4 = new HashSet<Class<?>>();
+        v4.add(RouletteWheelSelection.class);
         for (Class<?> c : v4) {
 
             this.getjComboBox1().addItem(c);
 
         }
-        for (Class<?> c : v2) {
-            this.jComboBox2.addItem(c);
 
-        }
-        for (Class<?> c : v3) {
-            this.jComboBox3.addItem(c);
 
-        }
+        this.jComboBox3.addItem(ComplexFitness.class);
+        this.jComboBox3.addItem(RandomFitness.class);
+
+
+        finder = null;
+        System.gc();
     }
 
     /**
@@ -119,9 +101,9 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{{null, null, null, null},
-                    {null, null, null, null}, {null, null, null, null},
-                    {null, null, null, null}}, new String[]{"Title 1",
-                    "Title 2", "Title 3", "Title 4"}));
+                        {null, null, null, null}, {null, null, null, null},
+                        {null, null, null, null}}, new String[]{"Title 1",
+                "Title 2", "Title 3", "Title 4"}));
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         jScrollPane1.setViewportView(jTable1);
@@ -208,20 +190,20 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         panel_1.add(btnNewButton, "cell 0 1");
 
         String botpath = this.bot1PathField.getText();
-        String botfolder = botpath.substring(0, botpath.lastIndexOf("\\") + 1);
+        String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
 
     }
 
     public JTextField getMutationProbabilityField() {
-		return mutationProbabilityField;
-	}
+        return mutationProbabilityField;
+    }
 
-	public void setMutationProbabilityField(JTextField mutationProbabilityField) {
-		this.mutationProbabilityField = mutationProbabilityField;
-	}
+    public void setMutationProbabilityField(JTextField mutationProbabilityField) {
+        this.mutationProbabilityField = mutationProbabilityField;
+    }
 
-	public JComboBox getGenerationsComboBox() {
+    public JComboBox getGenerationsComboBox() {
         return generationsComboBox;
     }
 
@@ -550,19 +532,19 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         btnParar.setEnabled(false);
         btnParar.setText("Parar");
         jPanel1.add(btnParar, "cell 2 15");
-        
+
         btnGuardar = new JButton();
         btnGuardar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-    main.saveXML();
-        	}
+            public void actionPerformed(ActionEvent arg0) {
+                main.saveXML();
+            }
         });
-        
+
         btnCargar = new JButton();
         btnCargar.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        	    main.loadXML();
-        	}
+            public void actionPerformed(ActionEvent arg0) {
+                main.loadXML();
+            }
         });
         btnCargar.setText("Cargar");
         jPanel1.add(btnCargar, "cell 3 15");
@@ -625,7 +607,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
     private void runButton1ActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_runButton1ActionPerformed
         String botpath = this.bot1PathField.getText();
-        String botfolder = botpath.substring(0, botpath.lastIndexOf("\\") + 1);
+        String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
         main.setMem(new Memoria(true, true, 26, true));
 
@@ -698,8 +680,8 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
          * Set the Nimbus look and feel
          */
         // <editor-fold defaultstate="collapsed"
-        // desc=" Look and feel setting code (optional) ">
-		/*
+        // desc=" Look and feel setting code (optional) ">        
+        /*
          * If Nimbus (introduced in Java SE 6) is not available, stay with the
          * default look and feel. For details see
          * http://download.oracle.com/javase
@@ -761,77 +743,78 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             logger.debug("main(String[]) - end"); //$NON-NLS-1$
         }
     }
+
     EvolutionMain main;
     private File currentFile;
     private SwingWorker worker;
     public boolean cancel = false;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-	javax.swing.JTextField bot1PathField;
-	javax.swing.JTextField bot2PathField;
-	javax.swing.JTextField fragLimitField;
-	private javax.swing.JTextField generationsField;
-	private javax.swing.JTextField iterationsField;
-	private javax.swing.JComboBox jComboBox1;
-	private javax.swing.JComboBox jComboBox2;
-	private javax.swing.JLabel jLabel1;
-	private javax.swing.JLabel jLabel10;
-	private javax.swing.JLabel jLabel11;
-	private javax.swing.JLabel jLabel12;
-	private javax.swing.JLabel jLabel13;
-	private javax.swing.JLabel jLabel2;
-	private javax.swing.JLabel jLabel3;
-	private javax.swing.JLabel jLabel4;
-	private javax.swing.JLabel jLabel5;
-	private javax.swing.JLabel jLabel6;
-	private javax.swing.JLabel jLabel7;
-	private javax.swing.JLabel jLabel8;
-	private javax.swing.JLabel jLabel9;
-	private javax.swing.JMenu jMenu1;
-	private javax.swing.JMenu jMenu2;
-	private javax.swing.JMenu jMenu3;
-	private javax.swing.JMenu jMenu4;
-	private javax.swing.JMenuBar jMenuBar1;
-	private javax.swing.JMenuBar jMenuBar2;
-	private javax.swing.JMenuItem jMenuItem1;
-	private javax.swing.JMenuItem jMenuItem2;
-	private javax.swing.JPanel jPanel1;
-	private javax.swing.JPanel jPanel2;
-	private javax.swing.JPanel jPanel3;
-	private javax.swing.JScrollPane jScrollPane1;
-	private javax.swing.JTabbedPane jTabbedPane1;
-	private javax.swing.JTable jTable1;
-	javax.swing.JTextField logPathField;
-	javax.swing.JTextField mapNameField;
-	javax.swing.JTextField pathUTField;
-	private javax.swing.JButton runButton;
-	private javax.swing.JButton runButton1;
-	javax.swing.JTextField threadsNumberField;
-	javax.swing.JTextField timeLimitField;
-	private JButton btnAadir;
-	private JPanel panel;
-	private JSeparator separator;
-	private JSeparator separator_2;
-	private JLabel lblMutacin;
-	private JLabel lblVariacinRelativa;
-	private JTextField mutationProbabilityField;
-	private JLabel label;
-	private JTextField mutationRatio;
-	private JLabel lblCrossover;
-	private JLabel lblNDePuntos;
-	private JTextField crossoverPointsText;
-	private JPanel panel_1;
-	private JScrollPane scrollPane;
-	private JTextPane infoTextPane;
-	private JButton btnNewButton;
-	private JButton btnParar;
-	private JLabel lblElitismo;
-	private JTextField elitismotextField;
-	private JComboBox generationsComboBox;
-	private JPanel panel_2;
-	private JButton btnGuardar;
-	private JButton btnCargar;
+    javax.swing.JTextField bot1PathField;
+    javax.swing.JTextField bot2PathField;
+    javax.swing.JTextField fragLimitField;
+    private javax.swing.JTextField generationsField;
+    private javax.swing.JTextField iterationsField;
+    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JComboBox jComboBox2;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
+    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar2;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
+    javax.swing.JTextField logPathField;
+    javax.swing.JTextField mapNameField;
+    javax.swing.JTextField pathUTField;
+    private javax.swing.JButton runButton;
+    private javax.swing.JButton runButton1;
+    javax.swing.JTextField threadsNumberField;
+    javax.swing.JTextField timeLimitField;
+    private JButton btnAadir;
+    private JPanel panel;
+    private JSeparator separator;
+    private JSeparator separator_2;
+    private JLabel lblMutacin;
+    private JLabel lblVariacinRelativa;
+    private JTextField mutationProbabilityField;
+    private JLabel label;
+    private JTextField mutationRatio;
+    private JLabel lblCrossover;
+    private JLabel lblNDePuntos;
+    private JTextField crossoverPointsText;
+    private JPanel panel_1;
+    private JScrollPane scrollPane;
+    private JTextPane infoTextPane;
+    private JButton btnNewButton;
+    private JButton btnParar;
+    private JLabel lblElitismo;
+    private JTextField elitismotextField;
+    private JComboBox generationsComboBox;
+    private JPanel panel_2;
+    private JButton btnGuardar;
+    private JButton btnCargar;
 
-	// End of variables declaration//GEN-END:variables
+    // End of variables declaration//GEN-END:variables
     public JTextField getCrossoverPointsText() {
         return crossoverPointsText;
     }

@@ -54,10 +54,10 @@ public class ComplexFitness extends IndividualStats {
         double damageBalance = 0;
 
         if (totalDamageGiven >= totalDamageTaken) {
-            damageBalance = Math.log10( (double) ((totalDamageGiven - totalDamageTaken) + 1) );
+            damageBalance = Math.log10( (totalDamageGiven - totalDamageTaken) + 1 );
         }
 
-        double fitnessValue = killBalance + (double) nSuperShields +
+        double fitnessValue = killBalance + nSuperShields +
                 ((nShields * 1.0) / 2.0) +
                 ( ( (totalTimeShock * 1.0) / 10.0) / ((deaths + 1) * 1.0) ) +
                 ( ( (totalTimeSniper * 1.0) / 10.0) / ((deaths + 1) * 1.0) ) +

@@ -56,7 +56,7 @@ public abstract class GeneticAlg {
 
 
     /** Number of generations to be generated before the end of the algorithm */
-    protected  int GENERATIONS;
+    private  int GENERATIONS;
     /** Current generation */
     protected int currentGeneration;
     /** Current population */

@@ -38,14 +38,16 @@ public class Pair<A, B> {
         this.second = second;
     }
 
-    public int hashCode() {
+    @Override
+	public int hashCode() {
         int hashFirst = first != null ? first.hashCode() : 0;
         int hashSecond = second != null ? second.hashCode() : 0;
 
         return (hashFirst + hashSecond) * hashSecond + hashFirst;
     }
 
-    public boolean equals(Object other) {
+    @Override
+	public boolean equals(Object other) {
         if (other instanceof Pair) {
                 Pair otherPair = (Pair) other;
                 return
@@ -60,7 +62,8 @@ public class Pair<A, B> {
         return false;
     }
 
-    public String toString()
+    @Override
+	public String toString()
     {
            return "(" + first + ", " + second + ")";
     }

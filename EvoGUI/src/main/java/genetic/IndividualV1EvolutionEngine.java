@@ -7,22 +7,16 @@ package genetic;
 import GUI.EvolutionMain;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
+import org.apache.log4j.Logger;
+import org.uncommons.watchmaker.framework.*;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
-import java.util.logging.Level;
-import org.apache.log4j.Logger;
-import org.uncommons.watchmaker.framework.CandidateFactory;
-import org.uncommons.watchmaker.framework.EvaluatedCandidate;
-import org.uncommons.watchmaker.framework.EvolutionaryOperator;
-import org.uncommons.watchmaker.framework.FitnessEvaluator;
-import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
-import org.uncommons.watchmaker.framework.SelectionStrategy;
 
 /**
- *
  * @author Jose
  */
 public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<IndividualV1> {
@@ -54,17 +48,17 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
         int count = 0;
         for (EvaluatedCandidate<IndividualV1> c : evaluatedPopulation) {
-            c.getCandidate().resetStats();;
+            c.getCandidate().resetStats();
+            ;
             main.getPopulation()[count] = c.getCandidate();
 
             count++;
         }
         main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
 
-            String fitnessName=main.getPopulation()[0].getFitnessClass().getSimpleName();
-            if(fitnessName.equals("RandomFitness")){
-            }
-            else{
+        String fitnessName = main.getPopulation()[0].getFitnessClass().getSimpleName();
+        if (fitnessName.equals("RandomFitness")) {
+        } else {
             for (int j = 0; j < Integer.parseInt(main.getBotsGUIMainWindow().getIterationsField().getText()) && !main.isCancel(); j++) {
                 if (!main.isCancel()) {
                     if (main.getServer().remainingJobList.isEmpty()) {
@@ -102,8 +96,8 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
                     main.getServer().updateRemainingList(true);
                 }
             }
-            }
-     
+        }
+
         main.setPopulation(main.getMem().loadPoblacion(26));
         Collection<Individual> oldpop = Arrays.asList(main.getPopulation().clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
@@ -138,10 +132,6 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         }
 
         return newpop;
-
-
-
-
 
 
     }

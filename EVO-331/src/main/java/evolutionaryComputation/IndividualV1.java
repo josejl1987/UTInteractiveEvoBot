@@ -15,8 +15,6 @@
 package evolutionaryComputation;
 
 import java.io.Serializable;
-import java.util.Arrays;
-
 import org.apache.log4j.Logger;
 
 import utilities.Arithmetic;
@@ -44,7 +42,8 @@ public class IndividualV1 extends Individual  implements Serializable{
     // *************************************************************************
 
     /** Create a chromosome with random gene values */
-    public void createRandomIndividual () {
+    @Override
+	public void createRandomIndividual () {
 
         // CLOSE, AVERAGE AND FAR DISTANCE
 

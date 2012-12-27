@@ -47,7 +47,6 @@ import cz.cuni.amis.pogamut.ut2004.agent.navigation.stuckdetector.UT2004Position
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004Bot;
 import cz.cuni.amis.pogamut.ut2004.bot.impl.UT2004BotModuleController;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType;
-import cz.cuni.amis.pogamut.ut2004.communication.messages.SyncMessage;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Configuration;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.Initialize;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.RemoveRay;
@@ -57,11 +56,9 @@ import cz.cuni.amis.pogamut.ut2004.utils.UnrealUtils;
 import cz.cuni.amis.utils.exception.PogamutException;
 import cz.cuni.amis.utils.flag.FlagListener;
 import java.io.IOException;
-import java.net.SocketException;
 
 import java.util.logging.Level;
 
-import javax.swing.JOptionPane;
 import javax.vecmath.Vector3d;
 import synchro.Job;
 import synchro.WorkQueueClient;
@@ -133,18 +130,9 @@ public class T800 extends UT2004BotModuleController {
      */
     private GeneticAlg geneticAlg;
     /**
-     * Location of a feasible spam or combo
-     */
-    private Location bullseye = null;
-    /**
      * Enemy's information (it is null when we are not seeing the enemy)
      */
     private Player enemy = null;
-    /**
-     * Used to tell the bot where he should be facing (useful when using
-     * pathExecutor)
-     */
-    private Location facingSpot = null;
     /**
      * It represents the destination where we want to make the bot go (no matter
      * what)
@@ -173,7 +161,7 @@ public class T800 extends UT2004BotModuleController {
      */
     private AutoTraceRay cardinalRayArray[] = new AutoTraceRay[8];
     private WorkQueueClient workClient;
-            int number = 0;
+            private int number = 0;
     // *************************************************************************
     //                                METHODS
     // *************************************************************************
@@ -317,10 +305,17 @@ public class T800 extends UT2004BotModuleController {
         destination = skynet.estimateDestination(info, enemy, weaponry, items);
 
         // Should we be facing anything?
-        facingSpot = enemy != null ? enemy.getLocation() : null;
+        /*
+      Used to tell the bot where he should be facing (useful when using
+      pathExecutor)
+     */
+        Location facingSpot = enemy != null ? enemy.getLocation() : null;
 
         // Should we blow a combo or through a spam?
-        bullseye = skynet.estimateTarget();
+        /*
+      Location of a feasible spam or combo
+     */
+        Location bullseye = skynet.estimateTarget();
 
         // Switch to best weapon, move and shoot (if necessary)
         primaryStateArray[primaryState].switchToBestWeapon(enemy, enemyInfo);
@@ -337,7 +332,7 @@ public class T800 extends UT2004BotModuleController {
     @ObjectClassEventListener(eventClass = WorldObjectAppearedEvent.class, objectClass = Item.class)
     protected void objectAppeared(WorldObjectAppearedEvent<Item> event) {
         Item item = event.getObject();
-        memory.update(item);
+        Memoria.update(item);
     }
 
     //__________________________________________________________________________
@@ -609,7 +604,7 @@ public class T800 extends UT2004BotModuleController {
      * our destination a flag will be raised, if we get stuck another flag will
      * be raised on so on.
      */
-    protected void initializePathListeners() {
+    private void initializePathListeners() {
         // add stuck detector that watch over the path-following, if it (heuristicly) finds out that the bot has stuck somewhere,
         // it reports an appropriate path event and the path executor will stop following the path which in turn allows
         // us to issue another follow-path command in the right time
@@ -661,7 +656,8 @@ public class T800 extends UT2004BotModuleController {
     }
 
     //__________________________________________________________________________
-    protected void finalize() throws Throwable {
+    @Override
+	protected void finalize() throws Throwable {
         saveInfo();
         super.finalize();
     }
@@ -669,7 +665,7 @@ public class T800 extends UT2004BotModuleController {
     /**
      * Initialize raycasting.
      */
-    protected void initializeRayCasting() {
+    private void initializeRayCasting() {
         // initialize rays for raycasting
         final int rayLength = (int) (UnrealUtils.CHARACTER_COLLISION_RADIUS * 10);
         final int backRayLength = 100000;
@@ -697,7 +693,8 @@ public class T800 extends UT2004BotModuleController {
 
         // register listener called when all rays are set up in the UT engine
         raycasting.getAllRaysInitialized().addListener(new FlagListener<Boolean>() {
-            public void flagChanged(Boolean changedValue) {
+            @Override
+			public void flagChanged(Boolean changedValue) {
                 // once all rays were initialized store the AutoTraceRay objects
                 // that will come in response in local variables, it is just
                 // for convenience
@@ -755,7 +752,7 @@ bot.startAgent();
         //new UT2004BotRunner (T800.class, "T800", "<ip address>", 3000).setMain(true).startAgent();
     }
 
-    protected void saveInfo() {
+    private void saveInfo() {
         // The match has ended, store level information
         if (logger.isDebugEnabled()) {
             logger.info("saveInfo() - Grabando items"); //$NON-NLS-1$

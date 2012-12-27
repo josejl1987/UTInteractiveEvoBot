@@ -231,7 +231,7 @@ public abstract class PrimaryState {
 
         // If there's not a substate or the substate can't be executed, execute
         // primary state movement
-        if (subState == null || newDestination != null || subStateError == true) {
+        if (subState == null || newDestination != null || subStateError) {
             if (newDestination != null && (!newDestination.equals (destination) || (newDestination.equals (destination) && !pathExecutor.isExecuting()))) {
                 destination = newDestination;
 

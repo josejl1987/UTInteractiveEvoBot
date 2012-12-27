@@ -35,7 +35,8 @@ public class ProportionalFitness extends IndividualStats {
     // *************************************************************************
 
     /** Estimate fitness */
-    public double fitness () {
+    @Override
+	public double fitness () {
         double balance = kills - deaths;
 
         double fitnessValue = 0;

@@ -28,9 +28,9 @@ public class WorkQueueServer implements Runnable {
      * Logger for this class
      */
     private static final Logger logger = Logger.getLogger(WorkQueueServer.class);
-    ServerSocket server;
-    Set<Integer> currentJobList;
-    public HashMap<Integer, Job> jobList;
+    private ServerSocket server;
+    final Set<Integer> currentJobList;
+    private HashMap<Integer, Job> jobList;
 
     public HashMap<Integer, Job> getJobList() {
         return jobList;
@@ -40,7 +40,7 @@ public class WorkQueueServer implements Runnable {
     private int count = 0;
     private int population_size;
     private int interations;
-    protected Memoria mem;
+    private Memoria mem;
     private int matchTime;
     private Timer timer;
     private int maxThreadsNum;

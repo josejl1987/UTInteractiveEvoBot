@@ -19,7 +19,6 @@ import org.apache.log4j.Logger;
 
 import java.util.Arrays;
 import java.util.logging.Level;
-import javax.swing.Timer;
 
 
 /**
@@ -39,7 +38,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     //                             INSTANCE FIELDS
     // *************************************************************************
 
-    Class<T> fitnessClass;
+    private Class<T> fitnessClass;
 
     public Class<T> getFitnessClass() {
         return fitnessClass;
@@ -63,7 +62,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         this.chromosome = chromosome;
     }
     /** Individual stats */
-    protected T stats; // Must be initialized in the derived classes
+    private T stats; // Must be initialized in the derived classes
 
 
     // *************************************************************************

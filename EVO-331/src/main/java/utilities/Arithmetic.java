@@ -46,7 +46,7 @@ public class Arithmetic {
     // *************************************************************************
 
 
-          public static     final  Random rnd=new Random(1);
+          private static     final  Random rnd=new Random(1);
     /** Constant that represents infinity */
     public static final double INFINITY = 999999999;
 

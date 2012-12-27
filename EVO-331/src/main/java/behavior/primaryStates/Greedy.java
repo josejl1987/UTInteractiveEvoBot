@@ -111,7 +111,8 @@ public class Greedy extends PrimaryState {
      * @param facingSpot Location that we want to make the bot face.
      * @param enemyInfo Guess/Known information about the enemy.
      */
-    public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
+    @Override
+	public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
 
         if (crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -225,7 +226,7 @@ public class Greedy extends PrimaryState {
      * @return -1 if the item isn't in the list of items considered or else, a value between
      * 0 and 100 indicating how good the item is.
      */
-    protected int estimateItemPriority (final Item item, final AgentInfo info, final Weaponry weaponry) {
+    private int estimateItemPriority (final Item item, final AgentInfo info, final Weaponry weaponry) {
         ItemType type = item.getType();
         int health = info.getHealth();
         int priority;
@@ -591,7 +592,8 @@ public class Greedy extends PrimaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "Greedy";
     }
 }

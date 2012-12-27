@@ -4,28 +4,27 @@
  */
 package genetic;
 
-import org.apache.log4j.Logger;
-
 import evolutionaryComputation.ComplexFitness;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import org.apache.log4j.Logger;
 import org.uncommons.maths.number.NumberGenerator;
 import org.uncommons.maths.random.Probability;
 import org.uncommons.watchmaker.framework.operators.AbstractCrossover;
 import org.uncommons.watchmaker.framework.operators.IntArrayCrossover;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 /**
- *
  * @author Jose
  */
 public class IndividualCrossover extends AbstractCrossover<Individual> {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(IndividualCrossover.class);
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger.getLogger(IndividualCrossover.class);
 
     public IndividualCrossover(int crossoverPoints) {
         super(crossoverPoints);
@@ -45,11 +44,11 @@ public class IndividualCrossover extends AbstractCrossover<Individual> {
 
     @Override
     protected List<Individual> mate(Individual t, Individual t1, int i, Random random) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("mate(Individual, Individual, int, Random) - start"); //$NON-NLS-1$
-		}
+        if (logger.isDebugEnabled()) {
+            logger.debug("mate(Individual, Individual, int, Random) - start"); //$NON-NLS-1$
+        }
 
-                IntArrayCrossover arrayXover;
+        IntArrayCrossover arrayXover;
         arrayXover = new IntArrayCrossover(i);
         List<int[]> chromList = new ArrayList<int[]>();
         chromList.add(t.getChromosome());
@@ -64,12 +63,11 @@ public class IndividualCrossover extends AbstractCrossover<Individual> {
         evolvedIndividuals.add(i1);
         evolvedIndividuals.add(i2);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("mate(Individual, Individual, int, Random) - end"); //$NON-NLS-1$
-		}
+        if (logger.isDebugEnabled()) {
+            logger.debug("mate(Individual, Individual, int, Random) - end"); //$NON-NLS-1$
+        }
         return evolvedIndividuals;
     }
 
-    
 
 }

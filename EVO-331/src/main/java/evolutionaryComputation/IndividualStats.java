@@ -65,9 +65,9 @@ public abstract class IndividualStats implements Serializable {
     protected int totalTimeSniper;
 
     /** Clock to time out how much time we spent with the shock rifle */
-    protected Timer shockClock;
+    private Timer shockClock;
     /** Clock to time out how much time we spent with the sniper rifle */
-    protected Timer sniperClock;
+    private Timer sniperClock;
 
 
     // *************************************************************************
@@ -84,13 +84,15 @@ public abstract class IndividualStats implements Serializable {
 
         int delay = 1000;
         ActionListener taskPerformer1 = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+            @Override
+			public void actionPerformed(ActionEvent evt) {
                totalTimeShock += 1;
             }
         };
 
         ActionListener taskPerformer2 = new ActionListener() {
-            public void actionPerformed(ActionEvent evt) {
+            @Override
+			public void actionPerformed(ActionEvent evt) {
                totalTimeSniper += 1;
             }
         };

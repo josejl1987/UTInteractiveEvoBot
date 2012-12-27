@@ -30,7 +30,7 @@ public class UT2004BotExecution {
 	 * Set to TRUE ONLY IN {@link UT2004BotExecution#start()} and back to FALSE ONLY IN {@link UT2004BotExecution#shutdown(boolean)}.
 	 * Do not alter the flag from anywhere else!
 	 */
-	protected Flag<Boolean> running = new Flag<Boolean>(false);
+	protected final Flag<Boolean> running = new Flag<Boolean>(false);
 	
 	/**
 	 * When {@link UT2004BotExecution#start()}ed it contains the bot process.

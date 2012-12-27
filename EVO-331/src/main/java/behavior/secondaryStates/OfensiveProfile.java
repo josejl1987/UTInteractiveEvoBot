@@ -87,7 +87,8 @@ public class OfensiveProfile extends SecondaryState {
      * @param facingSpot Location where want to make the bot face.
      * @throws SubStatusException Thrown when the enemy is not visible.
      */
-    public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
+    @Override
+	public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
 
         if (PrimaryState.crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -129,7 +130,8 @@ public class OfensiveProfile extends SecondaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "OfensiveProfile";
     }
 }

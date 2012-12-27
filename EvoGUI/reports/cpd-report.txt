@@ -1,0 +1,271 @@
+Found a 7 line (69 tokens) duplication in the following files: 
+Starting at line 248 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 344 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+    void runEvolutionOld(BotsGUIMainWindow botsGUIMainWindow) {
+        cancel = false;
+        botsGUIMainWindow.initMemoria();
+        this.getServer().updateRemainingList(true);
+        List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
+        int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
+        CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
+=====================================================================
+Found a 11 line (66 tokens) duplication in the following files: 
+Starting at line 49 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualV1Crossover.java
+Starting at line 49 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualCrossover.java
+
+			logger.debug("mate(IndividualV1, IndividualV1, int, Random) - start"); //$NON-NLS-1$
+		}
+
+        IntArrayCrossover arrayXover;
+        arrayXover = new IntArrayCrossover(i);
+        List<int[]> chromList = new ArrayList<int[]>();
+        chromList.add(t.getChromosome());
+        chromList.add(t1.getChromosome());
+        List<int[]> evolvedChromList = arrayXover.apply(chromList, random);
+
+        List<IndividualV1> evolvedIndividuals = new ArrayList<IndividualV1>();
+=====================================================================
+Found a 6 line (63 tokens) duplication in the following files: 
+Starting at line 257 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 354 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+        operators.add(new Replacement<IndividualV1>(factory, new Probability(0.1)));
+        EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
+        FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
+        Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
+        SelectionStrategy<Object> selection = initSelectionStrategy();
+        Random rng = new MersenneTwisterRNG();
+=====================================================================
+Found a 7 line (49 tokens) duplication in the following files: 
+Starting at line 723 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 729 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 735 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+        } catch (ClassNotFoundException ex) {
+            logger.error("main(String[])", ex); //$NON-NLS-1$
+
+            java.util.logging.Logger.getLogger(
+                    BotsGUIMainWindow.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+=====================================================================
+Found a 8 line (48 tokens) duplication in the following files: 
+Starting at line 61 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualV1Crossover.java
+Starting at line 61 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualCrossover.java
+
+        IndividualV1 i2 = new IndividualV1(t1);
+        i1.setChromosome(evolvedChromList.get(0));
+        i2.setChromosome(evolvedChromList.get(1));
+        evolvedIndividuals.add(i1);
+        evolvedIndividuals.add(i2);
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("mate(IndividualV1, IndividualV1, int, Random) - end"); //$NON-NLS-1$
+=====================================================================
+Found a 7 line (47 tokens) duplication in the following files: 
+Starting at line 723 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 729 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 735 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 741 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+        } catch (ClassNotFoundException ex) {
+            logger.error("main(String[])", ex); //$NON-NLS-1$
+
+            java.util.logging.Logger.getLogger(
+                    BotsGUIMainWindow.class.getName()).log(
+                    java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+=====================================================================
+Found a 7 line (46 tokens) duplication in the following files: 
+Starting at line 287 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 369 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+                newpop = engine.evolvePopulation(this.getPopulation().length, 2, (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(2));
+                int count = 0;
+                for (EvaluatedCandidate<IndividualV1> c : newpop) {
+                    this.getPopulation()[count] = c.getCandidate();
+                    this.getPopulation()[count].resetStats();
+                    count++;
+                }
+=====================================================================
+Found a 1 line (42 tokens) duplication in the following files: 
+Starting at line 256 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 354 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+        operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
+=====================================================================
+Found a 7 line (39 tokens) duplication in the following files: 
+Starting at line 104 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 130 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+    public void loadXML() {
+        updateParameters();
+        XStream xstream = new XStream(new DomDriver());
+        String xml = xstream.toXML(preferences);
+        final JFileChooser fc = new JFileChooser();
+        // In response to a button click:
+        int returnVal = fc.showOpenDialog(null);
+=====================================================================
+Found a 3 line (38 tokens) duplication in the following files: 
+Starting at line 217 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 634 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+        String botpath = this.bot1PathField.getText();
+          String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
+        Memoria.setBDNAME(botfolder + "Memoria.db");
+=====================================================================
+Found a 5 line (35 tokens) duplication in the following files: 
+Starting at line 323 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/TableColumnAdjuster.java
+Starting at line 335 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/TableColumnAdjuster.java
+
+		Action action = new ColumnAction(isSelectedColumn, isAdjust);
+		KeyStroke ks = KeyStroke.getKeyStroke( keyStroke );
+		table.getInputMap().put(ks, key);
+		table.getActionMap().put(key, action);
+	}
+=====================================================================
+Found a 3 line (33 tokens) duplication in the following files: 
+Starting at line 239 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 241 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+            } catch (InstantiationException ex) {
+                java.util.logging.Logger.getLogger(EvolutionMain.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IllegalAccessException ex) {
+=====================================================================
+Found a 16 line (33 tokens) duplication in the following files: 
+Starting at line 269 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 297 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+        for (int i = 0; i < Integer.parseInt(botsGUIMainWindow.getGenerationsField().getText()) && !cancel; i++) {
+            if (this.getServer().remainingJobList.isEmpty()) {
+                //                GeneticAlg geneticAlg;
+                //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
+                //                try {
+                //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
+                //                    main.setPopulation main.getMem().loadPoblacion(26);
+                //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
+                //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+                //                    initMemoria();
+                //                } catch (InstantiationException ex) {
+                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                //                } catch (IllegalAccessException ex) {
+                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                //                }
+                this.setPopulation(this.getMem().loadPoblacion(26));
+=====================================================================
+Found a 8 line (31 tokens) duplication in the following files: 
+Starting at line 35 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/test/java/synchro/WorkQueueServerTest.java
+Starting at line 24 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/test/java/synchro/NewTestSuite.java
+
+    @BeforeClass
+    public static void setUpClass() throws Exception {}
+
+    @AfterClass
+    public static void tearDownClass() throws Exception {}
+
+    @Before
+    public void setUp() {}
+=====================================================================
+Found a 2 line (30 tokens) duplication in the following files: 
+Starting at line 284 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 366 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+                this.setPopulation(this.getMem().loadPoblacion(26));
+                Collection<Individual> oldpop = Arrays.asList(this.getPopulation().clone());
+=====================================================================
+Found a 7 line (29 tokens) duplication in the following files: 
+Starting at line 314 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/SubClassFinder.java
+Starting at line 362 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/SubClassFinder.java
+
+            + classname)) {
+         thisResult.put(c, url);
+        }
+       } catch (ClassNotFoundException cnfex) {
+        errors.add(cnfex);
+        // System.err.println(cnfex);
+       } catch (Exception ex) {
+=====================================================================
+Found a 6 line (28 tokens) duplication in the following files: 
+Starting at line 59 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/TableColumnAdjuster.java
+Starting at line 169 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/TableColumnAdjuster.java
+
+	public void adjustColumns()
+	{
+		TableColumnModel tcm = table.getColumnModel();
+
+		for (int i = 0; i < tcm.getColumnCount(); i++)
+		{
+=====================================================================
+Found a 8 line (28 tokens) duplication in the following files: 
+Starting at line 144 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 619 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+                os.close();
+            } catch (IOException ex) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("jMenuItem1ActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
+                }
+            }
+
+        }
+=====================================================================
+Found a 5 line (28 tokens) duplication in the following files: 
+Starting at line 264 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 362 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+        engine = new GenerationalEvolutionEngine<IndividualV1>(factory, pipeline, fitnessEvaluator, selection, rng);
+        EvolutionMonitor<IndividualV1> observer = new EvolutionMonitor<IndividualV1>();
+
+        engine.addEvolutionObserver(observer);
+        observer.showInFrame("Monitor", false);
+=====================================================================
+Found a 2 line (28 tokens) duplication in the following files: 
+Starting at line 526 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 535 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+Starting at line 588 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+=====================================================================
+Found a 4 line (27 tokens) duplication in the following files: 
+Starting at line 25 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/server/StandaloneServer.java
+Starting at line 699 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/BotsGUIMainWindow.java
+
+    public static void main(String args[]) {
+        if (logger.isDebugEnabled()) {
+            logger.debug("main(String[]) - start");    // $NON-NLS-1$
+        }
+=====================================================================
+Found a 1 line (27 tokens) duplication in the following files: 
+Starting at line 62 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualV1EvolutionEngine.java
+Starting at line 85 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualV1EvolutionEngine.java
+
+        main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
+=====================================================================
+Found a 2 line (27 tokens) duplication in the following files: 
+Starting at line 226 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 260 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 358 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+        Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
+        SelectionStrategy<Object> selection = null;
+=====================================================================
+Found a 6 line (26 tokens) duplication in the following files: 
+Starting at line 42 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualV1Crossover.java
+Starting at line 42 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/genetic/IndividualCrossover.java
+
+    public IndividualV1Crossover(NumberGenerator<Integer> crossoverPointsVariable, NumberGenerator<Probability> crossoverProbabilityVariable) {
+        super(crossoverPointsVariable, crossoverProbabilityVariable);
+    }
+
+    @Override
+    protected List<IndividualV1> mate(IndividualV1 t, IndividualV1 t1, int i, Random random) {
+=====================================================================
+Found a 3 line (25 tokens) duplication in the following files: 
+Starting at line 285 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+Starting at line 367 of /home/jose/NetBeansProjects/UTInteractiveEvoBot/EvoGUI/src/main/java/GUI/EvolutionMain.java
+
+                Collection<Individual> oldpop = Arrays.asList(this.getPopulation().clone());
+                List<EvaluatedCandidate<IndividualV1>> newpop;
+                newpop = engine.evolvePopulation(this.getPopulation().length, 2, (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(2));

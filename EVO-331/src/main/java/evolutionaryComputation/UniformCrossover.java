@@ -43,7 +43,8 @@ public class UniformCrossover extends CrossoverType {
      * @param offspring Resulting individual. IT CAN'T BE a null pointer, it must
      * be a valid object.
      */
-    public void crossover (Individual male, Individual female, Individual offspring) {
+    @Override
+	public void crossover (Individual male, Individual female, Individual offspring) {
         int maleChromosomeSize = male.chromosomeSize ();
         int femaleChromosomeSize = female.chromosomeSize ();
 

@@ -68,26 +68,18 @@ public abstract class SecondaryState {
     // *************************************************************************
 
 
-    /** Pointer to the body field from T800 */
-    protected CompleteBotCommandsWrapper body;
     /** Pointer to the act field from T800 */
     protected IAct act;
-    /** Pointer to the world field from T800 */
-    protected IVisionWorldView world;
     /** Pointer to the items field from T800 */
     protected Items items;
     /** Pointer to the info field from T800 */
     protected AgentInfo info;
-    /** Pointer to the weaponry field from T800 */
-    protected Weaponry weaponry;
     /** Pointer to the pathPlanner field from T800 */
     protected IPathPlanner <ILocated> pathPlanner;
     /** Pointer to the pathExecutor field from T800 */
     protected IUnrealPathExecutor <ILocated> pathExecutor;
     /** Pointer to the move field from T800 */
     protected AdvancedLocomotion move;
-    /** Pointer to the raycasting field from T800 */
-    protected Raycasting raycasting;
     /** Pointer to the cardinalRayArray field from T800 */
     protected AutoTraceRay cardinalRayArray [];
 
@@ -132,16 +124,20 @@ public abstract class SecondaryState {
                         final IPathPlanner <ILocated> pathPlanner, final IUnrealPathExecutor <ILocated> pathExecutor,
                         final AdvancedLocomotion move, final Raycasting raycasting, final AutoTraceRay cardinalRayArray []) {
 
-        this.body = body;
+        /* Pointer to the body field from T800 */
+        CompleteBotCommandsWrapper body1 = body;
         this.act = act;
-        this.world = world;
+        /* Pointer to the world field from T800 */
+        IVisionWorldView world1 = world;
         this.items = items;
         this.info = info;
-        this.weaponry = weaponry;
+        /* Pointer to the weaponry field from T800 */
+        Weaponry weaponry1 = weaponry;
         this.pathPlanner = pathPlanner;
         this.pathExecutor = pathExecutor;
         this.move = move;
-        this.raycasting = raycasting;
+        /* Pointer to the raycasting field from T800 */
+        Raycasting raycasting1 = raycasting;
         this.cardinalRayArray = cardinalRayArray;
     }
 

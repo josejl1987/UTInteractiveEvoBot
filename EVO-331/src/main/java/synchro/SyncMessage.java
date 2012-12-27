@@ -47,7 +47,7 @@ public class SyncMessage implements Serializable {
     }
     
     int id;
-    Estado status; 
+    private Estado status; 
     
     public SyncMessage(int id,Estado stat)
     {

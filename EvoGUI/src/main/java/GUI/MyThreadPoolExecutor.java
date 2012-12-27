@@ -7,20 +7,21 @@ package GUI;
 
 //~--- JDK imports ------------------------------------------------------------
 
-import java.util.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
  * @author Jose
  */
-import java.util.concurrent.*;
 
 class MyThreadPoolExecutor {
-    int                                poolSize      = 4;
-    int                                maxPoolSize   = 4;
-    long                               keepAliveTime = 600;
-    ThreadPoolExecutor                 threadPool    = null;
-    final ArrayBlockingQueue<Runnable> queue         = new ArrayBlockingQueue<Runnable>(5);
+    int poolSize = 4;
+    int maxPoolSize = 4;
+    long keepAliveTime = 600;
+    ThreadPoolExecutor threadPool = null;
+    final ArrayBlockingQueue<Runnable> queue = new ArrayBlockingQueue<Runnable>(5);
 
     public MyThreadPoolExecutor() {
         threadPool = new ThreadPoolExecutor(poolSize, maxPoolSize, keepAliveTime, TimeUnit.SECONDS, queue);

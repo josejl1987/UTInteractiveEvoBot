@@ -9,12 +9,8 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.logging.Level;
 import synchro.Job.Estado;
 
 /**
@@ -32,10 +28,10 @@ public class WorkQueueClient {
      * in the editor.
      */
 
-    Socket clientSocket;
+    private Socket clientSocket;
     Estado status;
-    ObjectOutputStream output;
-    ObjectInputStream input;
+    private ObjectOutputStream output;
+    private ObjectInputStream input;
 
     public WorkQueueClient(int port) {
         try {

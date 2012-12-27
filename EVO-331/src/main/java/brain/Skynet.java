@@ -16,7 +16,6 @@ package brain;
 
 import org.apache.log4j.Logger;
 
-import bot.T800;
 import behavior.primaryStates.PrimaryState;
 import behavior.secondaryStates.SecondaryState;
 import knowledge.EnemyInfo;
@@ -61,8 +60,6 @@ public class Skynet {
 
     /** Current Individual to be evaluated */
     Individual testIndividual;
-    /** Pointer to body from T800 */
-    protected CompleteBotCommandsWrapper body;
     /** Location of a combo (null if it doesn't exist) */
     private Location comboLocation;
     /** Location of a spam (null if it doesn't exists) */
@@ -80,7 +77,8 @@ public class Skynet {
      * @param testIndividual Individual that is being tested during this execution
      */
     public Skynet (final CompleteBotCommandsWrapper body, final Individual testIndividual) {
-        this.body = body;
+        /* Pointer to body from T800 */
+        CompleteBotCommandsWrapper body1 = body;
         this.testIndividual = testIndividual;
 
         comboLocation = null;
@@ -105,7 +103,7 @@ public class Skynet {
      * @param weaponry Weaponry that we are carrying.
      * @return The priority of the given item.
      */
-    protected int estimateItemPriority (final Item item, final Weaponry weaponry) {
+    private int estimateItemPriority (final Item item, final Weaponry weaponry) {
         int priority = -1;
         ItemType type = item.getType ();
 
@@ -234,7 +232,7 @@ public class Skynet {
      * 1 our arsenal is far worst, 2 our arsenal is worst, 3 our arsenals are more or less
      * the same, 4 our arsenal is better, 5 our arsenal is far better.
      */
-    public int [] compareArsenals (final Weaponry weaponry, final boolean enemyArsenal []) {
+    private int [] compareArsenals (final Weaponry weaponry, final boolean enemyArsenal []) {
         int arsenalProfit [] = new int [3];
         int enemyTotalProfit [] = new int [3];
         int ownTotalProfit [] = new int [3];
@@ -499,7 +497,7 @@ public class Skynet {
      * @return The profile we need (Defensive or Ofensive) to stay in the best range.
      * If the risk is too high or we are already in the range, it returns "disabled".
      */
-    public int estimateProfile (double enemyDistance, int maximumProfit, int risk, int sweetSpot) {
+    private int estimateProfile (double enemyDistance, int maximumProfit, int risk, int sweetSpot) {
         // If our arsenal is more or less the same or better than the enemy's
         if (maximumProfit >= risk) {
             // Check which is the best range

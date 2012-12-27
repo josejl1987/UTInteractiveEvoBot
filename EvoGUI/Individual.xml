@@ -6,7 +6,7 @@ and open the template in the editor.
 
 
 <root>
-  
+
     <Individual>
         <type>
             <name>IndividualV1</name>
@@ -44,7 +44,7 @@ and open the template in the editor.
                 <name>Nº de escudos</name>
                 <group></group>
             </attribute>
-                        <attribute>
+            <attribute>
                 <name>Tiempo shock</name>
                 <group></group>
             </attribute>
@@ -86,9 +86,8 @@ and open the template in the editor.
                 </chromosome>
 
 
-
                 <chromosome>
-                    <name>Prioridad Bio Rifle </name>
+                    <name>Prioridad Bio Rifle</name>
                     <group>Prioridad armas</group>
                 </chromosome>
 
@@ -103,7 +102,7 @@ and open the template in the editor.
                 </chromosome>
 
                 <chromosome>
-                    <name>Prioridad Shock Rifle </name>
+                    <name>Prioridad Shock Rifle</name>
                     <group>Prioridad armas</group>
                 </chromosome>
 

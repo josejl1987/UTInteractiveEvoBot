@@ -127,7 +127,8 @@ public class DeterministicGenetic extends GeneticAlg {
     //__________________________________________________________________________
 
     /** Select the best Individuals for the next population, mate them and mutate them */
-    @Deprecated
+    @Override
+	@Deprecated
     public void selection () {
         // Sort the individuals based on their fitness
         Quicksort.sort (population);
@@ -209,7 +210,8 @@ public class DeterministicGenetic extends GeneticAlg {
      * Store all the genetic algorithm information in the data base.
      * @param memory Data Base controller.
      */
-    public void store (Memoria memory) {
+    @Override
+	public void store (Memoria memory) {
         memory.storeGenes (currentIndividual, currentGeneration, currentMatch, population);
     }
 

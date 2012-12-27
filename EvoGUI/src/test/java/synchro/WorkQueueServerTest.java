@@ -9,40 +9,30 @@ package synchro;
 
 import org.junit.*;
 
-import synchro.Job.Estado;
-
-import static org.junit.Assert.*;
-
 //~--- JDK imports ------------------------------------------------------------
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-
-import java.net.Socket;
-import java.net.UnknownHostException;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
- *
  * @author Jose
  */
 public class WorkQueueServerTest {
-    public WorkQueueServerTest() {}
+    public WorkQueueServerTest() {
+    }
 
     @BeforeClass
-    public static void setUpClass() throws Exception {}
+    public static void setUpClass() throws Exception {
+    }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {}
+    public static void tearDownClass() throws Exception {
+    }
 
     @Before
-    public void setUp() {}
+    public void setUp() {
+    }
 
     @After
-    public void tearDown() {}
+    public void tearDown() {
+    }
 
     /**
      * Test of addJob method, of class WorkQueueServer.

@@ -88,7 +88,8 @@ public class CriticalHealth extends SecondaryState {
      * @throws SubStatusException Thrown when there are no health packs or health
      * vials available.
      */
-    public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
+    @Override
+	public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
 
         if (PrimaryState.crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -170,7 +171,8 @@ public class CriticalHealth extends SecondaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "CriticalHealth";
     }
 }

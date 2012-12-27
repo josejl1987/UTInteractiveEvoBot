@@ -89,7 +89,8 @@ public class Camp extends PrimaryState {
      * @param facingSpot Location that the bot has to face.
      * @param enemyInfo Guess/Known information about the enemy.
      */
-    public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
+    @Override
+	public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
 
         if (!crouched) {
             if (pathExecutor.isExecuting()) {
@@ -114,7 +115,8 @@ public class Camp extends PrimaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "Camp";
     }
 }

@@ -5,21 +5,16 @@
 package genetic;
 
 import org.apache.log4j.Logger;
-
-import evolutionaryComputation.Individual;
-import java.util.Random;
 import org.uncommons.watchmaker.framework.factories.AbstractCandidateFactory;
 
 /**
- *
  * @author Jose
  */
-public abstract class IndividualFactory extends AbstractCandidateFactory  {
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(IndividualFactory.class);
+public abstract class IndividualFactory extends AbstractCandidateFactory {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger.getLogger(IndividualFactory.class);
 
 
-    
 }

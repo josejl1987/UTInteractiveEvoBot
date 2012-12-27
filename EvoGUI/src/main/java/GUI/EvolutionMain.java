@@ -4,77 +4,35 @@
  */
 package GUI;
 
-import com.google.inject.internal.cglib.core.Transformer;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
+import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch1v1;
+import evolutionaryComputation.Individual;
+import evolutionaryComputation.IndividualV1;
+import genetic.*;
+import knowledge.Memoria;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Random;
-import java.util.logging.Level;
-
 import org.uncommons.maths.random.MersenneTwisterRNG;
 import org.uncommons.maths.random.Probability;
-import org.uncommons.watchmaker.framework.CandidateFactory;
-import org.uncommons.watchmaker.framework.EvaluatedCandidate;
-import org.uncommons.watchmaker.framework.EvolutionObserver;
-import org.uncommons.watchmaker.framework.EvolutionaryOperator;
-import org.uncommons.watchmaker.framework.FitnessEvaluator;
-import org.uncommons.watchmaker.framework.GenerationalEvolutionEngine;
-import org.uncommons.watchmaker.framework.PopulationData;
-import org.uncommons.watchmaker.framework.SelectionStrategy;
+import org.uncommons.watchmaker.framework.*;
+import org.uncommons.watchmaker.framework.interactive.InteractiveSelection;
 import org.uncommons.watchmaker.framework.operators.EvolutionPipeline;
 import org.uncommons.watchmaker.framework.operators.Replacement;
 import org.uncommons.watchmaker.framework.termination.GenerationCount;
-import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
-
-import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch1v1;
-
-import evolutionaryComputation.Individual;
-import evolutionaryComputation.IndividualV1;
-import genetic.IndividualV1Crossover;
-import genetic.IndividualV1Evaluator;
-import genetic.IndividualV1EvolutionEngine;
-import genetic.IndividualV1Factory;
-import genetic.IndividualV1Mutation;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.InputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.StringWriter;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import knowledge.Memoria;
-import org.uncommons.watchmaker.framework.interactive.InteractiveSelection;
 import org.uncommons.watchmaker.swing.ObjectSwingRenderer;
 import org.uncommons.watchmaker.swing.SwingConsole;
+import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 import synchro.Job;
 import synchro.WorkQueueServer;
 
+import javax.swing.*;
+import java.io.*;
+import java.sql.Timestamp;
+import java.util.*;
+import java.util.logging.Level;
+
 /**
- *
  * @author Jose
  */
 public class EvolutionMain {
@@ -90,8 +48,6 @@ public class EvolutionMain {
     JobList jobList = new JobList();
     private Individual[] population;
     private boolean cancel = false;
-    private String botpath;
-    private String botfolder;
     ConfigPreferences preferences;
 
     public boolean isCancel() {
@@ -393,8 +349,11 @@ public class EvolutionMain {
     }
 
     public void killUCCServers() throws IOException {
-        Runtime.getRuntime().exec("Taskkill /im UCC.exe /f");
-        Runtime.getRuntime().exec("pkill UCC.exe /f");
+        if (OSValidator.isWindows()) {
+            Runtime.getRuntime().exec("Taskkill /im UCC.exe /f");
+        } else {
+            Runtime.getRuntime().exec("pkill -f ucc-bin-linux-amd64");
+        }
     }
 
     public BotsGUIMainWindow getBotsGUIMainWindow() {
@@ -418,7 +377,6 @@ public class EvolutionMain {
         getServer().setMaxThreadsNum(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().setNumAvailableThreads(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().init();
-
 
 
         while (!getServer().remainingJobList.isEmpty() && !cancel) {
@@ -459,9 +417,9 @@ public class EvolutionMain {
 
             LogCategory log = new LogCategory("DeathMatch1v1");
             UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-            log.setLevel(Level.ALL);
-            ///     log.addConsoleHandler();
-            //match.setLog(log);
+//            log.setLevel(Level.ALL);
+//                log.addConsoleHandler();
+//            match.setLog(log);
 
             // GAME CONFIGURATION
             match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);
@@ -488,7 +446,7 @@ public class EvolutionMain {
             getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
             Job newJob = new Job();
             newJob.setId(id);
-            
+
             newJob.setMatch(match);
             newJob.setStatus(Job.Estado.Init);
             newJob.setStartTime(new Timestamp(System.currentTimeMillis()));
@@ -505,8 +463,8 @@ public class EvolutionMain {
 
     public void initMemoria() {
 
-        botpath = botsGUIMainWindow.bot1PathField.getText();
-        botfolder = botpath.substring(0, botpath.lastIndexOf("\\") + 1);
+        String botpath = botsGUIMainWindow.bot1PathField.getText();
+        String botfolder = botpath.substring(0, botpath.lastIndexOf("\\") + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
         this.getServer().setMemoria(this.getMem());
         this.getServer().updateRemainingList(true);

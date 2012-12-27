@@ -56,12 +56,8 @@ public class Bot extends UT2004BotModuleController {
     public static NavPoint pathNodes [];
     /** Vector containing all the important areas of the current map */
     public static NavPoint areas [];
-    /** Location of a feasible spam or combo */
-    private Location bullseye = null;
     /** Enemy's information (it is null when we are not seeing the enemy) */
     private Player enemy = null;
-    /** Used to tell the bot where he should be facing (useful when using pathExecutor) */
-    private Location facingSpot = null;
     /** It represents the destination where we want to make the bot go (no matter what) */
     private Location destination = null;
     /** True if we have just killed an enemy */
@@ -260,10 +256,12 @@ public class Bot extends UT2004BotModuleController {
         destination = brain.estimateDestination (info, enemy, weaponry, items);
 
         // Should we be facing anything?
-        facingSpot = enemy != null? enemy.getLocation () : null;
+        /* Used to tell the bot where he should be facing (useful when using pathExecutor) */
+        Location facingSpot = enemy != null ? enemy.getLocation() : null;
 
         // Should we blow a combo or shoot a spam?
-        bullseye = brain.estimateTarget ();
+        /* Location of a feasible spam or combo */
+        Location bullseye = brain.estimateTarget();
 
         // Switch to best weapon, move and shoot (if necessary)
         primaryStateArray [primaryState].switchToBestWeapon (enemy, enemyInfo);

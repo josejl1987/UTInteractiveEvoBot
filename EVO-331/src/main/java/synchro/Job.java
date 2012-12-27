@@ -21,12 +21,13 @@ public class Job implements Runnable {
      * Logger for this class
      */
     private static final Logger logger = Logger.getLogger(Job.class);
-    Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
-        public void uncaughtException(Thread th, Throwable ex) {
+    private Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
+        @Override
+		public void uncaughtException(Thread th, Throwable ex) {
 
             logger.error("$Thread.UncaughtExceptionHandler.uncaughtException(Thread, Throwable) - Uncaught exception here: ", ex); //$NON-NLS-1$
 
-            if (ex.getClass().getCanonicalName() == "UCCStartException") {
+            if (ex.getClass().getCanonicalName().equals("UCCStartException")) {
                 try {
                     Thread.sleep(30000);
                 } catch (InterruptedException ex1) {
@@ -39,7 +40,7 @@ public class Job implements Runnable {
 
         }
     };
-    WorkQueueServer server;
+    private WorkQueueServer server;
 
     public Individual getIndividual() {
         return individual;
@@ -79,10 +80,10 @@ public class Job implements Runnable {
         Init, Running, Finished
     }
     Estado status;
-    Timestamp startTime;
+    private Timestamp startTime;
     Thread thread;
     int id;
-    UT2004DeathMatch1v1 match;
+    private UT2004DeathMatch1v1 match;
     private String replayName;
 
     public Job() {

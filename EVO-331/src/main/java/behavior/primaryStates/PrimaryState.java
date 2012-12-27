@@ -93,12 +93,8 @@ public abstract class PrimaryState {
 
     /** Current Individual to be evaluated */
     protected Individual testIndividual;
-    /** Pointer to the body field from T800 */
-    protected CompleteBotCommandsWrapper body;
     /** Pointer to the act field from T800 */
     protected IAct act;
-    /** Pointer to the world field from T800 */
-    protected IVisionWorldView world;
     /** Pointer to the game field from T800 */
     protected Game game;
     /** Pointer to the items field from T800 */
@@ -118,7 +114,7 @@ public abstract class PrimaryState {
     /** Pointer to the cardinalRayArray field from T800 */
     protected AutoTraceRay cardinalRayArray [];
     /** Pointer to the shoot field from T800 */
-    protected ImprovedShooting shoot;
+    private ImprovedShooting shoot;
 
 
     // *************************************************************************
@@ -129,43 +125,43 @@ public abstract class PrimaryState {
     // FLAGS
 
     /** Flag that indicates if we have hit with the sniper or the shock */
-    protected static boolean sniperOrShockHit;
+    private static boolean sniperOrShockHit;
     /** Flag that indicates if we have to shoot a combo */
-    protected static boolean blowCombo;
+    private static boolean blowCombo;
     /** Flag that indicates if we have to switch to the shock rifle */
-    protected static boolean useShockRifle;
+    private static boolean useShockRifle;
     /** Flag that indicates if we are going to throw a spam */
-    protected static boolean spam;
+    private static boolean spam;
     /** Flag that indicates if the bot is crouched */
     public static boolean crouched;
 
     // FIELDS
 
     /** Location where we want to make the bot go */
-    protected static Location destination;
+    private static Location destination;
     /** Location that the state is using to make the bot move */
     protected static Location stateDrivenDestination;
     /** Contains a list of the last places visited recently */
     protected static List <Location> visitedSpots;
     /** Current spot that the bot is facing */
-    protected static Location currentFacingSpot;
+    private static Location currentFacingSpot;
     /** Game time when the bot made a rotation (as a result of a non cognitive action) */
-    protected static double rotationTime;
+    private static double rotationTime;
     /** Collision sensors for each cardinal ray (true if any of them is hitting something) */
-    protected static boolean collisionSensorArray [];
+    private static boolean collisionSensorArray [];
     /** True if there's a hit in ANY cardinal ray */
-    protected static boolean raycastingHit;
+    private static boolean raycastingHit;
     /** True if the bot is moving (just used for reactive movement) */
-    protected static boolean moving;
+    private static boolean moving;
 
     // RANGE FIELDS
 
     /** Short range */
-    protected static int CLOSE;
+    private static int CLOSE;
     /** Medium range */
-    protected static int AVERAGE;
+    private static int AVERAGE;
     /** Long range */
-    protected static int FAR;
+    private static int FAR;
 
 
     // *************************************************************************
@@ -214,9 +210,11 @@ public abstract class PrimaryState {
                      final AdvancedLocomotion move, final Raycasting raycasting, final AutoTraceRay cardinalRayArray [],
                      final ImprovedShooting shoot, final Individual testIndividual) {
 
-        this.body = body;
+        /* Pointer to the body field from T800 */
+        CompleteBotCommandsWrapper body1 = body;
         this.act = act;
-        this.world = world;
+        /* Pointer to the world field from T800 */
+        IVisionWorldView world1 = world;
         this.game = game;
         this.items = items;
         this.info = info;
@@ -266,7 +264,7 @@ public abstract class PrimaryState {
 
         // If there's not a substate or the substate can't be executed, execute
         // primary state movement
-        if (subState == null || newDestination != null || subStateError == true) {
+        if (subState == null || newDestination != null || subStateError) {
             if (newDestination != null && (!newDestination.equals (destination) || (newDestination.equals (destination) && !pathExecutor.isExecuting()))) {
                 destination = newDestination;
 
@@ -707,7 +705,7 @@ public abstract class PrimaryState {
      * @param enemyInfo Guess/Known information about the enemy.
      * @return How good this weapon is from 0 to 100.
      */
-    protected int estimateWeaponAdvantage (final Weapon weapon, final Player enemy, final EnemyInfo enemyInfo) {
+    private int estimateWeaponAdvantage (final Weapon weapon, final Player enemy, final EnemyInfo enemyInfo) {
         ItemType type = weapon.getType();
         int profit = 0;
 
@@ -893,7 +891,7 @@ public abstract class PrimaryState {
     /**
      * Makes the bot run continously forward.
      */
-    protected void goForward () {
+    private void goForward () {
         move.moveContinuos();
         moving = true;
     }

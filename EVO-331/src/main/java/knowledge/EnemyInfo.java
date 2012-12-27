@@ -48,8 +48,6 @@ public class EnemyInfo {
     // *************************************************************************
 
 
-    /** Pointer to the field body from T800 (used for debugging) */
-    protected CompleteBotCommandsWrapper body;
     /** Enemy's name */
     private String name;
     /** Health that we suppose the enemy has */
@@ -72,16 +70,16 @@ public class EnemyInfo {
 
 
     /** Constant that refers to health vials */
-    public final static int HEALTH_VIAL = 0;
+    private final static int HEALTH_VIAL = 0;
     /** Constant that refers to health packs */
-    public final static int HEALTH_PACK = 1;
+    private final static int HEALTH_PACK = 1;
 
     /** Constant that identifies the position of the shield gun in the arsenal vector */
     public final static int SHIELD_GUN = 0;
     /** Constant that identifies the position of the assault rifle in the arsenal vector */
     public final static int ASSAULT_RIFLE = 1;
     /** Constant that identifies the position of the bio rifle in the arsenal vector */
-    public final static int BIO_RIFLE = 2;
+    private final static int BIO_RIFLE = 2;
     /** Constant that identifies the position of the link gun in the arsenal vector */
     public final static int LINK_GUN = 3;
     /** Constant that identifies the position of the minigun in the arsenal vector */
@@ -108,7 +106,8 @@ public class EnemyInfo {
      * @param body Pointer to the field body in T800.
      */
     public EnemyInfo (final CompleteBotCommandsWrapper body) {
-        this.body = body;
+        /* Pointer to the field body from T800 (used for debugging) */
+        CompleteBotCommandsWrapper body1 = body;
         health = 100;
         armor = 0;
         navPointPosition = null;
@@ -176,7 +175,7 @@ public class EnemyInfo {
      * @param enemyNavPoint NavPoint where we think the enemy is.
      * @param clockTime Game time when we guessed/saw where the enemy was.
      */
-    public void updateEnemyNavPoint (final NavPoint enemyNavPoint, final double clockTime) {
+    private void updateEnemyNavPoint (final NavPoint enemyNavPoint, final double clockTime) {
         lastEncounter = clockTime;
         navPointPosition = enemyNavPoint;
         currentPosition = enemyNavPoint.getLocation();
@@ -333,7 +332,7 @@ public class EnemyInfo {
      * @param type Type of health we want to update. 0 for health vial and 1 for
      * health pack (use the constants above).
      */
-    public void increaseHealth (final int type) {
+    private void increaseHealth (final int type) {
         if (type == HEALTH_VIAL) {
             health = health + 5;
 
@@ -358,7 +357,7 @@ public class EnemyInfo {
      * Increase enemy's armor
      * @param armorPoints Amount of points we want to increase.
      */
-    public void increaseArmor (final int armorPoints) {
+    private void increaseArmor (final int armorPoints) {
         armor = armor + armorPoints;
 
         if (armor > 150) {

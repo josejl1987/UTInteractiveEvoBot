@@ -11,8 +11,8 @@ import java.util.Random;
  * @author Jose
  */
 public class RandomFitness extends IndividualStats {
-      static  Random rnd=new Random();
-         double fit=0;
+      private static  Random rnd=new Random();
+         private double fit=0;
     @Override
 
     public double fitness() {

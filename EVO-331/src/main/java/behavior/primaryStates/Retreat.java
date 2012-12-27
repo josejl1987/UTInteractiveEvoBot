@@ -36,7 +36,6 @@ import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.Items;
 import cz.cuni.amis.pogamut.ut2004.bot.command.AdvancedLocomotion;
 import cz.cuni.amis.pogamut.ut2004.bot.command.CompleteBotCommandsWrapper;
 import cz.cuni.amis.pogamut.ut2004.bot.command.ImprovedShooting;
-import cz.cuni.amis.pogamut.ut2004.communication.messages.ItemType;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbcommands.SetCrouch;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.AutoTraceRay;
 import cz.cuni.amis.pogamut.ut2004.communication.messages.gbinfomessages.Player;
@@ -108,7 +107,8 @@ public class Retreat extends PrimaryState {
      * @param facingSpot Location that the bot has to face.
      * @param enemyInfo Guess/Known information about the enemy.
      */
-    public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
+    @Override
+	public void stateDrivenMovement (final Player enemy, final Location facingSpot, final EnemyInfo enemyInfo) {
 
         if (crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -255,7 +255,8 @@ public class Retreat extends PrimaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "Retreat";
     }
 }

@@ -72,11 +72,11 @@ public class Memoria {
     /**
      * Contains all the ammo items related to a certain level.
      */
-    public static Map<String, Set<String>> ammo = new HashMap<String, Set<String>>();
+    private static Map<String, Set<String>> ammo = new HashMap<String, Set<String>>();
     /**
      * Contains all the adrenaline items related to a certain level.
      */
-    public static Set<String> adrenaline = new HashSet<String>();
+    private static Set<String> adrenaline = new HashSet<String>();
 
     /**
      * Default Constructor.
@@ -116,7 +116,7 @@ public class Memoria {
 
         Connection conn = null;
 
-        if (DEBUG == true) {
+        if (DEBUG) {
             //System.out.println("Start function loadObject()");
             //System.out.println("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null" + ", x double not null, y double not null, z double not null" + ",  primary key(mapa, x, y, z) )");
         }
@@ -126,13 +126,13 @@ public class Memoria {
             conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
             Statement stat = conn.createStatement();
 
-            if (tablaItems == true) {
+            if (tablaItems) {
                 stat.execute("DROP TABLE IF EXISTS Item;");
             }
-            if (tablaGenetico == true) {
+            if (tablaGenetico) {
                 stat.execute("DROP TABLE IF EXISTS Genetico;");
             }
-            if (tablaAuxiliar == true) {
+            if (tablaAuxiliar) {
                 stat.execute("DROP TABLE IF EXISTS Auxiliar;");
             }
 
@@ -188,7 +188,7 @@ public class Memoria {
             conn = DriverManager.getConnection("jdbc:sqlite:" + nombreTabla + "info.db");
             Statement stat = conn.createStatement();
 
-            if (delete == true) {
+            if (delete) {
                 stat.execute("DROP TABLE IF EXISTS " + nombreTabla + ";");
             }
 
@@ -261,7 +261,7 @@ public class Memoria {
             }
 
             resultados = stat.executeQuery(sql);
-            if (resultados.next() != false) {
+            if (resultados.next()) {
                 success = true;
                 //System.out.println("SUCCESS");
             } else {
@@ -291,7 +291,7 @@ public class Memoria {
                     population[i].setGene(j, resultados.getInt("chromosome" + j));
                 }
                 ++i;
-                if (resultados.next() == false) {
+                if (!resultados.next()) {
                     salir = true;
                 }
             }
@@ -345,7 +345,7 @@ public class Memoria {
             Statement stat = conn.createStatement();
             resultados = stat.executeQuery(sql);
 
-            if (resultados.next() != false) {
+            if (resultados.next()) {
                 success = true;
                 //System.out.println("SUCCESS");
             } else {
@@ -369,7 +369,7 @@ public class Memoria {
                     population[i].setGene(j, resultados.getInt("chromosome" + j));
                 }
                 ++i;
-                if (resultados.next() == false) {
+                if (!resultados.next()) {
                     salir = true;
                 }
             }
@@ -409,7 +409,7 @@ public class Memoria {
             Statement stat = conn.createStatement();
             resultados = stat.executeQuery(sql);
 
-            if (resultados.next() != false) {
+            if (resultados.next()) {
                 salida = resultados.getInt("posicion") + 1;
             } else {
                 salida = 0;
@@ -495,7 +495,7 @@ public class Memoria {
             conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
             Statement stat = conn.createStatement();
             resultados = stat.executeQuery(sql);
-            while (resultados.next() != false) {
+            while (resultados.next()) {
                 salida = resultados.getInt("posicion");
                 remainingList.add(salida);
             }
@@ -972,7 +972,7 @@ public class Memoria {
 
         String sql = null;
 
-        if (DEBUG == true) {
+        if (DEBUG) {
             //System.out.println("Start function store()");
         }
 
@@ -985,7 +985,7 @@ public class Memoria {
                     + "'" + nombre + "',"
                     + "'" + mapa + "');";
 
-            if (DEBUG == true) {
+            if (DEBUG) {
                 //System.out.println("SQL: " + sql);
             }
 
@@ -1035,7 +1035,7 @@ public class Memoria {
 
         sql = "SELECT id, tipo, nombre FROM Item WHERE mapa = '" + map + "';";
 
-        if (DEBUG == true) {
+        if (DEBUG) {
             //System.out.println("Start function loadLocation()");
             //System.out.println("SQL: " + sql);
         }
@@ -1048,7 +1048,7 @@ public class Memoria {
             Statement sta = conn.createStatement();
             resultados = sta.executeQuery(sql);
 
-            if (DEBUG == true) {
+            if (DEBUG) {
                 //System.out.println("LLamada a la BD realizada con éxito");
             }
 
@@ -1128,7 +1128,7 @@ public class Memoria {
         }
     }
 
-    protected Connection connectDB() throws SQLException {
+    private Connection connectDB() throws SQLException {
         Connection conn;
         logger.info("Connecting to DB : "+BDNAME);
         conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);

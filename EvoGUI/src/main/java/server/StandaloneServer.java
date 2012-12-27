@@ -8,11 +8,9 @@ package server;
 //~--- non-JDK imports --------------------------------------------------------
 
 import org.apache.log4j.Logger;
-
 import synchro.WorkQueueServer;
 
 /**
- *
  * @author Jose
  */
 public class StandaloneServer {

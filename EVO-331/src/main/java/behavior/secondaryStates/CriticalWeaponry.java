@@ -87,7 +87,8 @@ public class CriticalWeaponry extends SecondaryState {
      * @throws SubStatusException Thrown when there are no visible weapons and we
      * don't know the place of any.
      */
-    public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
+    @Override
+	public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
 
         if (PrimaryState.crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -134,7 +135,8 @@ public class CriticalWeaponry extends SecondaryState {
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "CriticalWeaponry";
     }
 }

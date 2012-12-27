@@ -87,7 +87,8 @@ public class PickupHealth extends SecondaryState{
      * @param facingSpot Location where want to make the bot face.
      * @throws SubStatusException Thrown when there is no visible health.
      */
-    public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
+    @Override
+	public void executeMovement (final Player enemy, final Location facingSpot) throws SubStatusException {
 
         if (PrimaryState.crouched) {
             act.act(new SetCrouch ().setCrouch (false));
@@ -140,7 +141,8 @@ public class PickupHealth extends SecondaryState{
      * Converts to string the state's name.
      * @return The name of the state.
      */
-    public String toString () {
+    @Override
+	public String toString () {
         return "PickupHealth";
     }
 }

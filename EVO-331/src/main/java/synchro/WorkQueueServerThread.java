@@ -12,7 +12,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.net.SocketTimeoutException;
 import knowledge.Memoria;
 
 /**
@@ -25,7 +24,7 @@ public class WorkQueueServerThread implements Runnable {
      * Logger for this class
      */
     private static final Logger logger = Logger.getLogger(WorkQueueServerThread.class);
-    protected Socket clientSocket = null;
+    private Socket clientSocket = null;
     private WorkQueueServer server;
     private int id;
 

@@ -4,22 +4,21 @@
  */
 package GUI;
 
+import evolutionaryComputation.Individual;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
-import evolutionaryComputation.Individual;
-import java.util.HashMap;
-
 /**
- *
  * @author Jose
  */
 public class ConfigPreferences {
 
-	List<Individual[]> generationTableList;
+    List<Individual[]> generationTableList;
     HashMap<String, String> parameters;
- 
-	
+
+
     public List<Individual[]> getGenerationTableList() {
         return generationTableList;
     }
@@ -28,10 +27,10 @@ public class ConfigPreferences {
         this.generationTableList = generationTableList;
     }
 
-	public ConfigPreferences() {
-		this.generationTableList = new ArrayList<Individual[]>();
-		
-	}
-	
-	
+    public ConfigPreferences() {
+        this.generationTableList = new ArrayList<Individual[]>();
+
+    }
+
+
 }

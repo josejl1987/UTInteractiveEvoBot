@@ -32,7 +32,6 @@ public class Quicksort  {
 	private static final Logger logger = Logger.getLogger(Quicksort.class);
 
     private static Individual [] numbers;
-    private static int number;
 
     public static void sort(final Individual [] values) {
         // Check for empty or null array
@@ -41,7 +40,7 @@ public class Quicksort  {
         }
 
         Quicksort.numbers = values;
-        number = values.length;
+        int number = values.length;
         quicksort (0, number - 1);
     }
 

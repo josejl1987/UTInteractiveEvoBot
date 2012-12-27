@@ -15,23 +15,26 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
 /**
- *
  * @author Jose
  */
 @RunWith(Suite.class)
-@Suite.SuiteClasses({ synchro.WorkQueueServerTest.class })
+@Suite.SuiteClasses({synchro.WorkQueueServerTest.class})
 public class NewTestSuite {
     @BeforeClass
-    public static void setUpClass() throws Exception {}
+    public static void setUpClass() throws Exception {
+    }
 
     @AfterClass
-    public static void tearDownClass() throws Exception {}
+    public static void tearDownClass() throws Exception {
+    }
 
     @Before
-    public void setUp() throws Exception {}
+    public void setUp() throws Exception {
+    }
 
     @After
-    public void tearDown() throws Exception {}
+    public void tearDown() throws Exception {
+    }
 }
 
 
