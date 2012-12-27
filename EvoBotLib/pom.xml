@@ -55,7 +55,7 @@
     <dependency>
       <groupId>cz.cuni.amis.pogamut.ut2004</groupId>
       <artifactId>ut2004-tournament</artifactId>
-      <version>3.3.2-SNAPSHOT</version>
+      <version>3.3.1</version>
       <type>jar</type>
     </dependency>
   </dependencies>

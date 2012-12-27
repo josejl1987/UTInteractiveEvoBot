@@ -44,3 +44,6 @@ Thumbs.db
 .svn
 /EVO-331/target/apidocs
 /EVO-331/target/javadoc-bundle-options
+/EvoBotLib/target/
+/EVO-331/target/
+/UT2004Tournament/target/
