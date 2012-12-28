@@ -70,7 +70,19 @@
                     </execution>
                 </executions>
             </plugin>
-            
+                        <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>lib/</classpathPrefix>
+                            <mainClass>${bot.main.class}</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
            <plugin>
                 <groupId>com.pyx4me</groupId>
                 <artifactId>proguard-maven-plugin</artifactId>
@@ -90,6 +102,9 @@
                         <option>-keepclasseswithmembers public class * {
                             public static void main(java.lang.String[]);
                             }
+                        </option>
+                        <option>
+                            -keep public class * implements java.io.Serializable
                         </option>
                        
                     </options>

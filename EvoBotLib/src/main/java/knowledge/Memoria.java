@@ -21,6 +21,7 @@ import evolutionaryComputation.*;
 
 import java.sql.*;
 import java.util.*;
+import org.sqlite.JDBC;
 import utilities.Pair;
 
 /**
@@ -123,9 +124,11 @@ public class Memoria {
 
         try {
             Class.forName("org.sqlite.JDBC");
+            JDBC jdbc;
+        
             conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
             Statement stat = conn.createStatement();
-
+           
             if (tablaItems) {
                 stat.execute("DROP TABLE IF EXISTS Item;");
             }
