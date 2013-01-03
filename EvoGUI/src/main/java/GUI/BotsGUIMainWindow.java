@@ -612,6 +612,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             IndividualV1 v1 = new IndividualV1(true, (Class<? extends IndividualStats>) this.jComboBox3.getSelectedItem());
             newpopulation[i] = v1;
         }
+       
         main.setPopulation(newpopulation);
         main.getMem().storeGenes(0, -1, newpopulation);
         openDB(botfolder + "Memoria.db");
@@ -638,12 +639,19 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         worker = new SwingWorker<Void, Void>() {
             @Override
             public Void doInBackground() {
+                
+                try{
                 runEvolution();
                 if (isCancelled()) {
                     System.out.println("SwingWorker - isCancelled");
 
                 }
-                return null;
+          
+                }
+                catch(Exception e){
+                   logger.error("Uncaught Exception in SwingWorker", e);
+                }
+                      return null;
             }
 
             @Override

@@ -31,6 +31,7 @@ import java.io.*;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.logging.Level;
+import utilities.RandomGenerator;
 
 /**
  * @author Jose
@@ -87,6 +88,11 @@ public class EvolutionMain {
             try {
 
                 preferences = (ConfigPreferences) xstream.fromXML(new FileReader(file));
+                  int load=JOptionPane
+                .showConfirmDialog(this.botsGUIMainWindow,"¿Cargar datos?");
+                  if(load==JOptionPane.NO_OPTION){
+                      preferences.generationTableList.clear();
+                  }
             } catch (Exception ex) {
                 if (logger.isDebugEnabled()) {
                     logger.debug("jMenuItem1ActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
@@ -227,7 +233,7 @@ public class EvolutionMain {
         CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
         operators.add(new IndividualV1Crossover(xoverPoints));
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
-        operators.add(new Replacement<IndividualV1>(factory, new Probability(0.1)));
+        operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
         FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
@@ -325,7 +331,7 @@ public class EvolutionMain {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
-        //       operators.add(new Replacement<IndividualV1>(factory, new Probability(0.1)));
+               operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
         FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
@@ -341,6 +347,8 @@ public class EvolutionMain {
         List<EvaluatedCandidate<IndividualV1>> newpop;
         newpop = engine.evolvePopulation(this.getPopulation().length, Integer.parseInt(botsGUIMainWindow.getElitismotextField().getText()), (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(Integer.parseInt(botsGUIMainWindow.getGenerationsField().getText())));
         int count = 0;
+      Collections.sort(newpop);
+         Collections.reverse(newpop);
         for (EvaluatedCandidate<IndividualV1> c : newpop) {
             this.getPopulation()[count] = c.getCandidate();
             this.getPopulation()[count].resetStats();
@@ -416,7 +424,7 @@ public class EvolutionMain {
 
             LogCategory log = new LogCategory("DeathMatch1v1");
             UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-//            log.setLevel(Level.ALL);
+//            log.setLevel(Level.INFO);
 //            log.addConsoleHandler();
 //            match.setLog(log);
 

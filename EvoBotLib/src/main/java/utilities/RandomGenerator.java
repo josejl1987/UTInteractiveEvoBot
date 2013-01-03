@@ -12,6 +12,10 @@ import java.util.Random;
  */
 public class RandomGenerator {
               private static     final  Random rnd=new Random(1);
+
+    public static Random getRnd() {
+        return rnd;
+    }
         public static int doRandomNumber (int lowerBound, int upperBound) {
 
         return rnd.nextInt(upperBound - lowerBound + 1)  + lowerBound;

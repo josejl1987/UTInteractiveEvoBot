@@ -13,6 +13,7 @@ import org.uncommons.watchmaker.framework.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -119,6 +120,8 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
             count++;
         }
+        Collections.sort(newpop);
+        Collections.reverse(newpop);
         newpop = super.nextEvolutionStep(newpop, eliteCount, rng);
         count = 0;
 

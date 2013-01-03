@@ -185,13 +185,13 @@ public class UT2004BotExecution {
 	        } else {
 	        	streamSinkError = new StreamSink(config.getBotId().getToken()+"-StdErrSink", botProcess.getErrorStream());
 	        }
-	        streamSinkError.start();
+//	        streamSinkError.start();
 	        if (config.isRedirectStdOut()) {
 	        	streamSinkOutput = new StreamSink(config.getBotId().getToken()+"-StdOutSink", botProcess.getInputStream(), log, config.getBotId().getToken()+"-StdOut");
 	        } else {
 	        	streamSinkOutput = new StreamSink(config.getBotId().getToken()+"-StdOutSink", botProcess.getInputStream());
 	        }
-	        streamSinkOutput.start();
+//	        streamSinkOutput.start();
 	        shutDownHookThread = new Thread(shutDownHook, config.getBotId().getToken()+"-JVMShutdownHook");
 	        Runtime.getRuntime().addShutdownHook(shutDownHookThread);
 	        waitForEndThread = new Thread(waitForEnd, config.getBotId().getToken()+"-WaitForProcessEnd");

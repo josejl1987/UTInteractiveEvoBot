@@ -35,6 +35,7 @@ public class Memoria {
      * Logger for this class
      */
     private static final Logger logger = Logger.getLogger(Memoria.class);
+    private int numRetries = 5;
 
     public static String getBDNAME() {
         return BDNAME;
@@ -43,13 +44,10 @@ public class Memoria {
     public static void setBDNAME(String BDNAME) {
         Memoria.BDNAME = BDNAME;
     }
-    
-        /**
+    /**
      * Population array.Contains all individuals
      */
     private Individual[] population;
-    
-    
     /**
      * DB's name.
      */
@@ -121,46 +119,48 @@ public class Memoria {
             //System.out.println("Start function loadObject()");
             //System.out.println("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null" + ", x double not null, y double not null, z double not null" + ",  primary key(mapa, x, y, z) )");
         }
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                JDBC jdbc;
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            JDBC jdbc;
-        
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-           
-            if (tablaItems) {
-                stat.execute("DROP TABLE IF EXISTS Item;");
-            }
-            if (tablaGenetico) {
-                stat.execute("DROP TABLE IF EXISTS Genetico;");
-            }
-            if (tablaAuxiliar) {
-                stat.execute("DROP TABLE IF EXISTS Auxiliar;");
-            }
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
 
-            stat.execute("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null,  primary key(id, mapa) )");
-            String genetico = "CREATE TABLE Genetico (posicion int not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null";
-            for (int i = 0; i < nGenes; ++i) {
-                genetico = genetico.concat(",chromosome" + i + " int not null");
-            }
-            genetico = genetico.concat(");");
-            stat.execute(genetico);
+                if (tablaItems) {
+                    stat.execute("DROP TABLE IF EXISTS Item;");
+                }
+                if (tablaGenetico) {
+                    stat.execute("DROP TABLE IF EXISTS Genetico;");
+                }
+                if (tablaAuxiliar) {
+                    stat.execute("DROP TABLE IF EXISTS Auxiliar;");
+                }
 
-            String auxiliar = "CREATE TABLE Auxiliar (posicion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null";
-            for (int i = 0; i < nGenes; ++i) {
-                auxiliar = auxiliar.concat(",chromosome" + i + " int not null");
-            }
-            auxiliar = auxiliar.concat(");");
-            stat.execute(auxiliar);
+                stat.execute("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null,  primary key(id, mapa) )");
+                String genetico = "CREATE TABLE Genetico (posicion int not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null";
+                for (int i = 0; i < nGenes; ++i) {
+                    genetico = genetico.concat(",chromosome" + i + " int not null");
+                }
+                genetico = genetico.concat(");");
+                stat.execute(genetico);
 
-            conn.close();
-        } catch (Exception e) {
+                String auxiliar = "CREATE TABLE Auxiliar (posicion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null";
+                for (int i = 0; i < nGenes; ++i) {
+                    auxiliar = auxiliar.concat(",chromosome" + i + " int not null");
+                }
+                auxiliar = auxiliar.concat(");");
+                stat.execute(auxiliar);
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadObject(boolean, boolean, int, boolean) - OCURRIO UN ERROR EN LA CREACIÓN DE LAS TABLAS"); //$NON-NLS-1$
+                conn.close();
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadObject(boolean, boolean, int, boolean) - OCURRIO UN ERROR EN LA CREACIÓN DE LAS TABLAS"); //$NON-NLS-1$
+                }
+                logger.error("loadObject(boolean, boolean, int, boolean)", e); //$NON-NLS-1$
             }
-            logger.error("loadObject(boolean, boolean, int, boolean)", e); //$NON-NLS-1$
         }
 
         if (logger.isDebugEnabled()) {
@@ -185,50 +185,54 @@ public class Memoria {
         Connection conn = null;
         String insert;
         String tabla = "CREATE TABLE " + nombreTabla + " (deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShield int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null";
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + nombreTabla + "info.db");
+                Statement stat = conn.createStatement();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + nombreTabla + "info.db");
-            Statement stat = conn.createStatement();
-
-            if (delete) {
-                stat.execute("DROP TABLE IF EXISTS " + nombreTabla + ";");
-            }
-
-            if (best != null) {
-                for (int i = 0; i < best.chromosomeSize(); ++i) {
-                    tabla = tabla.concat(",chromosome" + i + " int not null");
-                }
-                tabla = tabla.concat(");");
-                stat.execute(tabla);
-
-                insert = "INSERT INTO " + nombreTabla + " VALUES";
-                insert = insert.concat("(' +" + best.getDeaths() + "', '"
-                        + best.getKills() + "', '" + best.getTotalDamageGiven() + "', '"
-                        + best.getTotalDamageTaken() + "', '" + best.getNSuperShields() + "', '"
-                        + best.getNShields() + "', '" + best.getTotalTimeShock() + "', '" + best.getTotalTimeSniper() + "'");
-
-                for (int j = 0; j < best.chromosomeSize(); ++j) {
-                    insert = insert.concat(",' " + best.getGene(j) + "'");
+                if (delete) {
+                    stat.execute("DROP TABLE IF EXISTS " + nombreTabla + ";");
                 }
 
-                insert = insert.concat(");");
+                if (best != null) {
+                    for (int i = 0; i < best.chromosomeSize(); ++i) {
+                        tabla = tabla.concat(",chromosome" + i + " int not null");
+                    }
+                    tabla = tabla.concat(");");
+                    stat.execute(tabla);
 
-                stat.execute(insert);
+                    insert = "INSERT INTO " + nombreTabla + " VALUES";
+                    insert = insert.concat("(' +" + best.getDeaths() + "', '"
+                            + best.getKills() + "', '" + best.getTotalDamageGiven() + "', '"
+                            + best.getTotalDamageTaken() + "', '" + best.getNSuperShields() + "', '"
+                            + best.getNShields() + "', '" + best.getTotalTimeShock() + "', '" + best.getTotalTimeSniper() + "'");
+
+                    for (int j = 0; j < best.chromosomeSize(); ++j) {
+                        insert = insert.concat(",' " + best.getGene(j) + "'");
+                    }
+
+                    insert = insert.concat(");");
+
+                    stat.execute(insert);
+                }
+
+                conn.close();
+                ok = true;
             }
-
-            conn.close();
-        } catch (Exception e) {
-
+             catch (Exception e) {
+            
             if (logger.isDebugEnabled()) {
                 logger.debug("storeBestIndividuo(String, Individual, boolean) - OCURRIO UN ERROR EN LA CREACIÓN DE LA TABLA PARA EL MEJOR INDIVIDUO"); //$NON-NLS-1$
             }
             logger.error("storeBestIndividuo(String, Individual, boolean)", e); //$NON-NLS-1$
+             }
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("storeBestIndividuo(String, Individual, boolean) - end"); //$NON-NLS-1$
         }
+    
     }
 
     /**
@@ -250,68 +254,71 @@ public class Memoria {
         Connection conn = null;
         boolean success = false;
         boolean salir = false;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = connectDB();
-            Statement stat = conn.createStatement();
-
-
-            resultados = stat.executeQuery(sql);
-            int count = 0;
-            while (resultados.next()) {
-                count++;
-            }
-
-            resultados = stat.executeQuery(sql);
-            if (resultados.next()) {
-                success = true;
-                //System.out.println("SUCCESS");
-            } else {
-                salir = true;
-                //System.out.println("NO SUCCESS");
-
-            }
-
-            int i = 0;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = connectDB();
+                Statement stat = conn.createStatement();
 
 
-            population = new Individual[count];
-            while (!salir) {
-                Individual v1;
-                v1 = new IndividualV1(false,(Class<? extends IndividualStats>) Class.forName(resultados.getString("FitnessClass")));
-                population[i] = v1;
-                population[i].setDeaths(resultados.getInt("deaths"));
-                population[i].setKills(resultados.getInt("kills"));
-                population[i].setTotalDamageGiven(resultados.getInt("totalDamageGiven"));
-                population[i].setTotalDamageTaken(resultados.getInt("totalDamageTaken"));
-                population[i].setNSuperShields(resultados.getInt("nSuperShields"));
-                population[i].setNShields(resultados.getInt("nShields"));
-                population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
-                population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
-                logger.debug("Cromosoma 0 "+v1.getGene(0));
-                for (int j = 0; j < nGenes; ++j) {
-                    population[i].setGene(j, resultados.getInt("chromosome" + j));
+                resultados = stat.executeQuery(sql);
+                int count = 0;
+                while (resultados.next()) {
+                    count++;
                 }
-                ++i;
-                if (!resultados.next()) {
+
+                resultados = stat.executeQuery(sql);
+                if (resultados.next()) {
+                    success = true;
+                    //System.out.println("SUCCESS");
+                } else {
                     salir = true;
+                    //System.out.println("NO SUCCESS");
+
                 }
-            }
-            conn.close();
-        } catch (Exception e) {
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadPoblacion(Individual[], int) - OCURRIO UN ERROR RECUPERANDO LOS INDIVIDUOS"); //$NON-NLS-1$
-                logger.error("Error cargando individuo",e);
+                int i = 0;
+
+
+                population = new Individual[count];
+                while (!salir) {
+                    Individual v1;
+                    v1 = new IndividualV1(false, (Class<? extends IndividualStats>) Class.forName(resultados.getString("FitnessClass")));
+                    population[i] = v1;
+                    population[i].setDeaths(resultados.getInt("deaths"));
+                    population[i].setKills(resultados.getInt("kills"));
+                    population[i].setTotalDamageGiven(resultados.getInt("totalDamageGiven"));
+                    population[i].setTotalDamageTaken(resultados.getInt("totalDamageTaken"));
+                    population[i].setNSuperShields(resultados.getInt("nSuperShields"));
+                    population[i].setNShields(resultados.getInt("nShields"));
+                    population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
+                    population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
+                    logger.debug("Cromosoma 0 " + v1.getGene(0));
+                    for (int j = 0; j < nGenes; ++j) {
+                        population[i].setGene(j, resultados.getInt("chromosome" + j));
+                    }
+                    ++i;
+                    if (!resultados.next()) {
+                        salir = true;
+                    }
+                }
+                conn.close();
+                ok = true;
+
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadPoblacion(Individual[], int) - OCURRIO UN ERROR RECUPERANDO LOS INDIVIDUOS"); //$NON-NLS-1$
+                    logger.error("Error cargando individuo", e);
+                }
+                logger.error("loadPoblacion(Individual[], int)", e); //$NON-NLS-1$
             }
-            logger.error("loadPoblacion(Individual[], int)", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("loadPoblacion(Individual[], int) - end"); //$NON-NLS-1$
         }
-        
+
         return population;
     }
 
@@ -341,50 +348,52 @@ public class Memoria {
         Connection conn = null;
         boolean success = false;
         boolean salir = false;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
-
-            if (resultados.next()) {
-                success = true;
-                //System.out.println("SUCCESS");
-            } else {
-                salir = true;
-                //System.out.println("NO SUCCESS");
-
-            }
-
-            int i = 0;
-            while (!salir) {
-                population[i].setDeaths(resultados.getInt("deaths"));
-                population[i].setKills(resultados.getInt("kills"));
-                population[i].setTotalDamageGiven(resultados.getInt("totalDamageGiven"));
-                population[i].setTotalDamageTaken(resultados.getInt("totalDamageTaken"));
-                population[i].setNSuperShields(resultados.getInt("nSuperShields"));
-                population[i].setNShields(resultados.getInt("nShields"));
-                population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
-                population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
-
-                for (int j = 0; j < nGenes; ++j) {
-                    population[i].setGene(j, resultados.getInt("chromosome" + j));
-                }
-                ++i;
-                if (!resultados.next()) {
+                if (resultados.next()) {
+                    success = true;
+                    //System.out.println("SUCCESS");
+                } else {
                     salir = true;
+                    //System.out.println("NO SUCCESS");
+
                 }
-            }
-            conn.close();
-        } catch (Exception e) {
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadPoblacionAuxiliar(Individual[], int) - OCURRIO UN ERROR RECUPERANDO LOS INDIVIDUOS"); //$NON-NLS-1$
+                int i = 0;
+                while (!salir) {
+                    population[i].setDeaths(resultados.getInt("deaths"));
+                    population[i].setKills(resultados.getInt("kills"));
+                    population[i].setTotalDamageGiven(resultados.getInt("totalDamageGiven"));
+                    population[i].setTotalDamageTaken(resultados.getInt("totalDamageTaken"));
+                    population[i].setNSuperShields(resultados.getInt("nSuperShields"));
+                    population[i].setNShields(resultados.getInt("nShields"));
+                    population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
+                    population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
+
+                    for (int j = 0; j < nGenes; ++j) {
+                        population[i].setGene(j, resultados.getInt("chromosome" + j));
+                    }
+                    ++i;
+                    if (!resultados.next()) {
+                        salir = true;
+                    }
+                }
+                conn.close();
+                ok = true;
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadPoblacionAuxiliar(Individual[], int) - OCURRIO UN ERROR RECUPERANDO LOS INDIVIDUOS"); //$NON-NLS-1$
+                }
+                logger.error("loadPoblacionAuxiliar(Individual[], int)", e); //$NON-NLS-1$
             }
-            logger.error("loadPoblacionAuxiliar(Individual[], int)", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("loadPoblacionAuxiliar(Individual[], int) - end"); //$NON-NLS-1$
         }
@@ -405,29 +414,32 @@ public class Memoria {
         String sql = "SELECT posicion FROM Genetico WHERE current = 1";
         Connection conn = null;
         int salida = 0;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
+                if (resultados.next()) {
+                    salida = resultados.getInt("posicion") + 1;
+                } else {
+                    salida = 0;
 
-            if (resultados.next()) {
-                salida = resultados.getInt("posicion") + 1;
-            } else {
-                salida = 0;
+                }
 
+                stat.executeUpdate("UPDATE Genetico SET current = 1 WHERE posicion = " + "'" + salida + "' ");
+
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadCurrent() - OCURRIO UN ERROR RECUPERANDO EL CURRENT"); //$NON-NLS-1$
+                }
+                logger.error("loadCurrent()", e); //$NON-NLS-1$
             }
-
-            stat.executeUpdate("UPDATE Genetico SET current = 1 WHERE posicion = " + "'" + salida + "' ");
-
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadCurrent() - OCURRIO UN ERROR RECUPERANDO EL CURRENT"); //$NON-NLS-1$
-            }
-            logger.error("loadCurrent()", e); //$NON-NLS-1$
         }
 
         if (logger.isDebugEnabled()) {
@@ -450,28 +462,30 @@ public class Memoria {
         String sql = "SELECT current FROM Genetico WHERE current != '-1'";
         Connection conn = null;
         int salida = 0;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
 
+                salida = resultados.getInt("current");
 
-            salida = resultados.getInt("current");
+                stat.executeUpdate("UPDATE Genetico SET current = 0 WHERE current = 1");
+                resultados.updateInt("current", 0);
 
-            stat.executeUpdate("UPDATE Genetico SET current = 0 WHERE current = 1");
-            resultados.updateInt("current", 0);
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
 
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadIteration() - OCURRIO UN ERROR RECUPERANDO EL ITERATION"); //$NON-NLS-1$
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadIteration() - OCURRIO UN ERROR RECUPERANDO EL ITERATION"); //$NON-NLS-1$
+                }
+                logger.error("loadIteration()", e); //$NON-NLS-1$
             }
-            logger.error("loadIteration()", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("loadIteration() - end"); //$NON-NLS-1$
         }
@@ -493,24 +507,27 @@ public class Memoria {
         Connection conn = null;
         int salida = 0;
         ArrayList<Integer> remainingList = new ArrayList<Integer>();
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
-            while (resultados.next()) {
-                salida = resultados.getInt("posicion");
-                remainingList.add(salida);
-            }
-            conn.close();
-        } catch (Exception e) {
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
+                while (resultados.next()) {
+                    salida = resultados.getInt("posicion");
+                    remainingList.add(salida);
+                }
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
 
-            if (logger.isDebugEnabled()) {
-                logger.debug("getRemainingIndividuals() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
+                if (logger.isDebugEnabled()) {
+                    logger.debug("getRemainingIndividuals() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
+                }
+                logger.error("getRemainingIndividuals()", e); //$NON-NLS-1$
             }
-            logger.error("getRemainingIndividuals()", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("getRemainingIndividuals() - end"); //$NON-NLS-1$
         }
@@ -518,7 +535,7 @@ public class Memoria {
 
     }
 
-    public int getCurrentGeneration() {
+    public synchronized int getCurrentGeneration() {
         if (logger.isDebugEnabled()) {
             logger.debug("getCurrentGeneration() - start"); //$NON-NLS-1$
         }
@@ -528,33 +545,36 @@ public class Memoria {
         String sql2 = "SELECT current FROM Genetico where current=-1";
         Connection conn = null;
         int salida = 0;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
+                salida = resultados.getInt("generacion");
+                resultados = stat.executeQuery(sql2);
 
-            salida = resultados.getInt("generacion");
-            resultados = stat.executeQuery(sql2);
+                if (!resultados.next()) {
+                    // query returned zero rows
+                }
 
-            if (!resultados.next()) {
-                // query returned zero rows
+
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("getCurrentGeneration() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
+                }
+                logger.error("getCurrentGeneration()", e); //$NON-NLS-1$
             }
-
-
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("getCurrentGeneration() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
-            }
-            logger.error("getCurrentGeneration()", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("getCurrentGeneration() - end"); //$NON-NLS-1$
         }
+
         return salida;
     }
 
@@ -567,24 +587,26 @@ public class Memoria {
         String sql = "SELECT generacion FROM Genetico LIMIT 1";
         Connection conn = null;
         int salida = 0;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
+                resultados = stat.executeQuery(sql);
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-            resultados = stat.executeQuery(sql);
+                salida = resultados.getInt("generacion");
 
-            salida = resultados.getInt("generacion");
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
 
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("loadGeneration() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
+                if (logger.isDebugEnabled()) {
+                    logger.debug("loadGeneration() - OCURRIO UN ERROR RECUPERANDO EL GENERATION"); //$NON-NLS-1$
+                }
+                logger.error("loadGeneration()", e); //$NON-NLS-1$
             }
-            logger.error("loadGeneration()", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("loadGeneration() - end"); //$NON-NLS-1$
         }
@@ -606,66 +628,68 @@ public class Memoria {
         }
 
         Connection conn = null;
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
 
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
+
+                stat.execute("DELETE FROM Genetico WHERE posicion = " + individualID);
+                int generation2 = this.getCurrentGeneration();
+
+                String insert;
+
+                int i = individualID;
+
+                insert = "INSERT INTO Genetico VALUES";
+                insert = insert.concat("('" + i + "', '" + generation2 + "', '" + currentIndividual.getDeaths() + "', '"
+                        + currentIndividual.getKills() + "', '" + currentIndividual.getTotalDamageGiven() + "', '"
+                        + currentIndividual.getTotalDamageTaken() + "', '" + currentIndividual.getNSuperShields() + "', '"
+                        + currentIndividual.getNShields() + "', '" + currentIndividual.getTotalTimeShock() + "' ,'" + currentIndividual.getTotalTimeSniper() + "'");
+
+                insert = insert.concat(", '1'");
+                insert = insert.concat(", '" + currentIndividual.getFitnessClass().getCanonicalName()
+                        + "' ");
+                for (int j = 0; j < currentIndividual.chromosomeSize(); ++j) {
+                    insert = insert.concat(",' " + currentIndividual.getGene(j) + "'");
+                }
+
+                insert = insert.concat(");");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeGenes(int, int, int, Individual) - " + insert); //$NON-NLS-1$
+                }
+                stat.execute(insert);
+                insert = "";
+
+                /*
+                 * if (iteration < 2 && currentIndividual == i) { insert = "INSERT
+                 * INTO Auxiliar VALUES"; insert = insert.concat("('"+ iteration
+                 * +"', '"+ population[i].getDeaths() +"', '"+
+                 * population[i].getKills() +"', '"+
+                 * population[i].getTotalDamageGiven() +"', '"+
+                 * population[i].getTotalDamageTaken() +"'");
+                 *
+                 * for (int j=0; j<population[i].size(); ++j){ insert =
+                 * insert.concat(",' "+ population[i].getChromosome()[j] +"'"); }
+                 * insert = insert.concat(");");
+                 *
+                 * stat.execute(insert); insert = ""; }
+                 */
 
 
-            stat.execute("DELETE FROM Genetico WHERE posicion = " + individualID);
-            int generation2=this.getCurrentGeneration();
 
-            String insert;
+                conn.close();
+                      ok = true;
+            } catch (Exception e) {
 
-            int i = individualID;
-
-            insert = "INSERT INTO Genetico VALUES";
-            insert = insert.concat("('" + i + "', '" + generation2 + "', '" + currentIndividual.getDeaths() + "', '"
-                    + currentIndividual.getKills() + "', '" + currentIndividual.getTotalDamageGiven() + "', '"
-                    + currentIndividual.getTotalDamageTaken() + "', '" + currentIndividual.getNSuperShields() + "', '"
-                    + currentIndividual.getNShields() + "', '" + currentIndividual.getTotalTimeShock() + "' ,'" + currentIndividual.getTotalTimeSniper() + "'");
-
-            insert = insert.concat(", '1'");
-            insert =insert.concat(", '"+currentIndividual.getFitnessClass().getCanonicalName()
-                   +"' ");
-            for (int j = 0; j < currentIndividual.chromosomeSize(); ++j) {
-                insert = insert.concat(",' " + currentIndividual.getGene(j) + "'");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeGenes(int, int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
+                }
+                logger.error("storeGenes(int, int, int, Individual[])", e); //$NON-NLS-1$
             }
-
-            insert = insert.concat(");");
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeGenes(int, int, int, Individual) - " + insert); //$NON-NLS-1$
-            }
-            stat.execute(insert);
-            insert = "";
-
-            /*
-             * if (iteration < 2 && currentIndividual == i) { insert = "INSERT
-             * INTO Auxiliar VALUES"; insert = insert.concat("('"+ iteration
-             * +"', '"+ population[i].getDeaths() +"', '"+
-             * population[i].getKills() +"', '"+
-             * population[i].getTotalDamageGiven() +"', '"+
-             * population[i].getTotalDamageTaken() +"'");
-             *
-             * for (int j=0; j<population[i].size(); ++j){ insert =
-             * insert.concat(",' "+ population[i].getChromosome()[j] +"'"); }
-             * insert = insert.concat(");");
-             *
-             * stat.execute(insert); insert = ""; }
-             */
-
-
-
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeGenes(int, int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
-            }
-            logger.error("storeGenes(int, int, int, Individual[])", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("storeGenes(int, int, int, Individual[]) - end"); //$NON-NLS-1$
         }
@@ -681,75 +705,78 @@ public class Memoria {
      * @param iteration Number of matches the bot has played
      */
     public synchronized void storeGenes(int currentIndividual, int generation, int iteration, Individual[] population) {
+
         if (logger.isDebugEnabled()) {
             logger.debug("storeGenes(int, int, int, Individual[]) - start"); //$NON-NLS-1$
         }
 
         Connection conn = null;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-
-
-            stat.execute("DELETE FROM Genetico WHERE posicion = " + currentIndividual);
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
+                Class.forName("org.sqlite.JDBC");
+                conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement stat = conn.createStatement();
 
 
-            String insert;
+                stat.execute("DELETE FROM Genetico WHERE posicion = " + currentIndividual);
 
-            int i = currentIndividual;
 
-            insert = "INSERT INTO Genetico VALUES";
-            insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
-                    + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
-                    + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
-                    + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");
+                String insert;
 
-            if (i == currentIndividual) {
-                insert = insert.concat(", '1'");
-            } else {
-                insert = insert.concat(", '-1'");
+                int i = currentIndividual;
+
+                insert = "INSERT INTO Genetico VALUES";
+                insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
+                        + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
+                        + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
+                        + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");
+
+                if (i == currentIndividual) {
+                    insert = insert.concat(", '1'");
+                } else {
+                    insert = insert.concat(", '-1'");
+                }
+                insert = insert.concat(", '" + population[i].getFitnessClass().getCanonicalName()
+                        + "' ");
+                for (int j = 0; j < population[i].chromosomeSize(); ++j) {
+                    insert = insert.concat(",' " + population[i].getGene(j) + "'");
+                }
+
+                insert = insert.concat(");");
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeGenes(int, int, int, Individual[]) - " + insert); //$NON-NLS-1$
+                }
+                stat.execute(insert);
+                insert = "";
+
+                /*
+                 * if (iteration < 2 && currentIndividual == i) { insert = "INSERT
+                 * INTO Auxiliar VALUES"; insert = insert.concat("('"+ iteration
+                 * +"', '"+ population[i].getDeaths() +"', '"+
+                 * population[i].getKills() +"', '"+
+                 * population[i].getTotalDamageGiven() +"', '"+
+                 * population[i].getTotalDamageTaken() +"'");
+                 *
+                 * for (int j=0; j<population[i].size(); ++j){ insert =
+                 * insert.concat(",' "+ population[i].getChromosome()[j] +"'"); }
+                 * insert = insert.concat(");");
+                 *
+                 * stat.execute(insert); insert = ""; }
+                 */
+
+
+
+                conn.close();
+                ok = true;
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeGenes(int, int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
+                }
+                logger.error("storeGenes(int, int, int, Individual[])", e); //$NON-NLS-1$
             }
-                        insert =insert.concat(", '"+population[i].getFitnessClass().getCanonicalName()
-                   +"' ");
-            for (int j = 0; j < population[i].chromosomeSize(); ++j) {
-                insert = insert.concat(",' " + population[i].getGene(j) + "'");
-            }
-
-            insert = insert.concat(");");
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeGenes(int, int, int, Individual[]) - " + insert); //$NON-NLS-1$
-            }
-            stat.execute(insert);
-            insert = "";
-
-            /*
-             * if (iteration < 2 && currentIndividual == i) { insert = "INSERT
-             * INTO Auxiliar VALUES"; insert = insert.concat("('"+ iteration
-             * +"', '"+ population[i].getDeaths() +"', '"+
-             * population[i].getKills() +"', '"+
-             * population[i].getTotalDamageGiven() +"', '"+
-             * population[i].getTotalDamageTaken() +"'");
-             *
-             * for (int j=0; j<population[i].size(); ++j){ insert =
-             * insert.concat(",' "+ population[i].getChromosome()[j] +"'"); }
-             * insert = insert.concat(");");
-             *
-             * stat.execute(insert); insert = ""; }
-             */
-
-
-
-            conn.close();
-        } catch (Exception e) {
-
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeGenes(int, int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
-            }
-            logger.error("storeGenes(int, int, int, Individual[])", e); //$NON-NLS-1$
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("storeGenes(int, int, int, Individual[]) - end"); //$NON-NLS-1$
         }
@@ -764,79 +791,84 @@ public class Memoria {
      * @param iteration Number of matches the bot has played
      */
     public void storeGenes(int generation, int iteration, Individual[] population) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("storeGenes(int, int, Individual[]) - start"); //$NON-NLS-1$
-        }
-
-        Connection conn = null;
-
-        try {
-            Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
-            Statement stat = conn.createStatement();
-
-
-            stat.execute("DELETE FROM Genetico WHERE posicion != '-1';");
-            if (iteration == 0) {
-                stat.execute("DELETE FROM Auxiliar WHERE posicion != '-1';");
+        synchronized (this) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("storeGenes(int, int, Individual[]) - start"); //$NON-NLS-1$
             }
 
-            String insert;
+            Connection conn = null;
+            boolean ok = false;
+            for (int v = 0; v < numRetries && !ok; v++) {
+                try {
+                    Class.forName("org.sqlite.JDBC");
+                    conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                    Statement stat = conn.createStatement();
 
-            int currentIndividual = -1;
-            for (int i = 0; i < population.length; i++) {
+
+                    stat.execute("DELETE FROM Genetico WHERE posicion != '-1';");
+                    if (iteration == 0) {
+                        stat.execute("DELETE FROM Auxiliar WHERE posicion != '-1';");
+                    }
+
+                    String insert;
+
+                    int currentIndividual = -1;
+                    for (int i = 0; i < population.length; i++) {
 
 
-                insert = "INSERT INTO Genetico VALUES";
-                insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
-                        + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
-                        + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
-                        + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");
+                        insert = "INSERT INTO Genetico VALUES";
+                        insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
+                                + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
+                                + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
+                                + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");
 
-                if (i == currentIndividual) {
-                    insert = insert.concat(", '1'");
-                } else {
-                    insert = insert.concat(", '-1'");
+                        if (i == currentIndividual) {
+                            insert = insert.concat(", '1'");
+                        } else {
+                            insert = insert.concat(", '-1'");
+                        }
+                        insert = insert.concat(", '" + population[i].getFitnessClass().getCanonicalName()
+                                + "' ");
+                        for (int j = 0; j < population[i].chromosomeSize(); ++j) {
+                            insert = insert.concat(",' " + population[i].getGene(j) + "'");
+                        }
+
+                        insert = insert.concat(");");
+
+                        stat.execute(insert);
+                        insert = "";
+
+                        /*
+                         * if (iteration < 2 && currentIndividual == i) { insert =
+                         * "INSERT INTO Auxiliar VALUES"; insert = insert.concat("('"+
+                         * iteration +"', '"+ population[i].getDeaths() +"', '"+
+                         * population[i].getKills() +"', '"+
+                         * population[i].getTotalDamageGiven() +"', '"+
+                         * population[i].getTotalDamageTaken() +"'");
+                         *
+                         * for (int j=0; j<population[i].size(); ++j){ insert =
+                         * insert.concat(",' "+ population[i].getChromosome()[j] +"'");
+                         * } insert = insert.concat(");");
+                         *
+                         * stat.execute(insert); insert = ""; }
+                         */
+
+                    }
+
+                    conn.close();
+                    ok = true;
+                } catch (Exception e) {
+
+                    if (logger.isDebugEnabled()) {
+                        logger.debug("storeGenes(int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
+                    }
+                    logger.error("storeGenes(int, int, Individual[])", e); //$NON-NLS-1$
                 }
-                            insert =insert.concat(", '"+population[i].getFitnessClass().getCanonicalName()
-                   +"' ");
-                for (int j = 0; j < population[i].chromosomeSize(); ++j) {
-                    insert = insert.concat(",' " + population[i].getGene(j) + "'");
-                }
-
-                insert = insert.concat(");");
-
-                stat.execute(insert);
-                insert = "";
-
-                /*
-                 * if (iteration < 2 && currentIndividual == i) { insert =
-                 * "INSERT INTO Auxiliar VALUES"; insert = insert.concat("('"+
-                 * iteration +"', '"+ population[i].getDeaths() +"', '"+
-                 * population[i].getKills() +"', '"+
-                 * population[i].getTotalDamageGiven() +"', '"+
-                 * population[i].getTotalDamageTaken() +"'");
-                 *
-                 * for (int j=0; j<population[i].size(); ++j){ insert =
-                 * insert.concat(",' "+ population[i].getChromosome()[j] +"'");
-                 * } insert = insert.concat(");");
-                 *
-                 * stat.execute(insert); insert = ""; }
-                 */
-
             }
-
-            conn.close();
-        } catch (Exception e) {
 
             if (logger.isDebugEnabled()) {
-                logger.debug("storeGenes(int, int, Individual[]) - OCURRIO UN ERROR EN LA INSERCION EN GENETICO"); //$NON-NLS-1$
+                logger.debug("storeGenes(int, int, Individual[]) - end"); //$NON-NLS-1$
             }
-            logger.error("storeGenes(int, int, Individual[])", e); //$NON-NLS-1$
-        }
-
-        if (logger.isDebugEnabled()) {
-            logger.debug("storeGenes(int, int, Individual[]) - end"); //$NON-NLS-1$
         }
     }
 
@@ -902,7 +934,7 @@ public class Memoria {
      *
      * @param map Map of the game.
      */
-    public void store(String map) {
+    public synchronized void store(String map) {
         if (logger.isDebugEnabled()) {
             logger.debug("store(String) - start"); //$NON-NLS-1$
         }
@@ -968,7 +1000,7 @@ public class Memoria {
      * @param nombre Name of this object.
      * @param mapa Map of the game.
      */
-    private void storeObject(String id, String tipo, String nombre, String mapa) {
+    private synchronized void storeObject(String id, String tipo, String nombre, String mapa) {
         if (logger.isDebugEnabled()) {
             logger.debug("storeObject(String, String, String, String) - start"); //$NON-NLS-1$
         }
@@ -978,33 +1010,34 @@ public class Memoria {
         if (DEBUG) {
             //System.out.println("Start function store()");
         }
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
 
-        try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
 
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                sql = "insert into Item values('" + id + "','" + tipo + "',"
+                        + "'" + nombre + "',"
+                        + "'" + mapa + "');";
 
-            sql = "insert into Item values('" + id + "','" + tipo + "',"
-                    + "'" + nombre + "',"
-                    + "'" + mapa + "');";
+                if (DEBUG) {
+                    //System.out.println("SQL: " + sql);
+                }
 
-            if (DEBUG) {
-                //System.out.println("SQL: " + sql);
+                Statement sta = conn.createStatement();
+                sta.execute(sql);
+                sta.close();
+                // conn.commit();
+                conn.close();
+                ok = true;
+            } catch (Exception e) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeObject(String, String, String, String) - OCURRIO UN ERROR EN LA FUNCION STORE"); //$NON-NLS-1$
+                }
+                //         e.printStackTrace(System.out);
             }
-
-            Statement sta = conn.createStatement();
-            sta.execute(sql);
-            sta.close();
-            // conn.commit();
-            conn.close();
-
-        } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeObject(String, String, String, String) - OCURRIO UN ERROR EN LA FUNCION STORE"); //$NON-NLS-1$
-            }
-            //         e.printStackTrace(System.out);
         }
-
         if (logger.isDebugEnabled()) {
             logger.debug("storeObject(String, String, String, String) - end"); //$NON-NLS-1$
         }
@@ -1042,88 +1075,91 @@ public class Memoria {
             //System.out.println("Start function loadLocation()");
             //System.out.println("SQL: " + sql);
         }
+        boolean ok = false;
+        for (int v = 0; v < numRetries && !ok; v++) {
+            try {
 
-        try {
+                Class.forName("org.sqlite.JDBC");
+                Connection conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
 
-            Class.forName("org.sqlite.JDBC");
-            Connection conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
+                Statement sta = conn.createStatement();
+                resultados = sta.executeQuery(sql);
 
-            Statement sta = conn.createStatement();
-            resultados = sta.executeQuery(sql);
-
-            if (DEBUG) {
-                //System.out.println("LLamada a la BD realizada con éxito");
-            }
-
-            while (resultados.next()) {
-                aux = resultados.getString("id");
-
-                if (resultados.getString("tipo").equals("ADRENALINE")) {
-                    adrenaline.add(aux);
-                } else if (resultados.getString("tipo").equals("HEALTH")) {
-                    if (resultados.getString("nombre").equals("MINI_HEALTH")) {
-                        miniH.add(aux);
-                    } else {
-                        H.add(aux);
-                    }
-                } else if (resultados.getString("tipo").equals("AMMO")) {
-                    if (resultados.getString("nombre").equals("ASSAULT_RIFLE")) {
-                        AMMO_ASSAULT_RIFLE.add(aux);
-                    } else if (resultados.getString("nombre").equals("BIO_RIFLE")) {
-                        AMMO_BIO_RIFLE.add(aux);
-                    } else if (resultados.getString("nombre").equals("FLAK_CANNON")) {
-                        AMMO_FLAK_CANNON.add(aux);
-                    } else if (resultados.getString("nombre").equals("LIGHTNING_GUN")) {
-                        AMMO_LIGHTNING_GUN.add(aux);
-                    } else if (resultados.getString("nombre").equals("LINK_GUN")) {
-                        AMMO_LINK_GUN.add(aux);
-                    } else if (resultados.getString("nombre").equals("MINIGUN")) {
-                        AMMO_MINIGUN.add(aux);
-                    } else if (resultados.getString("nombre").equals("ROCKET_LAUNCHER")) {
-                        AMMO_ROCKET_LAUNCHER.add(aux);
-                    } else if (resultados.getString("nombre").equals("SHIELD_GUN")) {
-                        AMMO_SHIELD_GUN.add(aux);
-                    } else if (resultados.getString("nombre").equals("SHOCK_RIFLE")) {
-                        AMMO_SHOCK_RIFLE.add(aux);
-                    } else if (resultados.getString("nombre").equals("SNIPER_RIFLE")) {
-                        AMMO_SNIPER_RIFLE.add(aux);
-                    }
-                } else if (resultados.getString("tipo").equals("WEAPON")) {
-                    weapon.put(resultados.getString("nombre"), new Pair<String, Boolean>(aux, false));
-                } else if (resultados.getString("tipo").equals("ARMOR")) {
-                    armor.put(resultados.getString("nombre"), new Pair<String, Boolean>(aux, false));
+                if (DEBUG) {
+                    //System.out.println("LLamada a la BD realizada con éxito");
                 }
+
+                while (resultados.next()) {
+                    aux = resultados.getString("id");
+
+                    if (resultados.getString("tipo").equals("ADRENALINE")) {
+                        adrenaline.add(aux);
+                    } else if (resultados.getString("tipo").equals("HEALTH")) {
+                        if (resultados.getString("nombre").equals("MINI_HEALTH")) {
+                            miniH.add(aux);
+                        } else {
+                            H.add(aux);
+                        }
+                    } else if (resultados.getString("tipo").equals("AMMO")) {
+                        if (resultados.getString("nombre").equals("ASSAULT_RIFLE")) {
+                            AMMO_ASSAULT_RIFLE.add(aux);
+                        } else if (resultados.getString("nombre").equals("BIO_RIFLE")) {
+                            AMMO_BIO_RIFLE.add(aux);
+                        } else if (resultados.getString("nombre").equals("FLAK_CANNON")) {
+                            AMMO_FLAK_CANNON.add(aux);
+                        } else if (resultados.getString("nombre").equals("LIGHTNING_GUN")) {
+                            AMMO_LIGHTNING_GUN.add(aux);
+                        } else if (resultados.getString("nombre").equals("LINK_GUN")) {
+                            AMMO_LINK_GUN.add(aux);
+                        } else if (resultados.getString("nombre").equals("MINIGUN")) {
+                            AMMO_MINIGUN.add(aux);
+                        } else if (resultados.getString("nombre").equals("ROCKET_LAUNCHER")) {
+                            AMMO_ROCKET_LAUNCHER.add(aux);
+                        } else if (resultados.getString("nombre").equals("SHIELD_GUN")) {
+                            AMMO_SHIELD_GUN.add(aux);
+                        } else if (resultados.getString("nombre").equals("SHOCK_RIFLE")) {
+                            AMMO_SHOCK_RIFLE.add(aux);
+                        } else if (resultados.getString("nombre").equals("SNIPER_RIFLE")) {
+                            AMMO_SNIPER_RIFLE.add(aux);
+                        }
+                    } else if (resultados.getString("tipo").equals("WEAPON")) {
+                        weapon.put(resultados.getString("nombre"), new Pair<String, Boolean>(aux, false));
+                    } else if (resultados.getString("tipo").equals("ARMOR")) {
+                        armor.put(resultados.getString("nombre"), new Pair<String, Boolean>(aux, false));
+                    }
+                }
+
+                /*
+                 * Guardamos los datos recopilados en cada una de su estructuras
+                 */
+                health.put("MINI_HEALTH", miniH);
+                health.put("HEALTH", H);
+                ammo.put("ASSAULT_RIFLE", AMMO_ASSAULT_RIFLE);
+                ammo.put("BIO_RIFLE", AMMO_BIO_RIFLE);
+                ammo.put("FLAIK_CANNON", AMMO_FLAK_CANNON);
+                ammo.put("LIGHTNING_GUN", AMMO_LIGHTNING_GUN);
+                ammo.put("LINK_GUN", AMMO_LINK_GUN);
+                ammo.put("MINIGUN", AMMO_MINIGUN);
+                ammo.put("ROCKET_LAUNCHER", AMMO_ROCKET_LAUNCHER);
+                ammo.put("SHIELD_GUN", AMMO_SHIELD_GUN);
+                ammo.put("SHOCK_RIFLE", AMMO_SHOCK_RIFLE);
+                ammo.put("SNIPER_RIFLE", AMMO_SNIPER_RIFLE);
+
+
+                for (Pair<String, Boolean> i : armor.values()) {
+                    //System.out.println(i.getFirst());
+                }
+
+                sta.close();
+                conn.close();
+                ok = true;
+            } catch (Exception e) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("load(String) - OCURRIO UN ERROR EN LA FUNCION LOADLOCATION"); //$NON-NLS-1$
+                }
+                logger.error("load(String)", e); //$NON-NLS-1$
+
             }
-
-            /*
-             * Guardamos los datos recopilados en cada una de su estructuras
-             */
-            health.put("MINI_HEALTH", miniH);
-            health.put("HEALTH", H);
-            ammo.put("ASSAULT_RIFLE", AMMO_ASSAULT_RIFLE);
-            ammo.put("BIO_RIFLE", AMMO_BIO_RIFLE);
-            ammo.put("FLAIK_CANNON", AMMO_FLAK_CANNON);
-            ammo.put("LIGHTNING_GUN", AMMO_LIGHTNING_GUN);
-            ammo.put("LINK_GUN", AMMO_LINK_GUN);
-            ammo.put("MINIGUN", AMMO_MINIGUN);
-            ammo.put("ROCKET_LAUNCHER", AMMO_ROCKET_LAUNCHER);
-            ammo.put("SHIELD_GUN", AMMO_SHIELD_GUN);
-            ammo.put("SHOCK_RIFLE", AMMO_SHOCK_RIFLE);
-            ammo.put("SNIPER_RIFLE", AMMO_SNIPER_RIFLE);
-
-
-            for (Pair<String, Boolean> i : armor.values()) {
-                //System.out.println(i.getFirst());
-            }
-
-            sta.close();
-            conn.close();
-        } catch (Exception e) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("load(String) - OCURRIO UN ERROR EN LA FUNCION LOADLOCATION"); //$NON-NLS-1$
-            }
-            logger.error("load(String)", e); //$NON-NLS-1$
-
         }
 
         if (logger.isDebugEnabled()) {
@@ -1133,7 +1169,7 @@ public class Memoria {
 
     private Connection connectDB() throws SQLException {
         Connection conn;
-        logger.info("Connecting to DB : "+BDNAME);
+        logger.info("Connecting to DB : " + BDNAME);
         conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
         return conn;
     }
