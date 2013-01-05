@@ -1,5 +1,7 @@
 package cz.cuni.amis.pogamut.ut2004.tournament.deathmatch;
 
+import deathmatch.UT2004DeathMatch1v1;
+import deathmatch.UT2004DeathMatch;
 import java.io.File;
 import java.util.logging.Level;
 
@@ -7,7 +9,7 @@ import org.junit.AfterClass;
 import org.junit.Test;
 
 import cz.cuni.amis.pogamut.base.utils.Pogamut;
-import cz.cuni.amis.pogamut.ut2004.tournament.utils.UT2004TournamentProperty;
+import utils.UT2004TournamentProperty;
 
 /**
  * Generic test that is using various bots from 'bots' folder and runs them agains native bot.

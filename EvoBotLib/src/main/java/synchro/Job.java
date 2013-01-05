@@ -4,7 +4,7 @@
  */
 package synchro;
 
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch1v1;
+import deathmatch.UT2004DeathMatch1v1;
 import evolutionaryComputation.Individual;
 import org.apache.log4j.Logger;
 

@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import cz.cuni.amis.pogamut.base.utils.Pogamut;
 import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch;
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatchResult;
-import cz.cuni.amis.pogamut.ut2004.tournament.match.UT2004MatchExecutor;
+import deathmatch.UT2004DeathMatch;
+import deathmatch.UT2004DeathMatchResult;
+import match.UT2004MatchExecutor;
 
 /**
  * Generic test that is using various bots from 'bots' folder and runs them agains native bot.

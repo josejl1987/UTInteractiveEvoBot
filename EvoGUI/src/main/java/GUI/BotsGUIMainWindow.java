@@ -255,7 +255,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             for (Individual i : population) {
                 Object[] fila = new Object[tagsList.size()];
                 fila[0] = count;
-                fila[1] = 0;
+                fila[1] = i.fitness();
                 fila[2] = i.getDeaths();
                 fila[3] = i.getKills();
                 fila[4] = i.getTotalDamageGiven();

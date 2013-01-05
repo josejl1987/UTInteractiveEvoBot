@@ -13,28 +13,21 @@
  */
 package bot;
 
-import org.apache.log4j.Logger;
-
-import behavior.secondaryStates.PickupAmmo;
-import behavior.secondaryStates.DefensiveProfile;
-import behavior.secondaryStates.PickupHealth;
+import behavior.primaryStates.Attack;
+import behavior.primaryStates.Camp;
+import behavior.primaryStates.Greedy;
+import behavior.primaryStates.Hunt;
+import behavior.primaryStates.PrimaryState;
+import behavior.primaryStates.Retreat;
 import behavior.secondaryStates.CriticalHealth;
+import behavior.secondaryStates.CriticalWeaponry;
+import behavior.secondaryStates.DefensiveProfile;
+import behavior.secondaryStates.OfensiveProfile;
+import behavior.secondaryStates.PickupAmmo;
+import behavior.secondaryStates.PickupHealth;
 import behavior.secondaryStates.PickupWeapon;
 import behavior.secondaryStates.SecondaryState;
-import behavior.secondaryStates.CriticalWeaponry;
-import behavior.secondaryStates.OfensiveProfile;
-import behavior.primaryStates.PrimaryState;
-import behavior.primaryStates.Camp;
-import behavior.primaryStates.Attack;
-import behavior.primaryStates.Greedy;
-import behavior.primaryStates.Retreat;
-import behavior.primaryStates.Hunt;
 import brain.*;
-import enumTypes.rayCardinals;
-import knowledge.*;
-import utilities.*;
-import evolutionaryComputation.*;
-
 import cz.cuni.amis.pogamut.base.agent.navigation.IPathExecutorState;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.ObjectClassEventListener;
@@ -55,13 +48,16 @@ import cz.cuni.amis.pogamut.ut2004.utils.UT2004BotRunner;
 import cz.cuni.amis.pogamut.ut2004.utils.UnrealUtils;
 import cz.cuni.amis.utils.exception.PogamutException;
 import cz.cuni.amis.utils.flag.FlagListener;
+import enumTypes.rayCardinals;
+import evolutionaryComputation.*;
 import java.io.IOException;
-
 import java.util.logging.Level;
-
 import javax.vecmath.Vector3d;
+import knowledge.*;
+import org.apache.log4j.Logger;
 import synchro.Job;
 import synchro.WorkQueueClient;
+import utilities.*;
 
 /**
  * This class contains the main loop of execution. From it, we communicate with
@@ -331,7 +327,8 @@ public class T800 extends UT2004BotModuleController {
     // *************************************************************************
     @ObjectClassEventListener(eventClass = WorldObjectAppearedEvent.class, objectClass = Item.class)
     protected void objectAppeared(WorldObjectAppearedEvent<Item> event) {
-        Item item = event.getObject();
+        Item item;
+        item = event.getObject();
         Memoria.update(item);
     }
 

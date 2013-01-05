@@ -1,5 +1,8 @@
 package cz.cuni.amis.pogamut.ut2004.tournament.capturetheflag;
 
+import capturetheflag.UT2004CaptureTheFlagResult;
+import capturetheflag.UT2004CaptureTheFlagConfig;
+import capturetheflag.UT2004CaptureTheFlag;
 import java.io.File;
 import java.util.logging.Level;
 
@@ -10,9 +13,9 @@ import org.junit.Test;
 
 import cz.cuni.amis.pogamut.base.utils.Pogamut;
 import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
-import cz.cuni.amis.pogamut.ut2004.tournament.match.UT2004BotConfig;
-import cz.cuni.amis.pogamut.ut2004.tournament.match.UT2004NativeBotConfig;
-import cz.cuni.amis.pogamut.ut2004.tournament.utils.UT2004TournamentProperty;
+import match.UT2004BotConfig;
+import match.UT2004NativeBotConfig;
+import utils.UT2004TournamentProperty;
 
 /**
  * Generic test that is using various bots from 'bots' folder and runs them agains native bot.

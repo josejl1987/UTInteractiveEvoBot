@@ -2,7 +2,7 @@
 
 import cz.cuni.amis.pogamut.base.utils.Pogamut;
 import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch1v1;
+import deathmatch.UT2004DeathMatch1v1;
 import org.apache.log4j.Logger;
 
 public class DeathMatch1v1 {

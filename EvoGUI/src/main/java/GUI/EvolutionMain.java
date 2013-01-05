@@ -7,7 +7,7 @@ package GUI;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
-import cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.UT2004DeathMatch1v1;
+import deathmatch.UT2004DeathMatch1v1;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
 import genetic.*;
@@ -233,7 +233,7 @@ public class EvolutionMain {
         CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
         operators.add(new IndividualV1Crossover(xoverPoints));
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
-        operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
+    //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
         FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
@@ -331,7 +331,7 @@ public class EvolutionMain {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
-               operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
+  //             operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
         FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();

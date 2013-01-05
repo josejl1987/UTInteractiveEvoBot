@@ -2,7 +2,7 @@ package cz.cuni.amis.pogamut.ut2004.tournament.deathmatch.config;
 
 import java.io.File;
 
-import cz.cuni.amis.pogamut.ut2004.tournament.match.UT2004BotConfig;
+import match.UT2004BotConfig;
 
 public class RudaBot {
 

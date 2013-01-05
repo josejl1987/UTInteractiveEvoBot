@@ -9,12 +9,12 @@
 		
     </parent>
 
-    <groupId>cz.cuni.amis.pogamut.ut2004</groupId>
-    <artifactId>ut2004-tournament</artifactId>
-    <version>3.3.1</version>
+    <groupId>cz.cuni.amis.pogamut.ut2004.josejl</groupId>
+    <artifactId>ut2004-tournament-custom</artifactId>
+    <version>0.1</version>
     <packaging>jar</packaging>
 
-    <name>ut2004-tournament</name>
+    <name>ut2004-tournament-custom</name>
     <url>http://diana.ms.mff.cuni.cz/maven-sites/pogamut/${project.version}/${project.artifactId}/</url>
 
     <dependencies>
@@ -27,6 +27,16 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>cz.cuni.amis</groupId>
+            <artifactId>afsm</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>cz.cuni.amis</groupId>
+            <artifactId>amis-utils</artifactId>
+            <version>3.4.0</version>
         </dependency>
     </dependencies>
 	
