@@ -148,13 +148,9 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>cz.cuni.amis</groupId>
-            <artifactId>amis-utils</artifactId>
-            <version>3.4.0</version>
-        </dependency>
-        <dependency>
-            <groupId>cz.cuni.amis.pogamut.ut2004.josejl</groupId>
             <artifactId>ut2004-tournament-custom</artifactId>
+            <groupId>cz.cuni.amis.pogamut.ut2004.josejl</groupId>
+            <type>jar</type>
             <version>0.1</version>
         </dependency>
     </dependencies>

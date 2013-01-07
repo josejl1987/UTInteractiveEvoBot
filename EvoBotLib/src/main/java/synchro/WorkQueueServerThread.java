@@ -53,11 +53,12 @@ public class WorkQueueServerThread implements Runnable {
 
             try {
                 msg = (SyncMessage) input.readObject();
+                server.setLock(false);
             } catch (IOException ex) {
-                logger.error("Socket ID" + id+ " error:"+this.clientSocket.toString(), ex); //$NON-NLS-1$
-               
+                logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
+
                 removeRemainingJob();
-                     server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
+                server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } catch (ClassNotFoundException ex) {
                 logger.error("run()", ex); //$NON-NLS-1$
 
@@ -70,7 +71,7 @@ public class WorkQueueServerThread implements Runnable {
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
                 server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
             } catch (SocketException ex) {
-                logger.error("Socket ID" + id+ " error:"+this.clientSocket.toString(), ex); //$NON-NLS-1$
+                logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
                 removeRemainingJob();
 
@@ -97,12 +98,12 @@ public class WorkQueueServerThread implements Runnable {
     }
 
     private void removeRemainingJob() {
-        synchronized (server.currentJobList){
-        synchronized (server.remainingJobList) {
-            server.remainingJobList.add(id);
-            server.currentJobList.remove(new Integer(id));
-            server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
+        synchronized (server.currentJobList) {
+            synchronized (server.remainingJobList) {
+                server.remainingJobList.add(id);
+                server.currentJobList.remove(new Integer(id));
+                server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
+            }
         }
-    }
     }
 }

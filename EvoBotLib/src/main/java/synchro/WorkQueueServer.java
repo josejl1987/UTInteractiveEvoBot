@@ -31,7 +31,15 @@ public class WorkQueueServer implements Runnable {
     private ServerSocket server;
     final Set<Integer> currentJobList;
     private HashMap<Integer, Job> jobList;
+    private boolean lock;
 
+    public boolean isLock() {
+        return lock;
+    }
+
+    public void setLock(boolean lock) {
+        this.lock = lock;
+    }
     public HashMap<Integer, Job> getJobList() {
         return jobList;
     }
@@ -144,7 +152,7 @@ public class WorkQueueServer implements Runnable {
     }
 
     public void updateRemainingList(boolean ignoreCurrent) {
-        int currentGeneration = mem.getCurrentGeneration();
+   
         remainingJobList = (ArrayList<Integer>) mem.getRemainingIndividuals();
         if (currentJobList != null && !ignoreCurrent) {
             for (Integer i : currentJobList) {

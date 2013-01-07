@@ -388,13 +388,14 @@ public class EvolutionMain {
 
 
         while (!getServer().remainingJobList.isEmpty() && !cancel) {
-            getServer().updateRemainingList(false);
+   
             while (!getServer().remainingJobList.isEmpty() && !cancel) {
                 for (Integer id : getServer().remainingJobList) {
-                    if (getServer().getNumAvailableThreads() > 0) {
+                    if (getServer().getNumAvailableThreads() > 0 &&!server.isLock()) {
                         if (!cancel) {
 
                             runMatch(botsGUIMainWindow, id);
+                            getServer().setLock(true);
                         }
                     }
                 }
@@ -474,7 +475,7 @@ public class EvolutionMain {
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
         this.getServer().setMemoria(this.getMem());
-        this.getServer().updateRemainingList(true);
+     //   this.getServer().updateRemainingList(true);
     }
 
     public void updateGenerationComboBox() {
