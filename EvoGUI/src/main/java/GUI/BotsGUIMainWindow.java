@@ -417,7 +417,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jLabel8.setText("Limite de tiempo");
 
         bot1PathField
-                .setText("C:\\Users\\Jose\\Documents\\utevobots\\utinteractiveevobot\\evo-331\\target\\EVO-331-1.0-SNAPSHOT-small.jar");
+                .setText("C:\\Users\\Jose\\Documents\\utevobots\\utinteractiveevobot\\evo-331\\target\\EVO-331-1.0-SNAPSHOT.jar");
 
         timeLimitField.setText("1");
 
@@ -430,7 +430,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jLabel4.setText("Ruta resultados");
 
         bot2PathField
-                .setText("C:\\Users\\Jose\\Documents\\utevobots\\utinteractiveevobot\\EXPERT-331\\target\\EXPERT-331-1.0-SNAPSHOT-small.jar");
+                .setText("C:\\Users\\Jose\\Documents\\utevobots\\utinteractiveevobot\\EXPERT-331\\target\\EXPERT-331-1.0-SNAPSHOT.jar");
 
         jLabel5.setText("Ruta UT2004");
 
