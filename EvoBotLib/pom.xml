@@ -2,7 +2,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.mycompany</groupId>
+  <groupId>bot.josejl</groupId>
   <artifactId>EvoBotLib</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>jar</packaging>
@@ -47,31 +47,20 @@
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>log4j-over-slf4j</artifactId>
-      <version>1.6.4</version>
-      <type>jar</type>
-    </dependency>
-    <dependency>
       <groupId>org.xerial</groupId>
       <artifactId>sqlite-jdbc</artifactId>
       <version>3.7.2</version>
       <type>jar</type>
     </dependency>
     <dependency>
-      <groupId>cz.cuni.amis</groupId>
-      <artifactId>afsm</artifactId>
-      <version>1.0.0-SNAPSHOT</version>
-    </dependency>
-    <dependency>
-      <groupId>cz.cuni.amis</groupId>
-      <artifactId>amis-utils</artifactId>
-      <version>3.4.0</version>
-    </dependency>
-    <dependency>
-      <groupId>cz.cuni.amis.pogamut.ut2004.josejl</groupId>
+      <groupId>${project.groupId}</groupId>
       <artifactId>ut2004-tournament-custom</artifactId>
       <version>0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.2</version>
     </dependency>
   </dependencies>
 </project>

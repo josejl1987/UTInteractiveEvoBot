@@ -8,7 +8,7 @@
         <version>3.3.1</version>
     </parent>
 
-    <groupId>cz.cuni.amis.pogamut.ut2004.examples</groupId>
+    <groupId>bot.josejl</groupId>
     <version>3.3.2-SNAPSHOT</version>
     <packaging>jar</packaging>
     <url>http://pogamut.cuni.cz/pogamut_files/latest/doc/tutorials/EmptyBotTutorial.html</url>
@@ -136,21 +136,13 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>com.mycompany</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>EvoBotLib</artifactId>
             <version>1.0-SNAPSHOT</version>
-            <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <artifactId>ut2004-tournament</artifactId>
-                    <groupId>cz.cuni.amis.pogamut.ut2004</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>ut2004-tournament-custom</artifactId>
-            <groupId>cz.cuni.amis.pogamut.ut2004.josejl</groupId>
-            <type>jar</type>
             <version>0.1</version>
         </dependency>
     </dependencies>

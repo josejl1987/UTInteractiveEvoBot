@@ -8,7 +8,7 @@
         <version>3.3.1</version>
     </parent>
 
-    <groupId>cz.cuni.amis.pogamut.ut2004.examples</groupId>
+    <groupId>bot.josejl</groupId>
     <artifactId>EXPERT-331</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -76,46 +76,7 @@
                         </configuration>
                     </execution>
                 </executions>
-            </plugin>
-            <plugin>
-                <groupId>com.pyx4me</groupId>
-                <artifactId>proguard-maven-plugin</artifactId>
-                <version>2.1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>proguard</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <proguardVersion>4.8</proguardVersion>
-                    <obfuscate>false</obfuscate>
-                    <options>
-                        <option>-keepclasseswithmembers public class * {
-                            public static void main(java.lang.String[]);
-                            }
-                        </option>
-                    </options>
-                                    
-                    <injar>${project.build.finalName}.jar</injar>
-                    <outjar>${project.build.finalName}-small.jar</outjar>
-                    <outputDirectory>${project.build.directory}</outputDirectory>
-                    <libs>
-                        <lib>${java.home}/lib/rt.jar</lib>
-                        <lib>${java.home}/lib/jsse.jar</lib>
-                    </libs>
-                    <addMavenDescriptor>false</addMavenDescriptor>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>net.sf.proguard</groupId>
-                        <artifactId>proguard-base</artifactId>
-                        <version>4.8</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
+            </plugin>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -145,16 +106,6 @@
             <groupId>org.xerial</groupId>
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.7.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.5.8</version>
-        </dependency>
-        <dependency>
-            <groupId>cz.cuni.amis</groupId>
-            <artifactId>afsm</artifactId>
-            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

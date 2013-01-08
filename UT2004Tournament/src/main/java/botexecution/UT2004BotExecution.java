@@ -149,7 +149,7 @@ public class UT2004BotExecution {
 					(javaHome == null 
 						? (linux ? "java" : "java.exe")
 						: javaHome + (linux ? "/bin/java" : "\\bin\\java.exe"));
-			
+	
 			String fullCommand = command + " \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host + "\""
 							             + " \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port + "\""
 							             + " -jar \"" + config.getJarFile().getAbsolutePath() + "\"";
@@ -163,6 +163,7 @@ public class UT2004BotExecution {
 						command, 
 						"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host,
 						"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port,
+ //                                               "-agentlib:jdwp=transport=dt_socket,address=localhost:9009,server=y,suspend=y" ,
 						"-jar", 
 						config.getJarFile().getAbsolutePath()						
 				);				            
@@ -185,13 +186,13 @@ public class UT2004BotExecution {
 	        } else {
 	        	streamSinkError = new StreamSink(config.getBotId().getToken()+"-StdErrSink", botProcess.getErrorStream());
 	        }
-//	        streamSinkError.start();
+	        streamSinkError.start();
 	        if (config.isRedirectStdOut()) {
 	        	streamSinkOutput = new StreamSink(config.getBotId().getToken()+"-StdOutSink", botProcess.getInputStream(), log, config.getBotId().getToken()+"-StdOut");
 	        } else {
 	        	streamSinkOutput = new StreamSink(config.getBotId().getToken()+"-StdOutSink", botProcess.getInputStream());
 	        }
-//	        streamSinkOutput.start();
+	        streamSinkOutput.start();
 	        shutDownHookThread = new Thread(shutDownHook, config.getBotId().getToken()+"-JVMShutdownHook");
 	        Runtime.getRuntime().addShutdownHook(shutDownHookThread);
 	        waitForEndThread = new Thread(waitForEnd, config.getBotId().getToken()+"-WaitForProcessEnd");

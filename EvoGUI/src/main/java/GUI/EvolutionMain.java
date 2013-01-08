@@ -425,7 +425,7 @@ public class EvolutionMain {
 
             LogCategory log = new LogCategory("DeathMatch1v1");
             UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-            log.setLevel(Level.INFO);
+            log.setLevel(Level.ALL);
             log.addConsoleHandler();
             match.setLog(log);
 
