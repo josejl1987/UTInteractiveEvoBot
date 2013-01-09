@@ -395,7 +395,7 @@ public class EvolutionMain {
                         if (!cancel) {
 
                             runMatch(botsGUIMainWindow, id);
-                            getServer().setLock(true);
+                            getServer().enableTimedLock(1*60*1000);
                         }
                     }
                 }
@@ -425,7 +425,7 @@ public class EvolutionMain {
 
             LogCategory log = new LogCategory("DeathMatch1v1");
             UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-            log.setLevel(Level.ALL);
+            log.setLevel(Level.SEVERE);
             log.addConsoleHandler();
             match.setLog(log);
 

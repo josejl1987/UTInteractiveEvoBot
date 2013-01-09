@@ -54,6 +54,7 @@ public class WorkQueueServerThread implements Runnable {
             try {
                 msg = (SyncMessage) input.readObject();
                 server.setLock(false);
+                server.cancelLockTimer();
             } catch (IOException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 

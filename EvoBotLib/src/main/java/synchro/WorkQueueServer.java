@@ -15,6 +15,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.logging.Level;
 import knowledge.Memoria;
 
@@ -32,18 +34,45 @@ public class WorkQueueServer implements Runnable {
     final Set<Integer> currentJobList;
     private HashMap<Integer, Job> jobList;
     private boolean lock;
+    private Timer lockTimer = new Timer();
+    private ArrayList<Integer> aux;
+
+    public void cancelLockTimer() {
+        lockTimer.cancel();
+    }
 
     public boolean isLock() {
         return lock;
     }
 
+    public void enableTimedLock(long timeout) {
+
+
+        lock = true;
+        // Clase en la que está el código a ejecutar
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                lock = false;
+            }
+        };
+
+
+        // Aquí se pone en marcha el timer cada segundo.
+
+        // Dentro de 0 milisegundos avísame cada 1000 milisegundos
+        lockTimer = new Timer();
+        lockTimer.schedule(timerTask, timeout);
+
+    }
+
     public void setLock(boolean lock) {
         this.lock = lock;
     }
+
     public HashMap<Integer, Job> getJobList() {
         return jobList;
     }
-    public ArrayList<Integer> remainingJobList;
+    public CopyOnWriteArrayList<Integer> remainingJobList=new CopyOnWriteArrayList();
     public boolean ready = true;
     private int count = 0;
     private int population_size;
@@ -152,8 +181,9 @@ public class WorkQueueServer implements Runnable {
     }
 
     public void updateRemainingList(boolean ignoreCurrent) {
-   
-        remainingJobList = (ArrayList<Integer>) mem.getRemainingIndividuals();
+
+        aux = (ArrayList<Integer>) mem.getRemainingIndividuals();
+        remainingJobList.addAllAbsent(aux);
         if (currentJobList != null && !ignoreCurrent) {
             for (Integer i : currentJobList) {
 
