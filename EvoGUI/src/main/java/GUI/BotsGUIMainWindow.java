@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
+import java.util.logging.Handler;
+import java.util.logging.LogManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import knowledge.Memoria;
@@ -23,6 +25,11 @@ import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 import org.uncommons.watchmaker.framework.selection.RouletteWheelSelection;
+import org.jdesktop.beansbinding.BeanProperty;
+import org.jdesktop.beansbinding.AutoBinding;
+import org.jdesktop.beansbinding.Bindings;
+import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
+import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
 
 /**
  * @author Jose
@@ -51,6 +58,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
 
         this.jComboBox3.addItem(ComplexFitness.class);
+        this.jComboBox3.addItem(KadlecFitness.class);
         this.jComboBox3.addItem(RandomFitness.class);
 
 
@@ -63,6 +71,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
      */
     public BotsGUIMainWindow() {
         main = new EvolutionMain(this);
+
 
         setResizable(false);
         initComponents();
@@ -94,18 +103,18 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object[][]{{null, null, null, null},
-                        {null, null, null, null}, {null, null, null, null},
-                        {null, null, null, null}}, new String[]{"Title 1",
-                "Title 2", "Title 3", "Title 4"}));
+                    {null, null, null, null}, {null, null, null, null},
+                    {null, null, null, null}}, new String[]{"Title 1",
+                    "Title 2", "Title 3", "Title 4"}));
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         jScrollPane1.setViewportView(jTable1);
         jPanel3 = new javax.swing.JPanel();
 
-        jTabbedPane1.addTab("EvoluciÃ³n", jPanel3);
+        jTabbedPane1.addTab("Evolución", jPanel3);
         jPanel3.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
-        btnAadir = new JButton("AÃ±adir");
+        btnAadir = new JButton("Añadir");
         btnAadir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             }
@@ -117,10 +126,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         panel.setLayout(new MigLayout("", "[pref!,grow][][pref!,grow]",
                 "[][][][][][][][][grow][]"));
 
-        lblMutacin = new JLabel("MutaciÃ³n");
+        lblMutacin = new JLabel("Mutación");
         panel.add(lblMutacin, "cell 0 0");
 
-        label = new JLabel("VariaciÃ³n relativa (%)");
+        label = new JLabel("Variación relativa (%)");
         panel.add(label, "cell 0 1");
 
         setMutationRatio(new JTextField());
@@ -141,7 +150,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         lblCrossover = new JLabel("Crossover");
         panel.add(lblCrossover, "cell 0 4,alignx left");
 
-        lblNDePuntos = new JLabel("NÂº de puntos");
+        lblNDePuntos = new JLabel("Nº de puntos");
         panel.add(lblNDePuntos, "cell 0 5");
 
         crossoverPointsText = new JTextField();
@@ -165,22 +174,35 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         panel_1 = new JPanel();
         jTabbedPane1.addTab("Salida", null, panel_1, null);
-        panel_1.setLayout(new MigLayout("wrap 1", "[grow,fill]",
-                "[grow,fill][]"));
+        panel_1.setLayout(new MigLayout("", "[][grow]", "[][][][][][][]"));
 
-        scrollPane = new JScrollPane();
-        panel_1.add(scrollPane, "cell 0 0,grow");
+        lblTrabajosEnCurso = new JLabel("Trabajos en curso");
+        panel_1.add(lblTrabajosEnCurso, "cell 0 0,alignx trailing");
 
-        infoTextPane = new JTextPane();
-        scrollPane.setViewportView(infoTextPane);
+        textField = new JTextField();
+        panel_1.add(textField, "cell 1 0,growx");
+        textField.setColumns(10);
 
-        btnNewButton = new JButton("Borrar");
-        btnNewButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent arg0) {
-                infoTextPane.setText("");
-            }
-        });
-        panel_1.add(btnNewButton, "cell 0 1");
+        lblTrabajosPendientes = new JLabel("Trabajos pendientes");
+        panel_1.add(lblTrabajosPendientes, "cell 0 2,alignx trailing");
+
+        textField_1 = new JTextField();
+        textField_1.setColumns(10);
+        panel_1.add(textField_1, "cell 1 2,growx");
+
+        lblTrabajosLanzados = new JLabel("Trabajos lanzados");
+        panel_1.add(lblTrabajosLanzados, "cell 0 4,alignx trailing");
+
+        textField_2 = new JTextField();
+        textField_2.setColumns(10);
+        panel_1.add(textField_2, "cell 1 4,growx");
+
+        lblThreadsDisponibles = new JLabel("Threads disponibles");
+        panel_1.add(lblThreadsDisponibles, "cell 0 6,alignx trailing");
+
+        textField_3 = new JTextField();
+        textField_3.setColumns(10);
+        panel_1.add(textField_3, "cell 1 6,growx");
 
         String botpath = this.bot1PathField.getText();
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
@@ -303,7 +325,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             resultados = stat.executeQuery(sql);
             ResultSetMetaData metaDatos = resultados.getMetaData();
 
-            // Se obtiene el nÃºmero de columnas.
+            // Se obtiene el número de columnas.
             int numeroColumnas = metaDatos.getColumnCount();
 
             // Se crea un array de etiquetas para rellenar
@@ -450,7 +472,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         jLabel9.setText("Generaciones");
 
-        jLabel10.setText("Algoritmo gÃ©netico");
+        jLabel10.setText("Algoritmo génetico");
 
         jLabel11.setText("Algoritmo de cruce");
 
@@ -568,6 +590,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         setJMenuBar(jMenuBar2);
 
         pack();
+        initDataBindings();
     }
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {
@@ -605,16 +628,18 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         main.setMem(new Memoria(true, true, 26, true));
 
         int num_individuals = Integer.parseInt(JOptionPane
-                .showInputDialog("NÃºmero de individuos"));
+                .showInputDialog("Número de individuos"));
         // TODO add your handling code here:1111
         IndividualV1[] newpopulation = new IndividualV1[num_individuals];
         for (int i = 0; i < num_individuals; i++) {
             IndividualV1 v1 = new IndividualV1(true, (Class<? extends IndividualStats>) this.jComboBox3.getSelectedItem());
             newpopulation[i] = v1;
         }
-       
+
         main.setPopulation(newpopulation);
         main.getMem().storeGenes(0, -1, newpopulation);
+        main.observer = new EvolutionMonitor<IndividualV1>();
+        main.preferences.currentGeneration = 0;
         openDB(botfolder + "Memoria.db");
         populateTable(newpopulation);
         main.getServer().setMemoria(main.getMem());
@@ -639,19 +664,18 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         worker = new SwingWorker<Void, Void>() {
             @Override
             public Void doInBackground() {
-                
-                try{
-                runEvolution();
-                if (isCancelled()) {
-                    System.out.println("SwingWorker - isCancelled");
 
+                try {
+                    runEvolution();
+                    if (isCancelled()) {
+                        System.out.println("SwingWorker - isCancelled");
+
+                    }
+
+                } catch (Exception e) {
+                    logger.error("Uncaught Exception in SwingWorker", e);
                 }
-          
-                }
-                catch(Exception e){
-                   logger.error("Uncaught Exception in SwingWorker", e);
-                }
-                      return null;
+                return null;
             }
 
             @Override
@@ -744,7 +768,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             logger.debug("main(String[]) - end"); //$NON-NLS-1$
         }
     }
-
     EvolutionMain main;
     private File currentFile;
     private SwingWorker worker;
@@ -804,9 +827,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JLabel lblNDePuntos;
     private JTextField crossoverPointsText;
     private JPanel panel_1;
-    private JScrollPane scrollPane;
-    private JTextPane infoTextPane;
-    private JButton btnNewButton;
     private JButton btnParar;
     private JLabel lblElitismo;
     private JTextField elitismotextField;
@@ -814,6 +834,14 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JPanel panel_2;
     private JButton btnGuardar;
     private JButton btnCargar;
+    private JLabel lblTrabajosEnCurso;
+    private JLabel lblTrabajosPendientes;
+    private JTextField textField;
+    private JTextField textField_1;
+    private JLabel lblTrabajosLanzados;
+    private JTextField textField_2;
+    private JLabel lblThreadsDisponibles;
+    private JTextField textField_3;
 
     // End of variables declaration//GEN-END:variables
     public JTextField getCrossoverPointsText() {
@@ -858,5 +886,8 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
     public JTextField getElitismotextField() {
         return elitismotextField;
+    }
+
+    protected void initDataBindings() {
     }
 }

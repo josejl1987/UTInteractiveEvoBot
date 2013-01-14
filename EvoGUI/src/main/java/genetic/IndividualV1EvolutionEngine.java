@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.*;
 
 import java.io.IOException;
+import java.security.Timestamp;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,7 +28,31 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
      */
     private static final Logger logger = Logger.getLogger(IndividualV1EvolutionEngine.class);
     private EvolutionMain main;
+    private long startTime;
+    private int currentGeneration;
 
+    public long getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(long startTime) {
+        this.startTime = startTime;
+    }
+
+    public int getCurrentGeneration() {
+        return currentGeneration;
+    }
+
+    public void setCurrentGeneration(int currentGeneration) {
+        this.currentGeneration = currentGeneration;
+    }
+    
+    public  List<EvaluatedCandidate<IndividualV1>> evaluatePopulationArray(IndividualV1[] population){
+        
+       
+        return  evaluatePopulation(Arrays.asList(population));
+        
+    }
     public IndividualV1EvolutionEngine(
             CandidateFactory<IndividualV1> candidateFactory,
             EvolutionaryOperator<IndividualV1> evolutionScheme,
@@ -38,6 +63,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         super(candidateFactory, evolutionScheme, fitnessEvaluator, selectionStrategy,
                 rng);
         this.main = main;
+        startTime = System.currentTimeMillis();
         // TODO Auto-generated constructor stub
     }
 
@@ -120,20 +146,24 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
             count++;
         }
-        Collections.sort(newpop);
-        Collections.reverse(newpop);
-        newpop = super.nextEvolutionStep(newpop, eliteCount, rng);
-        count = 0;
 
-
+        EvolutionUtils.sortEvaluatedPopulation(newpop, true);
+        main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop,true, eliteCount, currentGeneration, startTime));
+        
+  //      Collections.reverse(newpop);
         main.getGenerationTableList().add(copyList);
         main.updateGenerationComboBox();
+
+        newpop = super.nextEvolutionStep(newpop, eliteCount, rng);
+        count = 0;
         main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
         main.initMemoria();
+
+
         if (logger.isDebugEnabled()) {
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
         }
-
+        currentGeneration++;
         return newpop;
 
 

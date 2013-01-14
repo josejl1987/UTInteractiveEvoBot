@@ -96,7 +96,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     public Individual(Individual<T> copy){
         try {
             this.chromosome=Arrays.copyOf(copy.chromosome,copy.chromosome.length);
-              this.stats=(T) copy.stats.getClass().newInstance();
+            this.stats=(T) copy.stats.getClass().newInstance();
             this.stats.deaths=copy.stats.deaths;
             this.stats.kills=copy.stats.kills;
             this.stats.nShields=copy.stats.nShields;

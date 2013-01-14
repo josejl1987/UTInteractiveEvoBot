@@ -13,10 +13,14 @@ import java.util.Random;
 public class RandomFitness extends IndividualStats {
       private static  Random rnd=new Random();
          private double fit=0;
+                 static int count=1;
     @Override
 
     public double fitness() {
-        if(fit==0) fit=rnd.nextDouble()*rnd.nextDouble()*10;
+        if(fit==0){
+            fit=count;
+            count++;
+        }
         return fit;
                 
     }

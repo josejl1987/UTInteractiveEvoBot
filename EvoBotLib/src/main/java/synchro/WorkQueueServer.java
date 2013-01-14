@@ -17,6 +17,7 @@ import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.logging.Level;
 import knowledge.Memoria;
 
@@ -31,7 +32,21 @@ public class WorkQueueServer implements Runnable {
      */
     private static final Logger logger = Logger.getLogger(WorkQueueServer.class);
     private ServerSocket server;
+     
+    final Set<Integer> finishedJobList;
     final Set<Integer> currentJobList;
+
+    public Set<Integer> getFinishedJobList() {
+        return finishedJobList;
+    }
+
+    public Set<Integer> getCurrentJobList() {
+        return currentJobList;
+    }
+
+    public LinkedBlockingQueue<Integer> getRemainingJobList() {
+        return remainingJobList;
+    }
     private HashMap<Integer, Job> jobList;
     private boolean lock;
     private Timer lockTimer = new Timer();
@@ -72,7 +87,7 @@ public class WorkQueueServer implements Runnable {
     public HashMap<Integer, Job> getJobList() {
         return jobList;
     }
-    public CopyOnWriteArrayList<Integer> remainingJobList=new CopyOnWriteArrayList();
+    public LinkedBlockingQueue<Integer> remainingJobList = new LinkedBlockingQueue();
     public boolean ready = true;
     private int count = 0;
     private int population_size;
@@ -134,7 +149,7 @@ public class WorkQueueServer implements Runnable {
     public WorkQueueServer(int port) {
         try {
             server = new ServerSocket(port);
-
+        
         } catch (UnknownHostException ex) {
             logger.error("WorkQueueServer(int)", ex); //$NON-NLS-1$
 
@@ -145,6 +160,7 @@ public class WorkQueueServer implements Runnable {
 
         }
         currentJobList = new HashSet<Integer>();
+        finishedJobList  = new HashSet<Integer>();
         jobList = new HashMap<Integer, Job>();
     }
 
@@ -160,15 +176,25 @@ public class WorkQueueServer implements Runnable {
 
             while (true) {
                 Socket clientSocket = this.server.accept();
-                clientSocket.setSoTimeout(matchTime * 60 * 1200);
+                clientSocket.setSoTimeout(matchTime * 60 * 1700);
 
                 if (!remainingJobList.isEmpty()) {
-                    Integer id = remainingJobList.get(0);
-                    remainingJobList.remove(0);
-                    currentJobList.add(id);
 
-                    new Thread(
-                            new WorkQueueServerThread(clientSocket, id, this)).start();
+                    try {
+                        Integer id;
+                        id = remainingJobList.take();
+
+
+                        currentJobList.add(id);
+                        new Thread(
+                                new WorkQueueServerThread(clientSocket, id, this)).start();
+                    } catch (InterruptedException ex) {
+                        java.util.logging.Logger.getLogger(WorkQueueServer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+
+
+
                 }
 
             }
@@ -183,7 +209,12 @@ public class WorkQueueServer implements Runnable {
     public void updateRemainingList(boolean ignoreCurrent) {
 
         aux = (ArrayList<Integer>) mem.getRemainingIndividuals();
-        remainingJobList.addAllAbsent(aux);
+        
+        for (Integer element : aux) {
+            if (!remainingJobList.contains(element)) {
+                remainingJobList.add(element);
+            }
+        }
         if (currentJobList != null && !ignoreCurrent) {
             for (Integer i : currentJobList) {
 

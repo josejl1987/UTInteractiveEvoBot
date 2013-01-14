@@ -27,17 +27,18 @@ public class WorkQueueServerThread implements Runnable {
     private Socket clientSocket = null;
     private WorkQueueServer server;
     private int id;
-
+    
     public WorkQueueServerThread(Socket clientSocket, int id, WorkQueueServer server) {
         this.clientSocket = clientSocket;
         this.id = id;
         this.server = server;
     }
-
+    
     @Override
     public void run() {
-
+        
         try {
+         
             ObjectOutputStream output = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
             long time = System.currentTimeMillis();
@@ -50,7 +51,7 @@ public class WorkQueueServerThread implements Runnable {
             if (logger.isDebugEnabled()) {
                 logger.debug("run() - Enviado mensaje con ID"); //$NON-NLS-1$
             }
-
+            
             try {
                 msg = (SyncMessage) input.readObject();
                 server.setLock(false);
@@ -65,17 +66,18 @@ public class WorkQueueServerThread implements Runnable {
 
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             }
-
-
+            
+            
             try {
                 msg = (SyncMessage) input.readObject();
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
                 server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
+                logger.info("Thread para individuo " + id + ". Guardado en posición " + msg.id);
             } catch (SocketException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
                 removeRemainingJob();
-
+                
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } catch (ClassNotFoundException ex) {
                 logger.error("run()", ex); //$NON-NLS-1$
@@ -89,15 +91,17 @@ public class WorkQueueServerThread implements Runnable {
             if (logger.isDebugEnabled()) {
                 logger.debug("run() - Request processed: " + time); //$NON-NLS-1$
             }
+            this.server.finishedJobList.add(id);
+            logger.info("Individuo TX-"+server.getMem().getCurrentGeneration()+id+" ha terminado");
             this.clientSocket.close();
-
+            
         } catch (IOException ex) {
             logger.error("run()", ex); //$NON-NLS-1$
 
-
+            
         }
     }
-
+    
     private void removeRemainingJob() {
         synchronized (server.currentJobList) {
             synchronized (server.remainingJobList) {

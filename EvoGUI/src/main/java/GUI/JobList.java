@@ -15,11 +15,28 @@ public class JobList extends ArrayList<Thread> {
         // TODO Auto-generated constructor stub
     }
 
-    public void removeDeadThreads() {
-
+    public boolean areDone() {
+        
+        boolean done = true;
+        int count = 0;
         for (Thread t : this) {
-            if (!t.isAlive()) {
-                this.remove(t);
+            if (t.isAlive()) {
+                done = false;
+            }
+            count++;
+        }
+        if (count == 0) {
+            done = false;
+        }
+        return done;
+    }
+
+    public void removeDeadThreads() {
+        synchronized (this) {
+            for (Thread t : this) {
+                if (!t.isAlive()) {
+                    this.remove(t);
+                }
             }
         }
     }
@@ -31,5 +48,4 @@ public class JobList extends ArrayList<Thread> {
             }
         }
     }
-
 }

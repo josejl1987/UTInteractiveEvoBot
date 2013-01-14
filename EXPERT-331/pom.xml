@@ -107,5 +107,10 @@
             <artifactId>sqlite-jdbc</artifactId>
             <version>3.7.2</version>
         </dependency>
+        <dependency>
+            <groupId>cz.cuni.amis.pogamut</groupId>
+            <artifactId>pogamut-ut2004</artifactId>
+            <version>3.4.0</version>
+        </dependency>
     </dependencies>
 </project>

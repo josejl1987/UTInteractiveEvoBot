@@ -17,7 +17,15 @@ public class ConfigPreferences {
 
     List<Individual[]> generationTableList;
     HashMap<String, String> parameters;
+    int currentGeneration;
 
+    public int getCurrentGeneration() {
+        return currentGeneration;
+    }
+
+    public void setCurrentGeneration(int currentGeneration) {
+        this.currentGeneration = currentGeneration;
+    }
 
     public List<Individual[]> getGenerationTableList() {
         return generationTableList;

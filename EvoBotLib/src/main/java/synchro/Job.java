@@ -23,7 +23,7 @@ public class Job implements Runnable {
     private static final Logger logger = Logger.getLogger(Job.class);
     private Thread.UncaughtExceptionHandler h = new Thread.UncaughtExceptionHandler() {
         @Override
-		public void uncaughtException(Thread th, Throwable ex) {
+        public void uncaughtException(Thread th, Throwable ex) {
 
             logger.error("$Thread.UncaughtExceptionHandler.uncaughtException(Thread, Throwable) - Uncaught exception here: ", ex); //$NON-NLS-1$
 
@@ -35,7 +35,15 @@ public class Job implements Runnable {
                 }
             }
             server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-
+            server.getMem().storeGenes(id, 0, server.getMem().getCurrentGeneration(), backupIndividual);
+            try {
+                if(!server.remainingJobList.contains(id)){
+                server.remainingJobList.put(id);
+            }
+                thread.interrupt();
+            } catch (InterruptedException ex1) {
+                java.util.logging.Logger.getLogger(Job.class.getName()).log(Level.SEVERE, null, ex1);
+            }
 
 
         }
@@ -57,7 +65,7 @@ public class Job implements Runnable {
     public void setMatch(UT2004DeathMatch1v1 match) {
         this.match = match;
     }
-    private  Individual individual;
+    private Individual individual;
 
     public WorkQueueServer getServer() {
         return server;
@@ -85,18 +93,19 @@ public class Job implements Runnable {
     int id;
     private UT2004DeathMatch1v1 match;
     private String replayName;
+    public Individual backupIndividual;
 
     public Job() {
     }
 
-    public Job(Estado status, Job job, int id, WorkQueueServer server, Individual individual,UT2004DeathMatch1v1 match,Thread thread) {
+    public Job(Estado status, Job job, int id, WorkQueueServer server, Individual individual, UT2004DeathMatch1v1 match, Thread thread) {
         this.status = status;
         this.thread = thread;
         this.id = id;
         this.startTime = new Timestamp(new java.util.Date().getTime());
         this.individual = individual;
         this.server = server;
-        this.match=match;
+        this.match = match;
     }
 
     public int getId() {
