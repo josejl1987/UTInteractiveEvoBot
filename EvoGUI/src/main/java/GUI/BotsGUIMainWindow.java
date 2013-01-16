@@ -58,7 +58,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
 
         this.jComboBox3.addItem(ComplexFitness.class);
-        this.jComboBox3.addItem(KadlecFitness.class);
+      //  this.jComboBox3.addItem(KadlecFitness.class);
         this.jComboBox3.addItem(RandomFitness.class);
 
 
@@ -111,10 +111,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
         jPanel3 = new javax.swing.JPanel();
 
-        jTabbedPane1.addTab("Evolución", jPanel3);
+        jTabbedPane1.addTab("Evoluciï¿½n", jPanel3);
         jPanel3.setLayout(new MigLayout("", "[grow]", "[grow]"));
 
-        btnAadir = new JButton("Añadir");
+        btnAadir = new JButton("Aï¿½adir");
         btnAadir.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
             }
@@ -126,10 +126,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         panel.setLayout(new MigLayout("", "[pref!,grow][][pref!,grow]",
                 "[][][][][][][][][grow][]"));
 
-        lblMutacin = new JLabel("Mutación");
+        lblMutacin = new JLabel("Mutaciï¿½n");
         panel.add(lblMutacin, "cell 0 0");
 
-        label = new JLabel("Variación relativa (%)");
+        label = new JLabel("Variaciï¿½n relativa (%)");
         panel.add(label, "cell 0 1");
 
         setMutationRatio(new JTextField());
@@ -150,7 +150,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         lblCrossover = new JLabel("Crossover");
         panel.add(lblCrossover, "cell 0 4,alignx left");
 
-        lblNDePuntos = new JLabel("Nº de puntos");
+        lblNDePuntos = new JLabel("Nï¿½ de puntos");
         panel.add(lblNDePuntos, "cell 0 5");
 
         crossoverPointsText = new JTextField();
@@ -325,7 +325,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             resultados = stat.executeQuery(sql);
             ResultSetMetaData metaDatos = resultados.getMetaData();
 
-            // Se obtiene el número de columnas.
+            // Se obtiene el nï¿½mero de columnas.
             int numeroColumnas = metaDatos.getColumnCount();
 
             // Se crea un array de etiquetas para rellenar
@@ -472,7 +472,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         jLabel9.setText("Generaciones");
 
-        jLabel10.setText("Algoritmo génetico");
+        jLabel10.setText("Algoritmo gï¿½netico");
 
         jLabel11.setText("Algoritmo de cruce");
 
@@ -628,7 +628,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         main.setMem(new Memoria(true, true, 26, true));
 
         int num_individuals = Integer.parseInt(JOptionPane
-                .showInputDialog("Número de individuos"));
+                .showInputDialog("Nï¿½mero de individuos"));
         // TODO add your handling code here:1111
         IndividualV1[] newpopulation = new IndividualV1[num_individuals];
         for (int i = 0; i < num_individuals; i++) {
