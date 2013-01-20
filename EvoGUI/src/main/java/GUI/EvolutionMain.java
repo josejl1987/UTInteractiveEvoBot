@@ -54,6 +54,7 @@ public class EvolutionMain {
     private int populationLength;
     public EvolutionMonitor<IndividualV1> observer;
     private IndividualV1EvolutionEngine engine;
+    private IndividualV1ChromosomeCopy chromosomeCopyOperator=new IndividualV1ChromosomeCopy();
 
     public boolean isCancel() {
         return cancel;
@@ -351,6 +352,7 @@ public class EvolutionMain {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
+        operators.add(chromosomeCopyOperator);
         //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
         FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
@@ -382,6 +384,14 @@ public class EvolutionMain {
             count++;
         }
         this.preferences.setCurrentGeneration(engine.getCurrentGeneration());
+    }
+
+    public IndividualV1ChromosomeCopy getChromosomeCopyOperator() {
+        return chromosomeCopyOperator;
+    }
+
+    public void setChromosomeCopyOperator(IndividualV1ChromosomeCopy chromosomeCopyOperator) {
+        this.chromosomeCopyOperator = chromosomeCopyOperator;
     }
 
     public void killUCCServers() throws IOException {

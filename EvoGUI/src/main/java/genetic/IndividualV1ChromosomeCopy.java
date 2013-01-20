@@ -16,13 +16,43 @@ import java.util.Random;
  *
  * @author jose
  */
-public class IndividualV1ChromosomeCopy implements EvolutionaryOperator<IndividualV1>  {
+public class IndividualV1ChromosomeCopy implements EvolutionaryOperator<IndividualV1> {
+
+    public IndividualV1 selectedCandidate = null;
+
+    public IndividualV1 getSelectedCandidate() {
+        return selectedCandidate;
+    }
+
+    public void setSelectedCandidate(IndividualV1 selectedCandidate) {
+        this.selectedCandidate = selectedCandidate;
+    }
+    boolean[] locked;
+
+    public IndividualV1ChromosomeCopy() {
+        locked = new boolean[IndividualV1.chromosomeGroup.values().length];
+    }
+
+    public void setLockGroupValue(IndividualV1.chromosomeGroup group, boolean value) {
+        locked[group.ordinal()] = value;
+    }
 
     public List<IndividualV1> apply(List<IndividualV1> selectedCandidates, Random rng) {
-        
-        
-        return null;
-        
+        ArrayList<IndividualV1> newList=new ArrayList<IndividualV1>();
+        if (selectedCandidate != null) {
+            for (IndividualV1 individual : selectedCandidates) {
+
+                for (int i = 0; i < selectedCandidate.chromosomeSize(); i++) {
+                    IndividualV1.chromosomeGroup currentGroup = selectedCandidate.getChromosomeGroup(i);
+                    if (locked[currentGroup.ordinal()]) {
+                        individual.getChromosome()[i] = selectedCandidate.getGene(i);
+                    }
+                }
+                newList.add(individual);
+            }
+               return newList;
+        }
+        return selectedCandidates;
+
     }
-    
 }

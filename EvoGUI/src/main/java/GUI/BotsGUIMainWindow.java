@@ -47,6 +47,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
      */
     static final Logger logger = Logger.getLogger(BotsGUIMainWindow.class);
     private JComboBox jComboBox3;
+    private JCheckBox[] chkboxArray;
 
     private void initComboBox() {
         SubClassFinder finder = new SubClassFinder();
@@ -64,7 +65,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
 
         this.jComboBox3.addItem(ComplexFitness.class);
-      //  this.jComboBox3.addItem(KadlecFitness.class);
+        //  this.jComboBox3.addItem(KadlecFitness.class);
         this.jComboBox3.addItem(RandomFitness.class);
 
 
@@ -88,8 +89,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         panel_2 = new JPanel();
         jTabbedPane1.addTab("New tab", null, panel_2, null);
-        panel_2.setLayout(new MigLayout("", "[grow,fill]",
-                "[pref!,grow,fill][]"));
+        panel_2.setLayout(new MigLayout("", "[grow,fill]", "[pref!,grow,fill][354.00][42.00]"));
 
         generationsComboBox = new JComboBox();
         generationsComboBox.addActionListener(new ActionListener() {
@@ -115,6 +115,15 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         jScrollPane1.setViewportView(jTable1);
+        chkboxArray = new JCheckBox[IndividualV1.chromosomeGroup.values().length];
+        for (int i = 0; i < chkboxArray.length; i++) {
+            chkboxArray[i] = new JCheckBox(IndividualV1.chromosomeGroup.values()[i].name());
+            panel_2.add(chkboxArray[i], "cell " + i + " 2");
+        }
+
+
+
+
         jPanel3 = new javax.swing.JPanel();
 
         jTabbedPane1.addTab("Evoluci�n", jPanel3);
@@ -213,47 +222,66 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         String botpath = this.bot1PathField.getText();
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
-        jTable1.addMouseListener(new MouseAdapter() 
-        {
-            
+        jTable1.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
                 int r = jTable1.rowAtPoint(e.getPoint());
                 if (r >= 0 && r < jTable1.getRowCount()) {
-                	jTable1.setRowSelectionInterval(r, r);
+                    jTable1.setRowSelectionInterval(r, r);
                 } else {
-                	jTable1.clearSelection();
+                    jTable1.clearSelection();
                 }
 
-                int rowindex = jTable1.getSelectedRow();
-                if (rowindex < 0)
+                final int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0) {
                     return;
-                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
-                  JPopupMenu popup=new JPopupMenu("Menu");
-                  popup.add("Test");
+                }
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    JPopupMenu popup = new JPopupMenu("Menu");
+                    JMenuItem menuItem = new JMenuItem("Seleccionar");
+                    menuItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            updateSelectedIndividual(rowindex);
+                        }
+                    });
+                    popup.add(menuItem);
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
-            
-            
+
             @Override
             public void mouseReleased(MouseEvent e) {
                 int r = jTable1.rowAtPoint(e.getPoint());
                 if (r >= 0 && r < jTable1.getRowCount()) {
-                	jTable1.setRowSelectionInterval(r, r);
+                    jTable1.setRowSelectionInterval(r, r);
                 } else {
-                	jTable1.clearSelection();
+                    jTable1.clearSelection();
                 }
 
-                int rowindex = jTable1.getSelectedRow();
-                if (rowindex < 0)
+            final    int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0) {
                     return;
-                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
-                  JPopupMenu popup=new JPopupMenu("Menu");
+                }
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    JPopupMenu popup = new JPopupMenu("Menu");
+                    JMenuItem menuItem = new JMenuItem("Seleccionar");
+                    menuItem.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            updateSelectedIndividual(rowindex);
+                        }
+                    });
+                    popup.add(menuItem);
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
-    });
+        });
+    }
+
+    private void updateSelectedIndividual(int index) {
+        for (int i = 0; i < IndividualV1.chromosomeGroup.values().length; i++) {
+            this.main.getChromosomeCopyOperator().setLockGroupValue(IndividualV1.chromosomeGroup.values()[i], chkboxArray[i].isSelected());
+        }
+        main.getChromosomeCopyOperator().selectedCandidate = new IndividualV1((IndividualV1) this.main.getPopulation()[index]);
     }
 
     public JTextField getMutationProbabilityField() {
@@ -273,8 +301,8 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
             SAXBuilder builder = new SAXBuilder();
 
-          URL  instream =  BotsGUIMainWindow.class.getResource("Individual.xml");
-                  File xmlFile = new File(instream.toURI());
+            URL instream = BotsGUIMainWindow.class.getResource("Individual.xml");
+            File xmlFile = new File(instream.toURI());
             String individualType = population[0].getClass().getSimpleName();
             try {
 
@@ -894,6 +922,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JTextField textField_2;
     private JLabel lblThreadsDisponibles;
     private JTextField textField_3;
+    private JCheckBox chckbxDistancia;
 
     // End of variables declaration//GEN-END:variables
     public JTextField getCrossoverPointsText() {
