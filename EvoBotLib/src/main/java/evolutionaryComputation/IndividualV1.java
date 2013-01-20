@@ -32,7 +32,30 @@ import utilities.RandomGenerator;
 public class IndividualV1 extends Individual  implements Serializable{
 
 
-	/**
+   public  enum chromosomeGroup{Distancia,PrioridadArmas,Salud,Riesgo,Tiempo,Items};
+    public chromosomeGroup getChromosomeGroup(int index){
+        if(index>=0 && index<3){
+           return chromosomeGroup.Distancia;
+        }
+           else if(index>=3 && index<12){
+               return chromosomeGroup.PrioridadArmas;
+           }
+           else if (index>=12 && index<14){
+               return chromosomeGroup.Salud;
+           }
+           else if (index>=14&&index<19){
+               return chromosomeGroup.Riesgo;
+           }
+           else if (index>=19&&index<20){
+               return chromosomeGroup.Tiempo;
+               
+           }
+           else if (index>=20 && index<26){
+             return  chromosomeGroup.Items;
+           }
+        return null;
+    }
+	/**1
 	 * Logger for this class
 	 */
 	private static final Logger logger = Logger.getLogger(IndividualV1.class);
