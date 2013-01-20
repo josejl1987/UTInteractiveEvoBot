@@ -92,12 +92,18 @@ public class EvolutionMain {
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             try {
-                 preferences = (ConfigPreferences) xstream.fromXML(new FileReader(file));
+                preferences = (ConfigPreferences) xstream.fromXML(new FileReader(file));
                 int load = JOptionPane
                         .showConfirmDialog(this.botsGUIMainWindow, "�Cargar datos?");
                 if (load == JOptionPane.NO_OPTION) {
                     preferences.generationTableList.clear();
                     preferences.currentGeneration = 0;
+                } else {
+
+                    createGenerationGraph();
+                    this.updateGenerationComboBox();
+                    this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
+                    this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
                 }
             } catch (Exception ex) {
                 if (logger.isDebugEnabled()) {
@@ -109,10 +115,7 @@ public class EvolutionMain {
 
 
         updateDialogs();
-        createGenerationGraph();
-        this.updateGenerationComboBox();
-        this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size()-1));
-        this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
+
     }
 
     public void saveXML() {

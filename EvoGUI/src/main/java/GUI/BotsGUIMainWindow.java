@@ -8,12 +8,18 @@ import evolutionaryComputation.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.sql.*;
 import java.util.*;
 import java.util.List;
 import java.util.logging.Handler;
+import java.util.logging.Level;
 import java.util.logging.LogManager;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -207,7 +213,47 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         String botpath = this.bot1PathField.getText();
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
+        jTable1.addMouseListener(new MouseAdapter() 
+        {
+            
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int r = jTable1.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < jTable1.getRowCount()) {
+                	jTable1.setRowSelectionInterval(r, r);
+                } else {
+                	jTable1.clearSelection();
+                }
 
+                int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+                  JPopupMenu popup=new JPopupMenu("Menu");
+                  popup.add("Test");
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+            
+            
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = jTable1.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < jTable1.getRowCount()) {
+                	jTable1.setRowSelectionInterval(r, r);
+                } else {
+                	jTable1.clearSelection();
+                }
+
+                int rowindex = jTable1.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+                  JPopupMenu popup=new JPopupMenu("Menu");
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+    });
     }
 
     public JTextField getMutationProbabilityField() {
@@ -223,85 +269,91 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     }
 
     public void populateTable(Individual[] population) {
-
-        SAXBuilder builder = new SAXBuilder();
-        File xmlFile = new File("Individual.xml");
-        String individualType = population[0].getClass().getSimpleName();
         try {
 
-            Document document = (Document) builder.build(xmlFile);
-            Element rootNode = document.getRootElement();
-            List<Element> list = rootNode.getChildren("Individual");
-            ArrayList<String> tagsList = new ArrayList<String>();
-            ArrayList<String> groupList = new ArrayList<String>();
-            for (Element individual : list) {
+            SAXBuilder builder = new SAXBuilder();
 
-                Element type = individual.getChild("type");
-                String typeName = type.getChildText("name");
-                if (typeName.equals(individualType)) {
+          URL  instream =  BotsGUIMainWindow.class.getResource("Individual.xml");
+                  File xmlFile = new File(instream.toURI());
+            String individualType = population[0].getClass().getSimpleName();
+            try {
 
-                    List<Element> attributesList = individual
-                            .getChildren("attributes");
-                    for (Element attributes : attributesList) {
+                Document document = (Document) builder.build(xmlFile);
+                Element rootNode = document.getRootElement();
+                List<Element> list = rootNode.getChildren("Individual");
+                ArrayList<String> tagsList = new ArrayList<String>();
+                ArrayList<String> groupList = new ArrayList<String>();
+                for (Element individual : list) {
 
-                        List<Element> singleAttribList = attributes
-                                .getChildren("attribute");
-                        List<Element> chromosomesList = attributes
-                                .getChildren("chromosomes");
+                    Element type = individual.getChild("type");
+                    String typeName = type.getChildText("name");
+                    if (typeName.equals(individualType)) {
 
-                        for (Element singleAttrib : singleAttribList) {
-                            tagsList.add(singleAttrib.getChildText("name"));
+                        List<Element> attributesList = individual
+                                .getChildren("attributes");
+                        for (Element attributes : attributesList) {
 
-                        }
-                        for (Element singleAttrib : chromosomesList) {
+                            List<Element> singleAttribList = attributes
+                                    .getChildren("attribute");
+                            List<Element> chromosomesList = attributes
+                                    .getChildren("chromosomes");
 
-                            List<Element> chromosomeList = singleAttrib
-                                    .getChildren("chromosome");
-
-                            for (Element chrom : chromosomeList) {
-                                tagsList.add(chrom.getChildText("name"));
+                            for (Element singleAttrib : singleAttribList) {
+                                tagsList.add(singleAttrib.getChildText("name"));
 
                             }
+                            for (Element singleAttrib : chromosomesList) {
 
+                                List<Element> chromosomeList = singleAttrib
+                                        .getChildren("chromosome");
+
+                                for (Element chrom : chromosomeList) {
+                                    tagsList.add(chrom.getChildText("name"));
+
+                                }
+
+                            }
                         }
+
                     }
 
                 }
-
-            }
-            jTable1.removeAll();
-            DefaultTableModel model = new DefaultTableModel();
-            model
-                    .setColumnIdentifiers(tagsList.toArray());
-            int count = 0;
-            for (Individual i : population) {
-                Object[] fila = new Object[tagsList.size()];
-                fila[0] = count;
-                fila[1] = i.fitness();
-                fila[2] = i.getDeaths();
-                fila[3] = i.getKills();
-                fila[4] = i.getTotalDamageGiven();
-                fila[5] = i.getTotalDamageTaken();
-                fila[6] = i.getNSuperShields();
-                fila[7] = i.getNShields();
-                fila[8] = i.getTotalTimeShock();
-                fila[9] = i.getTotalTimeSniper();
-                fila[10] = 0;
-                for (int j = 0; j < i.chromosomeSize(); j++) {
-                    fila[j + 11] = i.getGene(j);
+                jTable1.removeAll();
+                DefaultTableModel model = new DefaultTableModel();
+                model
+                        .setColumnIdentifiers(tagsList.toArray());
+                int count = 0;
+                for (Individual i : population) {
+                    Object[] fila = new Object[tagsList.size()];
+                    fila[0] = count;
+                    fila[1] = i.fitness();
+                    fila[2] = i.getDeaths();
+                    fila[3] = i.getKills();
+                    fila[4] = i.getTotalDamageGiven();
+                    fila[5] = i.getTotalDamageTaken();
+                    fila[6] = i.getNSuperShields();
+                    fila[7] = i.getNShields();
+                    fila[8] = i.getTotalTimeShock();
+                    fila[9] = i.getTotalTimeSniper();
+                    fila[10] = 0;
+                    for (int j = 0; j < i.chromosomeSize(); j++) {
+                        fila[j + 11] = i.getGene(j);
+                    }
+                    model.addRow(fila);
+                    count++;
                 }
-                model.addRow(fila);
-                count++;
+                jTable1.setModel(model);
+
+
+                TableColumnAdjuster tca = new TableColumnAdjuster(jTable1);
+                tca.adjustColumns();
+            } catch (IOException io) {
+                System.out.println(io.getMessage());
+            } catch (JDOMException jdomex) {
+                System.out.println(jdomex.getMessage());
             }
-            jTable1.setModel(model);
-
-
-            TableColumnAdjuster tca = new TableColumnAdjuster(jTable1);
-            tca.adjustColumns();
-        } catch (IOException io) {
-            System.out.println(io.getMessage());
-        } catch (JDOMException jdomex) {
-            System.out.println(jdomex.getMessage());
+        } catch (URISyntaxException ex) {
+            java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
