@@ -184,17 +184,17 @@ public class T800 extends UT2004BotModuleController {
             workClient = new WorkQueueClient(4000);
             if(workClient!=null){
             synchro.SyncMessage id = workClient.readMessage(null);
-            Memoria.setBDNAME((String) id.getData());
-
+            testIndividual=(Individual) id.getData();
+            logger.info("Daño recibido-START " + testIndividual.getTotalDamageTaken());
 
             if (logger.isDebugEnabled()) {
                 logger.info("prepareBot(UT2004Bot) - ID recibido= " + id.getId()); //$NON-NLS-1$
             }
-            id.setStatus(Job.Estado.Running);
+         //   id.setStatus(Job.Estado.Running);
             workClient.sendMessage(id);
             number = id.getId();
            
-             memory.loadPoblacion(26);
+           //  memory.loadPoblacion(26);
             if (logger.isDebugEnabled()) {
                 logger.info("prepareBot(UT2004Bot) - Confirmación ID enviado= " + id.getId()); //$NON-NLS-1$
             }
@@ -208,7 +208,7 @@ public class T800 extends UT2004BotModuleController {
         logger.info("Using ID " + number);
  //      geneticAlg.setCurrentIndividual(number);
         // Get a reference to the individual that is goint to play the current match
-        testIndividual = memory.getPopulation()[number];
+   //     testIndividual = memory.getPopulation()[number];
 
         enemyInfo = new EnemyInfo(body);
         skynet = new Skynet(body, testIndividual);
@@ -763,9 +763,13 @@ bot.startAgent();
         try {
             //Get current individual ID from server
             //       geneticAlg.store(memory);
+            
             synchro.SyncMessage id = new synchro.SyncMessage(this.number, Job.Estado.Finished);
-            id.setData(this.testIndividual);
+         
+            id.setData(testIndividual);
+               logger.info("Daño recibido-FINAL" + ((Individual)(id.getData())).getTotalDamageTaken());
             workClient.sendMessage(id);
+                 logger.info("Daño recibido-FINALENVIO" + ((Individual)(id.getData())).getTotalDamageTaken());
             if (logger.isDebugEnabled()) {
                 logger.info("saveInfo() - Confirmación enviada"); //$NON-NLS-1$
             }

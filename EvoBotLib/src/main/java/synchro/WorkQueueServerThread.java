@@ -5,6 +5,7 @@
 package synchro;
 
 import evolutionaryComputation.Individual;
+import evolutionaryComputation.IndividualV1;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -45,7 +46,7 @@ public class WorkQueueServerThread implements Runnable {
             String confirmation = "1";
             // while(confirmation!="OK"){
             SyncMessage msg = new SyncMessage(id, Job.Estado.Init);
-            msg.data = Memoria.getBDNAME();
+            msg.data = server.getJobList().get(id).getIndividual();
             output.writeObject(msg);
             msg = null;
             if (logger.isDebugEnabled()) {
@@ -71,8 +72,11 @@ public class WorkQueueServerThread implements Runnable {
             try {
                 msg = (SyncMessage) input.readObject();
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-                server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
-                logger.info("Thread para individuo " + id + ". Guardado en posición " + msg.id);
+                int index=msg.id%server.getPopulation_size();
+                int index2=msg.id/server.getInterations();
+                server.individualsIterationList[index][index2]=(IndividualV1) msg.data;
+              //  server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
+                logger.info("Thread para individuo " + id + ". Guardado en posición " + msg.id%30);
             } catch (SocketException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 

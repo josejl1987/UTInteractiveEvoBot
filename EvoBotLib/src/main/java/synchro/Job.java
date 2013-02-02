@@ -35,15 +35,16 @@ public class Job implements Runnable {
                 }
             }
             server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-            server.getMem().storeGenes(id, 0, server.getMem().getCurrentGeneration(), backupIndividual);
-            try {
-                if(!server.remainingJobList.contains(id)){
-                server.remainingJobList.put(id);
-            }
-                thread.interrupt();
-            } catch (InterruptedException ex1) {
-                java.util.logging.Logger.getLogger(Job.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+         //   server.getMem().storeGenes(id, 0, server.getMem().getCurrentGeneration(), backupIndividual);
+            status=Estado.Error;
+//            try {
+//           //     if(!server.remainingJobList.contains(id)){
+//            //    server.remainingJobList.put(id);
+//            }
+//                thread.interrupt();
+//            } catch (InterruptedException ex1) {
+//                java.util.logging.Logger.getLogger(Job.class.getName()).log(Level.SEVERE, null, ex1);
+//            }
 
 
         }
@@ -90,7 +91,7 @@ public class Job implements Runnable {
     }
     public enum Estado {
 
-        Init, Running, Finished,Error;
+        Init,WaitingID, Running, Finished,Error;
     }
     Estado status;
     private Timestamp startTime;

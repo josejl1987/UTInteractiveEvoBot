@@ -57,7 +57,7 @@ public class EvolutionMain {
     private int populationLength;
     public EvolutionMonitor<IndividualV1> observer;
     private IndividualV1EvolutionEngine engine;
-    private IndividualV1ChromosomeCopy chromosomeCopyOperator=new IndividualV1ChromosomeCopy();
+    private IndividualV1ChromosomeCopy chromosomeCopyOperator = new IndividualV1ChromosomeCopy();
 
     public boolean isCancel() {
         return cancel;
@@ -103,7 +103,7 @@ public class EvolutionMain {
                     preferences.generationTableList.clear();
                     preferences.currentGeneration = 0;
                 } else {
-                       updateDialogs();
+                    updateDialogs();
                     createGenerationGraph();
                     this.updateGenerationComboBox();
                     initMemoria();
@@ -122,33 +122,32 @@ public class EvolutionMain {
         updateDialogs();
 
     }
-    
-     public void saveXML(String filename) {
+
+    public void saveXML(String filename) {
         updateParameters();
         preferences.currentGeneration = engine.getCurrentGeneration();
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
 
-   
-            File file =new File(filename);
-            try {
-                BufferedWriter os = new BufferedWriter(new FileWriter(file));
-                os.write(xml);
-                os.flush();
-                os.close();
-            } catch (IOException ex) {
-                if (logger.isDebugEnabled()) {
-                    logger.debug("jMenuItem1ActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
-                }
-            }
 
-        
+        File file = new File(filename);
+        try {
+            BufferedWriter os = new BufferedWriter(new FileWriter(file));
+            os.write(xml);
+            os.flush();
+            os.close();
+        } catch (IOException ex) {
+            if (logger.isDebugEnabled()) {
+                logger.debug("jMenuItem1ActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
+            }
+        }
+
+
 
 
         updateParameters();
     }
-
 
     public void saveXML() {
         updateParameters();
@@ -362,7 +361,6 @@ public class EvolutionMain {
 //            }
 //        }
 //    }
-
     public List<Individual[]> getGenerationTableList() {
         return preferences.generationTableList;
     }
@@ -374,7 +372,7 @@ public class EvolutionMain {
     void runEvolution(BotsGUIMainWindow botsGUIMainWindow) {
         cancel = false;
         botsGUIMainWindow.initMemoria();
-     //   this.getServer().updateRemainingList(true);
+        //   this.getServer().updateRemainingList(true);
         getServer().setMatchTime(Integer.parseInt(botsGUIMainWindow.timeLimitField.getText()));
         List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
         int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
@@ -453,27 +451,28 @@ public class EvolutionMain {
 
         getServer().setMaxThreadsNum(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().setNumAvailableThreads(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
-        getServer().init();
-        
-        for(int i=0;i<this.population.length*Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());i++){
+        int iterations = Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());
+        getServer().init(this.populationLength, iterations);
+
+        for (int i = 0; i < iterations * populationLength; i++) {
             this.createJob(i, botsGUIMainWindow);
         }
 
-        while (getServer().getFinishedJobList().size() != populationLength && !jobList.areDone() && !cancel) {
-
-            while (!getServer().remainingJobList.isEmpty() && !cancel) {
+        while (getServer().getJobList().getFinishedJobs().size() != populationLength && !jobList.areDone() && !cancel) {
+   
+          
 
                 if (getServer().getNumAvailableThreads() > 0 && !server.isLock()) {
-                    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean( OperatingSystemMXBean.class);
-             
-                   double load= osBean.getSystemCpuLoad();  
-                    if (!cancel&&load<0.86) {
+                    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+
+                    double load = osBean.getSystemCpuLoad();
+                    if (!cancel && load < 0.86 && getServer().getJobList().getRemainingJobs().size()>0) {
                         int id;
 
-                        id = getServer().remainingJobList.peek();
+                        id = getServer().getJobList().getRemainingJobs().get(0);
                         runMatch(botsGUIMainWindow, id);
                         logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
-                  //      getServer().enableTimedLock(1 * 60 * 1000);
+                        getServer().enableTimedLock(1 * 60 * 1000);
 
 
                     }
@@ -481,12 +480,12 @@ public class EvolutionMain {
                 }
                 try {
                     Thread.sleep(500);
-
+                   
                 } catch (InterruptedException ex) {
                     if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                         BotsGUIMainWindow.logger.debug("iterateOnce() - " + ex); //$NON-NLS-1$
                     }
-                }
+             
 
             }
             //          getServer().updateRemainingList(true);
@@ -505,9 +504,14 @@ public class EvolutionMain {
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - start"); //$NON-NLS-1$
             }
-            Job newJob = createJob(id, botsGUIMainWindow);
-
-            jobList.add(newJob.getThread());
+            //   Job newJob = createJob(id, botsGUIMainWindow);
+            server.getJobList().get(id).setThread((new Thread(server.getJobList().get(id).getMatch())));
+            server.getJobList().get(id).getThread().setName(server.getJobList().get(id).getMatch().getMatchName());
+            server.getJobList().get(id).run();
+            server.getJobList().get(id).setStatus(Job.Estado.WaitingID);
+            getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
+            server.updateRemainingList();
+            //  jobList.add(newJob.getThread());
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - end"); //$NON-NLS-1$
             }
@@ -583,7 +587,7 @@ public class EvolutionMain {
         // OUTPUT RESULT
         match.setOutputDir(botsGUIMainWindow.logPathField.getText());
         botsGUIMainWindow.initMemoria();
-        getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
+
         Job newJob = new Job();
         newJob.setId(id);
         newJob.setMatch(match);
@@ -591,8 +595,8 @@ public class EvolutionMain {
         newJob.setStartTime(new Timestamp(System.currentTimeMillis()));
         newJob.setThread((new Thread(match)));
         newJob.getThread().setName(match.getMatchName());
-        newJob.setIndividual(new IndividualV1(this.getPopulation()[id]));
-        newJob.backupIndividual = new IndividualV1(this.getPopulation()[id]);
+        newJob.setIndividual(new IndividualV1(this.getPopulation()[id % this.populationLength]));
+        newJob.backupIndividual = new IndividualV1(this.getPopulation()[id % this.populationLength]);
         newJob.setServer(getServer());
         getServer().getJobList().put(id, newJob);
         return newJob;

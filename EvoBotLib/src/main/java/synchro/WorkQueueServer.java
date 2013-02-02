@@ -5,6 +5,7 @@
 package synchro;
 
 import evolutionaryComputation.Individual;
+import evolutionaryComputation.IndividualV1;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -36,7 +37,7 @@ public class WorkQueueServer implements Runnable {
      
     final Set<Integer> finishedJobList;
     final Set<Integer> currentJobList;
-    final IndividualV1[][] individualsIterationList=null;
+     IndividualV1[][] individualsIterationList=null;
     public Set<Integer> getFinishedJobList() {
         return finishedJobList;
     }
@@ -85,12 +86,28 @@ public class WorkQueueServer implements Runnable {
         this.lock = lock;
     }
 
-    public HashMap<Integer, Job> getJobList() {
+    public JobList getJobList() {
         return jobList;
     }
     public LinkedBlockingQueue<Integer> remainingJobList = new LinkedBlockingQueue();
     public boolean ready = true;
     private int count = 0;
+
+    public int getPopulation_size() {
+        return population_size;
+    }
+
+    public void setPopulation_size(int population_size) {
+        this.population_size = population_size;
+    }
+
+    public int getInterations() {
+        return interations;
+    }
+
+    public void setInterations(int interations) {
+        this.interations = interations;
+    }
     private int population_size;
     private int interations;
     private Memoria mem;
@@ -169,7 +186,10 @@ public class WorkQueueServer implements Runnable {
         jobList = new JobList();
     }
 
-    public void init() {
+    public void init(int populationSize,int iterations) {
+        this.population_size=populationSize;
+        this.interations=iterations;
+        this.individualsIterationList=new IndividualV1[populationSize][iterations];
         this.updateRemainingList();
         this.currentJobList.clear();
     }
@@ -185,17 +205,15 @@ public class WorkQueueServer implements Runnable {
 
                 if (!remainingJobList.isEmpty()) {
 
-                    try {
+                   
                         Integer id;
-                        id = remainingJobList.take();
+                        id = jobList.getWaitingIdJob();
 
 
                         currentJobList.add(id);
                         new Thread(
                                 new WorkQueueServerThread(clientSocket, id, this)).start();
-                    } catch (InterruptedException ex) {
-                        java.util.logging.Logger.getLogger(WorkQueueServer.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                     
 
 
 
@@ -211,7 +229,8 @@ public class WorkQueueServer implements Runnable {
 
     }
     public void updateRemainingList(){
-        this.jobList.getRemainingJobs();
+     remainingJobList.clear();
+     remainingJobList.addAll(this.jobList.getRemainingJobs());
     }
 
     public void updateRemainingListOld(boolean ignoreCurrent,int iterations) {

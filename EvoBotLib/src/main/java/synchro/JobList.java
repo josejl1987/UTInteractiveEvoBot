@@ -15,7 +15,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class JobList extends HashMap<Integer, Job> {
     
-    List<Integer> getRemainingJobs(){
+ public   List<Integer> getRemainingJobs(){
         
        CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());
        ArrayList<Integer> remainingList=new ArrayList<Integer>();
@@ -27,6 +27,36 @@ public class JobList extends HashMap<Integer, Job> {
        }
        
         return remainingList;
+    }
+    
+   public     List<Integer> getFinishedJobs(){
+        
+       CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());
+       ArrayList<Integer> remainingList=new ArrayList<Integer>();
+       for(Job job:jobArray){
+        if(job.getStatus()==Job.Estado.Finished){
+            remainingList.add(job.getId());
+        }
+       
+       }
+       
+        return remainingList;
+    }
+    
+  public     Integer getWaitingIdJob(){
+        
+       CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());
+       ArrayList<Integer> remainingList=new ArrayList<Integer>();
+       boolean find=false;
+       int id=-1;
+       for(Job job:jobArray){
+        if(job.getStatus()==Job.Estado.WaitingID&&!find){
+           id=job.getId();
+        }
+       
+       }
+       
+        return id;
     }
     
 }

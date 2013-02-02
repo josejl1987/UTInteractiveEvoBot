@@ -120,7 +120,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
                         logger.warn("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - exception ignored", ex); //$NON-NLS-1$
 
                     }
-                    main.getServer().updateRemainingList(true);
+                    main.getServer().updateRemainingList();
                 }
             }
         }
