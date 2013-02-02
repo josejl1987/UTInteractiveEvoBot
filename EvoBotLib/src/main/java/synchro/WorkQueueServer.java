@@ -4,6 +4,7 @@
  */
 package synchro;
 
+import evolutionaryComputation.Individual;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -35,7 +36,7 @@ public class WorkQueueServer implements Runnable {
      
     final Set<Integer> finishedJobList;
     final Set<Integer> currentJobList;
-
+    final IndividualV1[][] individualsIterationList=null;
     public Set<Integer> getFinishedJobList() {
         return finishedJobList;
     }
@@ -47,7 +48,7 @@ public class WorkQueueServer implements Runnable {
     public LinkedBlockingQueue<Integer> getRemainingJobList() {
         return remainingJobList;
     }
-    private HashMap<Integer, Job> jobList;
+    private JobList jobList;
     private boolean lock;
     private Timer lockTimer = new Timer();
     private ArrayList<Integer> aux;
@@ -146,6 +147,10 @@ public class WorkQueueServer implements Runnable {
         this.mem = mem;
     }
 
+    /**
+     *
+     * @param port
+     */
     public WorkQueueServer(int port) {
         try {
             server = new ServerSocket(port);
@@ -161,11 +166,11 @@ public class WorkQueueServer implements Runnable {
         }
         currentJobList = new HashSet<Integer>();
         finishedJobList  = new HashSet<Integer>();
-        jobList = new HashMap<Integer, Job>();
+        jobList = new JobList();
     }
 
     public void init() {
-        this.updateRemainingList(true);
+        this.updateRemainingList();
         this.currentJobList.clear();
     }
 
@@ -205,8 +210,11 @@ public class WorkQueueServer implements Runnable {
         }
 
     }
+    public void updateRemainingList(){
+        this.jobList.getRemainingJobs();
+    }
 
-    public void updateRemainingList(boolean ignoreCurrent) {
+    public void updateRemainingListOld(boolean ignoreCurrent,int iterations) {
 
         aux = (ArrayList<Integer>) mem.getRemainingIndividuals();
         

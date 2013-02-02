@@ -126,6 +126,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         }
 
         main.setPopulation(main.getMem().loadPoblacion(26));
+        main.saveXML("./backup.xml");
         Collection<Individual> oldpop = Arrays.asList(main.getPopulation().clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
 
@@ -164,6 +165,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
         }
         currentGeneration++;
+     
         return newpop;
 
 

@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import com.sun.management.OperatingSystemMXBean;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 import cz.cuni.amis.pogamut.base.utils.logging.LogCategory;
@@ -28,6 +29,8 @@ import synchro.WorkQueueServer;
 
 import javax.swing.*;
 import java.io.*;
+import java.lang.management.ManagementFactory;
+
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.logging.Level;
@@ -100,9 +103,10 @@ public class EvolutionMain {
                     preferences.generationTableList.clear();
                     preferences.currentGeneration = 0;
                 } else {
-
+                       updateDialogs();
                     createGenerationGraph();
                     this.updateGenerationComboBox();
+                    initMemoria();
                     this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
                     this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
                 }
@@ -118,6 +122,33 @@ public class EvolutionMain {
         updateDialogs();
 
     }
+    
+     public void saveXML(String filename) {
+        updateParameters();
+        preferences.currentGeneration = engine.getCurrentGeneration();
+        XStream xstream = new XStream(new DomDriver());
+        String xml = xstream.toXML(preferences);
+
+
+   
+            File file =new File(filename);
+            try {
+                BufferedWriter os = new BufferedWriter(new FileWriter(file));
+                os.write(xml);
+                os.flush();
+                os.close();
+            } catch (IOException ex) {
+                if (logger.isDebugEnabled()) {
+                    logger.debug("jMenuItem1ActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
+                }
+            }
+
+        
+
+
+        updateParameters();
+    }
+
 
     public void saveXML() {
         updateParameters();
@@ -239,98 +270,98 @@ public class EvolutionMain {
     }
 
     @Deprecated
-    void runEvolutionOld(BotsGUIMainWindow botsGUIMainWindow) {
-        cancel = false;
-        botsGUIMainWindow.initMemoria();
-        this.getServer().updateRemainingList(true);
-        List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
-        int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
-        CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
-        operators.add(new IndividualV1Crossover(xoverPoints));
-        operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
-        //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
-        EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
-        FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
-        Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
-        SelectionStrategy<Object> selection = initSelectionStrategy();
-        Random rng = new MersenneTwisterRNG();
-        GenerationalEvolutionEngine<IndividualV1> engine;
-        engine = new GenerationalEvolutionEngine<IndividualV1>(factory, pipeline, fitnessEvaluator, selection, rng);
-        if (observer != null) {
-            observer = new EvolutionMonitor<IndividualV1>();
-        }
-
-        // engine.addEvolutionObserver(observer);
-        observer.showInFrame("Monitor", false);
-        int generations = Integer.parseInt(botsGUIMainWindow.getGenerationsField().getText());
-        for (int i = 0; i < generations && !cancel; i++) {
-            if (this.getServer().remainingJobList.isEmpty()) {
-                //                GeneticAlg geneticAlg;
-                //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
-                //                try {
-                //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
-                //                    main.setPopulation main.getMem().loadPoblacion(26);
-                //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
-                //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
-                //                    initMemoria();
-                //                } catch (InstantiationException ex) {
-                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                //                } catch (IllegalAccessException ex) {
-                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                //                }
-                this.setPopulation(this.getMem().loadPoblacion(26));
-                Collection<Individual> oldpop = Arrays.asList(this.getPopulation().clone());
-                List<EvaluatedCandidate<IndividualV1>> newpop;
-                newpop = engine.evolvePopulation(this.getPopulation().length, 2, (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(2));
-                int count = 0;
-                for (EvaluatedCandidate<IndividualV1> c : newpop) {
-                    this.getPopulation()[count] = c.getCandidate();
-                    this.getPopulation()[count].resetStats();
-                    count++;
-                }
-                this.getMem().storeGenes(this.getMem().getCurrentGeneration() + 1, -1, this.getPopulation());
-                botsGUIMainWindow.initMemoria();
-            }
-            int iterations = Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());
-            for (int j = 0; j < iterations && !cancel; j++) {
-                if (this.getServer().remainingJobList.isEmpty()) {
-                    //                GeneticAlg geneticAlg;
-                    //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
-                    //                try {
-                    //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
-                    //                    main.setPopulation main.getMem().loadPoblacion(26);
-                    //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
-                    //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
-                    //                    initMemoria();
-                    //                } catch (InstantiationException ex) {
-                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    //                } catch (IllegalAccessException ex) {
-                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                    //                }
-                    this.setPopulation(this.getMem().loadPoblacion(26));
-                    this.getMem().storeGenes(this.getMem().getCurrentGeneration(), -1, this.getPopulation());
-                    botsGUIMainWindow.initMemoria();
-                }
-                botsGUIMainWindow.main.iterateOnce();
-                try {
-                    this.killUCCServers();
-                } catch (IOException ex) {
-                    if (EvolutionMain.logger.isDebugEnabled()) {
-                        EvolutionMain.logger.debug("runButtonActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
-                    }
-                }
-                try {
-                    Thread.sleep(2000);
-                } catch (InterruptedException ex) {
-                }
-                this.getServer().updateRemainingList(true);
-
-            }
-            if (EvolutionMain.logger.isDebugEnabled()) {
-                EvolutionMain.logger.debug("runButtonActionPerformed(java.awt.event.ActionEvent) - end"); //$NON-NLS-1$
-            }
-        }
-    }
+//    void runEvolutionOld(BotsGUIMainWindow botsGUIMainWindow) {
+//        cancel = false;
+//        botsGUIMainWindow.initMemoria();
+//        this.getServer().updateRemainingList(true);
+//        List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
+//        int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
+//        CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
+//        operators.add(new IndividualV1Crossover(xoverPoints));
+//        operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
+//        //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
+//        EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
+//        FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
+//        Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
+//        SelectionStrategy<Object> selection = initSelectionStrategy();
+//        Random rng = new MersenneTwisterRNG();
+//        GenerationalEvolutionEngine<IndividualV1> engine;
+//        engine = new GenerationalEvolutionEngine<IndividualV1>(factory, pipeline, fitnessEvaluator, selection, rng);
+//        if (observer != null) {
+//            observer = new EvolutionMonitor<IndividualV1>();
+//        }
+//
+//        // engine.addEvolutionObserver(observer);
+//        observer.showInFrame("Monitor", false);
+//        int generations = Integer.parseInt(botsGUIMainWindow.getGenerationsField().getText());
+//        for (int i = 0; i < generations && !cancel; i++) {
+//            if (this.getServer().remainingJobList.isEmpty()) {
+//                //                GeneticAlg geneticAlg;
+//                //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
+//                //                try {
+//                //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
+//                //                    main.setPopulation main.getMem().loadPoblacion(26);
+//                //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
+//                //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+//                //                    initMemoria();
+//                //                } catch (InstantiationException ex) {
+//                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//                //                } catch (IllegalAccessException ex) {
+//                //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//                //                }
+//                this.setPopulation(this.getMem().loadPoblacion(26));
+//                Collection<Individual> oldpop = Arrays.asList(this.getPopulation().clone());
+//                List<EvaluatedCandidate<IndividualV1>> newpop;
+//                newpop = engine.evolvePopulation(this.getPopulation().length, 2, (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(2));
+//                int count = 0;
+//                for (EvaluatedCandidate<IndividualV1> c : newpop) {
+//                    this.getPopulation()[count] = c.getCandidate();
+//                    this.getPopulation()[count].resetStats();
+//                    count++;
+//                }
+//                this.getMem().storeGenes(this.getMem().getCurrentGeneration() + 1, -1, this.getPopulation());
+//                botsGUIMainWindow.initMemoria();
+//            }
+//            int iterations = Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());
+//            for (int j = 0; j < iterations && !cancel; j++) {
+//                if (this.getServer().remainingJobList.isEmpty()) {
+//                    //                GeneticAlg geneticAlg;
+//                    //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
+//                    //                try {
+//                    //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
+//                    //                    main.setPopulation main.getMem().loadPoblacion(26);
+//                    //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
+//                    //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+//                    //                    initMemoria();
+//                    //                } catch (InstantiationException ex) {
+//                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//                    //                } catch (IllegalAccessException ex) {
+//                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+//                    //                }
+//                    this.setPopulation(this.getMem().loadPoblacion(26));
+//                    this.getMem().storeGenes(this.getMem().getCurrentGeneration(), -1, this.getPopulation());
+//                    botsGUIMainWindow.initMemoria();
+//                }
+//                botsGUIMainWindow.main.iterateOnce();
+//                try {
+//                    this.killUCCServers();
+//                } catch (IOException ex) {
+//                    if (EvolutionMain.logger.isDebugEnabled()) {
+//                        EvolutionMain.logger.debug("runButtonActionPerformed(java.awt.event.ActionEvent) - " + ex); //$NON-NLS-1$
+//                    }
+//                }
+//                try {
+//                    Thread.sleep(2000);
+//                } catch (InterruptedException ex) {
+//                }
+//                this.getServer().updateRemainingList(true);
+//
+//            }
+//            if (EvolutionMain.logger.isDebugEnabled()) {
+//                EvolutionMain.logger.debug("runButtonActionPerformed(java.awt.event.ActionEvent) - end"); //$NON-NLS-1$
+//            }
+//        }
+//    }
 
     public List<Individual[]> getGenerationTableList() {
         return preferences.generationTableList;
@@ -343,7 +374,7 @@ public class EvolutionMain {
     void runEvolution(BotsGUIMainWindow botsGUIMainWindow) {
         cancel = false;
         botsGUIMainWindow.initMemoria();
-        this.getServer().updateRemainingList(true);
+     //   this.getServer().updateRemainingList(true);
         getServer().setMatchTime(Integer.parseInt(botsGUIMainWindow.timeLimitField.getText()));
         List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
         int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
@@ -423,20 +454,26 @@ public class EvolutionMain {
         getServer().setMaxThreadsNum(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().setNumAvailableThreads(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().init();
-
+        
+        for(int i=0;i<this.population.length*Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());i++){
+            this.createJob(i, botsGUIMainWindow);
+        }
 
         while (getServer().getFinishedJobList().size() != populationLength && !jobList.areDone() && !cancel) {
 
             while (!getServer().remainingJobList.isEmpty() && !cancel) {
 
                 if (getServer().getNumAvailableThreads() > 0 && !server.isLock()) {
-                    if (!cancel) {
+                    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean( OperatingSystemMXBean.class);
+             
+                   double load= osBean.getSystemCpuLoad();  
+                    if (!cancel&&load<0.86) {
                         int id;
 
                         id = getServer().remainingJobList.peek();
                         runMatch(botsGUIMainWindow, id);
                         logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
-                        getServer().enableTimedLock(1 * 60 * 1000);
+                  //      getServer().enableTimedLock(1 * 60 * 1000);
 
 
                     }
@@ -468,47 +505,7 @@ public class EvolutionMain {
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - start"); //$NON-NLS-1$
             }
-
-            LogCategory log = new LogCategory("DeathMatch1v1");
-            UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-            log.setLevel(Level.INFO);
-
-            match.setLog(log);
-
-            // GAME CONFIGURATION
-            match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);
-            match.setUnrealHome(botsGUIMainWindow.pathUTField.getText());
-            match.setMapName(botsGUIMainWindow.mapNameField.getText());
-            match.setFragLimit(Integer.parseInt(botsGUIMainWindow.fragLimitField.getText()));
-            match.setTimeLimitInMinutes(Integer.parseInt(botsGUIMainWindow.timeLimitField.getText()));
-
-            // BOT 1 CONFIGURATION
-
-            match.setBot1Name("Bot evolutivo");
-            match.setBot1JarPath(botsGUIMainWindow.bot1PathField.getText());
-
-            // BOT 2 CONFIGURATION
-
-            match.setBot2Name("Bot experto");
-            match.setBot2JarPath(botsGUIMainWindow.bot2PathField.getText());
-
-            // OUTPUT RESULT
-
-            match.setOutputDir(botsGUIMainWindow.logPathField.getText());
-            botsGUIMainWindow.initMemoria();
-
-            getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
-            Job newJob = new Job();
-            newJob.setId(id);
-            newJob.setMatch(match);
-            newJob.setStatus(Job.Estado.Init);
-            newJob.setStartTime(new Timestamp(System.currentTimeMillis()));
-            newJob.setThread((new Thread(match)));
-            newJob.getThread().setName(match.getMatchName());
-            newJob.backupIndividual = new IndividualV1(this.getPopulation()[id]);
-            newJob.setServer(getServer());
-            getServer().getJobList().put(id, newJob);
-            newJob.run();
+            Job newJob = createJob(id, botsGUIMainWindow);
 
             jobList.add(newJob.getThread());
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
@@ -564,5 +561,40 @@ public class EvolutionMain {
             observer.populationUpdate(EvolutionUtils.getPopulationData(x, true, Integer.parseInt(this.preferences.parameters.get("elitismNum")), generation, System.currentTimeMillis()));
             generation++;
         }
+    }
+
+    private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow) throws SecurityException, NumberFormatException {
+        LogCategory log = new LogCategory("DeathMatch1v1");
+        UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
+        log.setLevel(Level.INFO);
+        match.setLog(log);
+        // GAME CONFIGURATION
+        match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);
+        match.setUnrealHome(botsGUIMainWindow.pathUTField.getText());
+        match.setMapName(botsGUIMainWindow.mapNameField.getText());
+        match.setFragLimit(Integer.parseInt(botsGUIMainWindow.fragLimitField.getText()));
+        match.setTimeLimitInMinutes(Integer.parseInt(botsGUIMainWindow.timeLimitField.getText()));
+        // BOT 1 CONFIGURATION
+        match.setBot1Name("Bot evolutivo");
+        match.setBot1JarPath(botsGUIMainWindow.bot1PathField.getText());
+        // BOT 2 CONFIGURATION
+        match.setBot2Name("Bot experto");
+        match.setBot2JarPath(botsGUIMainWindow.bot2PathField.getText());
+        // OUTPUT RESULT
+        match.setOutputDir(botsGUIMainWindow.logPathField.getText());
+        botsGUIMainWindow.initMemoria();
+        getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
+        Job newJob = new Job();
+        newJob.setId(id);
+        newJob.setMatch(match);
+        newJob.setStatus(Job.Estado.Init);
+        newJob.setStartTime(new Timestamp(System.currentTimeMillis()));
+        newJob.setThread((new Thread(match)));
+        newJob.getThread().setName(match.getMatchName());
+        newJob.setIndividual(new IndividualV1(this.getPopulation()[id]));
+        newJob.backupIndividual = new IndividualV1(this.getPopulation()[id]);
+        newJob.setServer(getServer());
+        getServer().getJobList().put(id, newJob);
+        return newJob;
     }
 }

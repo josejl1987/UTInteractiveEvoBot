@@ -83,9 +83,14 @@ public class Job implements Runnable {
         }
     }
 
+    public void restart(){
+                setThread((new Thread(match)));
+       getThread().setName(match.getMatchName());
+       this.run();
+    }
     public enum Estado {
 
-        Init, Running, Finished
+        Init, Running, Finished,Error;
     }
     Estado status;
     private Timestamp startTime;

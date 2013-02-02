@@ -81,7 +81,7 @@ public class WorkQueueServerThread implements Runnable {
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } catch (ClassNotFoundException ex) {
                 logger.error("run()", ex); //$NON-NLS-1$
-
+                server.getJobList().get(id).setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             }
 

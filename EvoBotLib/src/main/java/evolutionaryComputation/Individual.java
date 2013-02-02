@@ -40,6 +40,15 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
 
     private Class<T> fitnessClass;
 
+    public boolean shouldEvaluate=true;
+
+    public boolean ShouldEvaluate() {
+        return shouldEvaluate;
+    }
+
+    public void setShouldEvaluate(boolean shouldEvaluate) {
+        this.shouldEvaluate = shouldEvaluate;
+    }
     public Class<T> getFitnessClass() {
         return fitnessClass;
     }
