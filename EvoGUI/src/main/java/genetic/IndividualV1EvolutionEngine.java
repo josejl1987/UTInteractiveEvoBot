@@ -5,6 +5,7 @@
 package genetic;
 
 import GUI.EvolutionMain;
+import GUI.PopulationAverage;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
 import org.apache.log4j.Logger;
@@ -46,13 +47,14 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
     public void setCurrentGeneration(int currentGeneration) {
         this.currentGeneration = currentGeneration;
     }
-    
-    public  List<EvaluatedCandidate<IndividualV1>> evaluatePopulationArray(IndividualV1[] population){
-        
-       
-        return  evaluatePopulation(Arrays.asList(population));
-        
+
+    public List<EvaluatedCandidate<IndividualV1>> evaluatePopulationArray(IndividualV1[] population) {
+
+
+        return evaluatePopulation(Arrays.asList(population));
+
     }
+
     public IndividualV1EvolutionEngine(
             CandidateFactory<IndividualV1> candidateFactory,
             EvolutionaryOperator<IndividualV1> evolutionScheme,
@@ -86,46 +88,47 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         String fitnessName = main.getPopulation()[0].getFitnessClass().getSimpleName();
         if (fitnessName.equals("RandomFitness")) {
         } else {
-            for (int j = 0; j < Integer.parseInt(main.getBotsGUIMainWindow().getIterationsField().getText()) && !main.isCancel(); j++) {
-                if (!main.isCancel()) {
-                    if (main.getServer().remainingJobList.isEmpty()) {
-                        //                GeneticAlg geneticAlg;
-                        //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
-                        //                try {
-                        //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
-                        //                    main.setPopulation main.getMem().loadPoblacion(26);
-                        //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
-                        //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
-                        //                    initMemoria();
-                        //                } catch (InstantiationException ex) {
-                        //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        //                } catch (IllegalAccessException ex) {
-                        //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-                        //                }
-                        main.setPopulation(main.getMem().loadPoblacion(26));
-                        main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
-                        main.initMemoria();
-                    }
-                    main.iterateOnce();
-                    try {
-                        main.killUCCServers();
-                    } catch (IOException ex) {
-                        logger.error("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random)", ex); //$NON-NLS-1$
 
-
-                    }
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException ex) {
-                        logger.warn("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - exception ignored", ex); //$NON-NLS-1$
-
-                    }
-                    main.getServer().updateRemainingList();
+            if (!main.isCancel()) {
+                if (main.getServer().remainingJobList.isEmpty()) {
+                    //                GeneticAlg geneticAlg;
+                    //                Class<?> geneticClass = (Class<?>) this.jComboBox1.getSelectedItem();
+                    //                try {
+                    //                    geneticAlg = (GeneticAlg) geneticClass.newInstance();
+                    //                    main.setPopulation main.getMem().loadPoblacion(26);
+                    //                    main.setPopulation geneticAlg.evolve(main.getPopulation());
+                    //                    main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+                    //                    initMemoria();
+                    //                } catch (InstantiationException ex) {
+                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    //                } catch (IllegalAccessException ex) {
+                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
+                    //                }
+      //              main.setPopulation(main.getMem().loadPoblacion(26));
+      //              main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
+      //              main.initMemoria();
                 }
+                main.iterateOnce();
+                try {
+                    main.killUCCServers();
+                } catch (IOException ex) {
+                    logger.error("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random)", ex); //$NON-NLS-1$
+
+
+                }
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException ex) {
+                    logger.warn("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - exception ignored", ex); //$NON-NLS-1$
+
+                }
+                main.getServer().updateRemainingList();
             }
+
         }
 
-        main.setPopulation(main.getMem().loadPoblacion(26));
+        //  main.setPopulation(main.getMem().loadPoblacion(26));
+        main.setPopulation(PopulationAverage.meanAverage(main.getServer().getIndividualsIterationList(), main.getServer().getPopulation_size(), main.getServer().getInterations()));
         main.saveXML("./backup.xml");
         Collection<Individual> oldpop = Arrays.asList(main.getPopulation().clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
@@ -149,9 +152,9 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         }
 
         EvolutionUtils.sortEvaluatedPopulation(newpop, true);
-        main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop,true, eliteCount, currentGeneration, startTime));
-        
-  //      Collections.reverse(newpop);
+        main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop, true, eliteCount, currentGeneration, startTime));
+
+        //      Collections.reverse(newpop);
         main.getGenerationTableList().add(copyList);
         main.updateGenerationComboBox();
 
@@ -165,7 +168,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
         }
         currentGeneration++;
-     
+
         return newpop;
 
 

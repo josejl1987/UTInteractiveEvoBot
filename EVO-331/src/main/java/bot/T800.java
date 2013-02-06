@@ -28,6 +28,9 @@ import behavior.secondaryStates.PickupHealth;
 import behavior.secondaryStates.PickupWeapon;
 import behavior.secondaryStates.SecondaryState;
 import brain.*;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.io.xml.StaxDriver;
 import cz.cuni.amis.pogamut.base.agent.navigation.IPathExecutorState;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.EventListener;
 import cz.cuni.amis.pogamut.base.communication.worldview.listener.annotation.ObjectClassEventListener;
@@ -56,6 +59,7 @@ import javax.vecmath.Vector3d;
 import knowledge.*;
 import org.apache.log4j.Logger;
 import synchro.Job;
+import synchro.SyncMessage;
 import synchro.WorkQueueClient;
 import utilities.*;
 
@@ -65,7 +69,7 @@ import utilities.*;
  *
  * @author Francisco Aisa García
  * @author Ricardo Caballero Moral
- * @version 1.0.4
+ * @version 1.0.4M
  */
 public class T800 extends UT2004BotModuleController {
 
@@ -124,7 +128,6 @@ public class T800 extends UT2004BotModuleController {
     /**
      * Genetic algorithm being used
      */
-
     /**
      * Enemy's information (it is null when we are not seeing the enemy)
      */
@@ -157,7 +160,7 @@ public class T800 extends UT2004BotModuleController {
      */
     private AutoTraceRay cardinalRayArray[] = new AutoTraceRay[8];
     private WorkQueueClient workClient;
-            private int number = 0;
+    private int number = 0;
     // *************************************************************************
     //                                METHODS
     // *************************************************************************
@@ -172,7 +175,7 @@ public class T800 extends UT2004BotModuleController {
 
         // Initialize the Data Base controller
         memory = new Memoria(false, false, 26, false);
-        memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
+    //    memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
         memory.debug(false);
 
         //geneticAlg = new ExtremeElitism(50, 30, new UniformCrossover(), memory);
@@ -182,23 +185,22 @@ public class T800 extends UT2004BotModuleController {
         try {
             //Get current individual ID from server
             workClient = new WorkQueueClient(4000);
-            if(workClient!=null){
-            synchro.SyncMessage id = workClient.readMessage(null);
-            testIndividual=(Individual) id.getData();
-            logger.info("Daño recibido-START " + testIndividual.getTotalDamageTaken());
+            if (workClient != null) {
+                synchro.SyncMessage id = workClient.readMessage(null);
+                testIndividual = (IndividualV1) id.getData();
 
-            if (logger.isDebugEnabled()) {
-                logger.info("prepareBot(UT2004Bot) - ID recibido= " + id.getId()); //$NON-NLS-1$
+                if (logger.isDebugEnabled()) {
+                    logger.info("prepareBot(UT2004Bot) - ID recibido= " + id.getId()); //$NON-NLS-1$
+                }
+                //   id.setStatus(Job.Estado.Running);
+                workClient.sendMessage(id);
+                number = id.getId();
+
+                //  memory.loadPoblacion(26);
+                if (logger.isDebugEnabled()) {
+                    logger.info("prepareBot(UT2004Bot) - Confirmación ID enviado= " + id.getId()); //$NON-NLS-1$
+                }
             }
-         //   id.setStatus(Job.Estado.Running);
-            workClient.sendMessage(id);
-            number = id.getId();
-           
-           //  memory.loadPoblacion(26);
-            if (logger.isDebugEnabled()) {
-                logger.info("prepareBot(UT2004Bot) - Confirmación ID enviado= " + id.getId()); //$NON-NLS-1$
-            }
- }
         } catch (IOException ex) {
             logger.error("prepareBot(UT2004Bot): Connection problem", ex); //$NON-NLS-1$
             throw new PogamutException("No DB server found", ex);
@@ -206,9 +208,9 @@ public class T800 extends UT2004BotModuleController {
             logger.error("prepareBot(UT2004Bot)", ex); //$NON-NLS-1$
         }
         logger.info("Using ID " + number);
- //      geneticAlg.setCurrentIndividual(number);
+        //      geneticAlg.setCurrentIndividual(number);
         // Get a reference to the individual that is goint to play the current match
-   //     testIndividual = memory.getPopulation()[number];
+        //     testIndividual = memory.getPopulation()[number];
 
         enemyInfo = new EnemyInfo(body);
         skynet = new Skynet(body, testIndividual);
@@ -248,7 +250,7 @@ public class T800 extends UT2004BotModuleController {
         if (currentIndv < 10) {
             name = name + memory.getCurrentGeneration() + "0" + currentIndv;
         } else {
-            name = name +  memory.getCurrentGeneration() + currentIndv;
+            name = name + memory.getCurrentGeneration() + currentIndv;
         }
 
         return new Initialize().setName(name);
@@ -302,15 +304,15 @@ public class T800 extends UT2004BotModuleController {
 
         // Should we be facing anything?
         /*
-      Used to tell the bot where he should be facing (useful when using
-      pathExecutor)
-     */
+         Used to tell the bot where he should be facing (useful when using
+         pathExecutor)
+         */
         Location facingSpot = enemy != null ? enemy.getLocation() : null;
 
         // Should we blow a combo or through a spam?
         /*
-      Location of a feasible spam or combo
-     */
+         Location of a feasible spam or combo
+         */
         Location bullseye = skynet.estimateTarget();
 
         // Switch to best weapon, move and shoot (if necessary)
@@ -654,7 +656,7 @@ public class T800 extends UT2004BotModuleController {
 
     //__________________________________________________________________________
     @Override
-	protected void finalize() throws Throwable {
+    protected void finalize() throws Throwable {
         saveInfo();
         super.finalize();
     }
@@ -691,7 +693,7 @@ public class T800 extends UT2004BotModuleController {
         // register listener called when all rays are set up in the UT engine
         raycasting.getAllRaysInitialized().addListener(new FlagListener<Boolean>() {
             @Override
-			public void flagChanged(Boolean changedValue) {
+            public void flagChanged(Boolean changedValue) {
                 // once all rays were initialized store the AutoTraceRay objects
                 // that will come in response in local variables, it is just
                 // for convenience
@@ -739,9 +741,9 @@ public class T800 extends UT2004BotModuleController {
         // Launch a local bot
 
 
-UT2004BotRunner bot=new UT2004BotRunner(T800.class, "T800").setMain(true);
-bot.setName("Prueba");
-bot.startAgent();        
+        UT2004BotRunner bot = new UT2004BotRunner(T800.class, "T800").setMain(true);
+        bot.setName("Prueba");
+        bot.startAgent();
 
         // Launch a remote bot
         //new UT2004BotRunner (T800.class, "T800", "<ip address>", 3000).setMain(true).startAgent();
@@ -761,15 +763,15 @@ bot.startAgent();
         }
 
         try {
-            //Get current individual ID from server
-            //       geneticAlg.store(memory);
-            
-            synchro.SyncMessage id = new synchro.SyncMessage(this.number, Job.Estado.Finished);
-         
-            id.setData(testIndividual);
-               logger.info("Daño recibido-FINAL" + ((Individual)(id.getData())).getTotalDamageTaken());
-            workClient.sendMessage(id);
-                 logger.info("Daño recibido-FINALENVIO" + ((Individual)(id.getData())).getTotalDamageTaken());
+
+            SyncMessage msg = new synchro.SyncMessage(this.number, Job.Estado.Finished);
+            msg.data = ((IndividualV1) testIndividual);
+            logger.info("Daño recibido-FINAL" + ((Individual) (msg.getData())).getTotalDamageTaken());
+            workClient.sendMessage(msg);
+            msg.data = ((IndividualStats) testIndividual.getStats());
+            msg.setStatus(Job.Estado.Init);
+            workClient.sendMessage(msg);
+            logger.info("Daño recibido-FINALENVIO" + ((Individual) (msg.getData())).getTotalDamageTaken());
             if (logger.isDebugEnabled()) {
                 logger.info("saveInfo() - Confirmación enviada"); //$NON-NLS-1$
             }

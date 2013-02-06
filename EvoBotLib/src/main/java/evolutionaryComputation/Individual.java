@@ -73,6 +73,14 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     /** Individual stats */
     private T stats; // Must be initialized in the derived classes
 
+    public T getStats() {
+        return stats;
+    }
+
+    public void setStats(T stats) {
+        this.stats = stats;
+    }
+
 
     // *************************************************************************
     //                                METHODS
@@ -115,6 +123,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
             this.stats.totalTimeShock=copy.stats.totalTimeShock;
             this.stats.totalTimeSniper=copy.stats.totalTimeSniper;
             this.fitnessClass=copy.fitnessClass;
+            this.shouldEvaluate=copy.shouldEvaluate;
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Individual.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -212,7 +221,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     //__________________________________________________________________________
 
     /** Get the number of kills */
-    public int getKills () {
+    public double getKills () {
         return stats.getKills ();
     }
 
@@ -229,7 +238,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     //__________________________________________________________________________
 
     /** Get the number of the deaths */
-    public int getDeaths () {
+    public double getDeaths () {
         return stats.getDeaths ();
     }
 
@@ -256,19 +265,20 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         stats.setTotalTimeSniper(totalTimeSniper);
     }
 
-    public int getNSuperShields () {
+    public double getNSuperShields () {
+
         return stats.getNSuperShields();
     }
 
-    public int getNShields () {
+    public double getNShields () {
         return stats.getNShields();
     }
 
-    public int getTotalTimeShock () {
+    public double getTotalTimeShock () {
         return stats.getTotalTimeShock();
     }
 
-    public int getTotalTimeSniper () {
+    public double getTotalTimeSniper () {
         return stats.getTotalTimeSniper();
     }
 
@@ -276,7 +286,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
 
     /** Get the total amount of damage given */
     public int getTotalDamageGiven () {
-        return stats.getTotalDamageGiven ();
+        return (int) stats.getTotalDamageGiven ();
     }
 
     //__________________________________________________________________________
@@ -292,7 +302,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     //__________________________________________________________________________
 
     /** Get the total amount of damage taken */
-    public int getTotalDamageTaken () {
+    public double getTotalDamageTaken () {
         return stats.getTotalDamageTaken ();
     }
 

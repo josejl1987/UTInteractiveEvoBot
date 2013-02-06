@@ -48,21 +48,21 @@ public abstract class IndividualStats implements Serializable {
 
 
     /** Number of times the individual has killed */
-    protected int kills;
+    protected double kills;
     /** Number of times the individual has died */
-    protected int deaths;
+    protected double deaths;
     /** Total amount of damage the individual has given to the enemy */
-    protected int totalDamageGiven;
+    protected double totalDamageGiven;
     /** Total amount of damage the individual has received from the enemy */
-    protected int totalDamageTaken;
+    protected double totalDamageTaken;
     /** Total Super Shield Packs picked up */
-    protected int nSuperShields;
+    protected double nSuperShields;
     /** Total Shields Packs picked up */
-    protected int nShields;
+    protected double nShields;
     /** Total time we had the shock rifle */
-    protected int totalTimeShock;
+    protected double totalTimeShock;
     /** Total time we had the sniper rifle */
-    protected int totalTimeSniper;
+    protected double totalTimeSniper;
 
     /** Clock to time out how much time we spent with the shock rifle */
     private Timer shockClock;
@@ -183,28 +183,28 @@ public abstract class IndividualStats implements Serializable {
     //__________________________________________________________________________
 
     /** Get the total amount of damage taken */
-    public int getTotalDamageTaken () {
+    public double getTotalDamageTaken () {
         return totalDamageTaken;
     }
 
     //__________________________________________________________________________
 
     /** Get the total amount of damage given */
-    public int getTotalDamageGiven () {
+    public double getTotalDamageGiven () {
         return totalDamageGiven;
     }
 
     //__________________________________________________________________________
 
     /** Get the number of the deaths */
-    public int getDeaths () {
+    public double getDeaths () {
         return deaths;
     }
 
     //__________________________________________________________________________
 
     /** Get the number of kills */
-    public int getKills () {
+    public double getKills () {
         return kills;
     }
 
@@ -293,7 +293,7 @@ public abstract class IndividualStats implements Serializable {
      *
      * @return Number of Super Shields taken
      */
-    int getNSuperShields () {
+    double getNSuperShields () {
         return nSuperShields;
     }
 
@@ -304,7 +304,7 @@ public abstract class IndividualStats implements Serializable {
      *
      * @return Number of Shields taken
      */
-    int getNShields () {
+    double getNShields () {
         return nShields;
     }
 
@@ -315,7 +315,7 @@ public abstract class IndividualStats implements Serializable {
      *
      * @return Total time that we have had the shock rifle
      */
-    int getTotalTimeShock () {
+    double getTotalTimeShock () {
         return totalTimeShock;
     }
 
@@ -326,7 +326,26 @@ public abstract class IndividualStats implements Serializable {
      *
      * @return Total time that we have had the sniper rifle
      */
-    int getTotalTimeSniper () {
+    double getTotalTimeSniper () {
         return totalTimeSniper;
+    }
+    
+    public void add(IndividualStats other,double weight){
+            /** Number of times the individual has killed */
+      kills+=other.kills*weight;
+    /** Number of times the individual has died */
+      deaths+=other.deaths*weight;
+    /** Total amount of damage the individual has given to the enemy */
+      totalDamageGiven+=other.totalDamageGiven*weight;;
+    /** Total amount of damage the individual has received from the enemy */
+      totalDamageTaken+=other.totalDamageTaken*weight;
+    /** Total Super Shield Packs picked up */
+      nSuperShields+=other.nSuperShields*weight;
+    /** Total Shields Packs picked up */
+      nShields+=other.nShields*weight;
+    /** Total time we had the shock rifle */
+      totalTimeShock+=other.getTotalTimeShock()*weight;;
+    /** Total time we had the sniper rifle */
+      totalTimeSniper+=other.getTotalTimeSniper()*weight;;
     }
 }

@@ -39,6 +39,7 @@ public class IndividualV1Mutation implements EvolutionaryOperator<IndividualV1> 
         List<IndividualV1> result = new ArrayList<IndividualV1>(selectedCandidates.size());
         for (IndividualV1 candidate : selectedCandidates) {
             IndividualV1 individual = new IndividualV1(candidate);
+            individual.shouldEvaluate=true;
             int chromosome[] = individual.getChromosome();
             for (int i = 0; i < individual.chromosomeSize(); i++) {
 
@@ -54,6 +55,7 @@ public class IndividualV1Mutation implements EvolutionaryOperator<IndividualV1> 
         if (logger.isDebugEnabled()) {
             logger.debug("apply(List<IndividualV1>, Random) - end"); //$NON-NLS-1$
         }
+        
         return result;
     }
 }

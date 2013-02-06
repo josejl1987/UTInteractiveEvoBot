@@ -56,6 +56,8 @@ public class IndividualV1Crossover extends AbstractCrossover<IndividualV1> {
         List<IndividualV1> evolvedIndividuals = new ArrayList<IndividualV1>();
         IndividualV1 i1 = new IndividualV1(t);
         IndividualV1 i2 = new IndividualV1(t1);
+        i1.shouldEvaluate=true;
+        i2.shouldEvaluate=true;
         i1.setChromosome(evolvedChromList.get(0));
         i2.setChromosome(evolvedChromList.get(1));
         evolvedIndividuals.add(i1);

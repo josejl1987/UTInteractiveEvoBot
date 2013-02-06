@@ -30,8 +30,8 @@ public class WorkQueueClient {
 
     private Socket clientSocket;
     Estado status;
-    private ObjectOutputStream output;
-    private ObjectInputStream input;
+    public ObjectOutputStream output;
+    public ObjectInputStream input;
 
     public WorkQueueClient(int port) {
         try {
@@ -68,7 +68,8 @@ public class WorkQueueClient {
     }
 
     public void sendMessage(SyncMessage msg) throws IOException {
- ;
+     
+        output.reset();
         output.writeObject(msg);
 
     }

@@ -20,7 +20,7 @@ public class SyncMessage implements Serializable {
 	private static final Logger logger = Logger.getLogger(SyncMessage.class);
 
     
-    Object data;
+   public Object data;
 
     public Object getData() {
         return data;

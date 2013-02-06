@@ -38,6 +38,14 @@ public class WorkQueueServer implements Runnable {
     final Set<Integer> finishedJobList;
     final Set<Integer> currentJobList;
      IndividualV1[][] individualsIterationList=null;
+
+    public IndividualV1[][] getIndividualsIterationList() {
+        return individualsIterationList;
+    }
+
+    public void setIndividualsIterationList(IndividualV1[][] individualsIterationList) {
+        this.individualsIterationList = individualsIterationList;
+    }
     public Set<Integer> getFinishedJobList() {
         return finishedJobList;
     }
@@ -203,7 +211,7 @@ public class WorkQueueServer implements Runnable {
                 Socket clientSocket = this.server.accept();
                 clientSocket.setSoTimeout(matchTime * 60 * 1700);
 
-                if (!remainingJobList.isEmpty()) {
+                if (!remainingJobList.isEmpty()||jobList.getWaitingIdJob()!=-1) {
 
                    
                         Integer id;

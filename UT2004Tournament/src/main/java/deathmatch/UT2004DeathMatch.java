@@ -174,6 +174,7 @@ public class UT2004DeathMatch extends UT2004Match<UT2004DeathMatchConfig, UT2004
 					log.warning("ONE OF BOTS HAS DIED OUT, BUT SERVER IS STILL RUNNING ... POSSIBLE MATCH FAILURE!");
 				}
 			}
+//                        Thread.sleep(50000);
 			if (!serverDiedOut.get() && server.inState(IAgentStateUp.class)) {
 				// server is still running? Kill it...
 				server.kill();

@@ -453,15 +453,24 @@ public class EvolutionMain {
         getServer().setNumAvailableThreads(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         int iterations = Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());
         getServer().init(this.populationLength, iterations);
-
+        getServer().getJobList().clear();
         for (int i = 0; i < iterations * populationLength; i++) {
-            this.createJob(i, botsGUIMainWindow);
+            if(population[i%populationLength].ShouldEvaluate()) {
+                this.createJob(i, botsGUIMainWindow);
+            }
+            else{
+                for(int j=0;j<iterations;j++){
+                    getServer().getIndividualsIterationList()[i%populationLength][j]=new IndividualV1(population[i%populationLength]);
+                }
+            }
+            getServer().getJobList().getFinishedJobs().size();
         }
-
-        while (getServer().getJobList().getFinishedJobs().size() != populationLength && !jobList.areDone() && !cancel) {
+       int jobSize=getServer().getJobList().size();
+       int finishedJobSize=getServer().getJobList().getFinishedJobs().size();
+        while (jobSize!=finishedJobSize  && !cancel) {
    
           
-
+                finishedJobSize=getServer().getJobList().getFinishedJobs().size();
                 if (getServer().getNumAvailableThreads() > 0 && !server.isLock()) {
                     OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
@@ -472,8 +481,9 @@ public class EvolutionMain {
                         id = getServer().getJobList().getRemainingJobs().get(0);
                         runMatch(botsGUIMainWindow, id);
                         logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
+                  
                         getServer().enableTimedLock(1 * 60 * 1000);
-
+                      
 
                     }
 
@@ -493,6 +503,7 @@ public class EvolutionMain {
 //        jobList.removeDeadThreads();
         jobList.clear();
         getServer().getFinishedJobList().clear();
+        
 
         if (BotsGUIMainWindow.logger.isDebugEnabled()) {
             BotsGUIMainWindow.logger.debug("iterateOnce() - end"); //$NON-NLS-1$
@@ -570,7 +581,7 @@ public class EvolutionMain {
     private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow) throws SecurityException, NumberFormatException {
         LogCategory log = new LogCategory("DeathMatch1v1");
         UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-        log.setLevel(Level.INFO);
+        log.setLevel(Level.ALL);
         match.setLog(log);
         // GAME CONFIGURATION
         match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);

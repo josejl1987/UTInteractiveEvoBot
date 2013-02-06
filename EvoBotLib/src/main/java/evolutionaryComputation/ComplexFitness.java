@@ -14,6 +14,7 @@
 
 package evolutionaryComputation;
 
+import java.io.Serializable;
 import org.apache.log4j.Logger;
 
 
@@ -26,7 +27,7 @@ import org.apache.log4j.Logger;
  */
 
 
-public class ComplexFitness extends IndividualStats {
+public class ComplexFitness extends IndividualStats implements Serializable {
 	/**
 	 * Logger for this class
 	 */
