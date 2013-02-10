@@ -455,55 +455,53 @@ public class EvolutionMain {
         getServer().init(this.populationLength, iterations);
         getServer().getJobList().clear();
         for (int i = 0; i < iterations * populationLength; i++) {
-            if(population[i%populationLength].ShouldEvaluate()) {
+            if (population[i % populationLength].ShouldEvaluate()) {
                 this.createJob(i, botsGUIMainWindow);
-            }
-            else{
-                for(int j=0;j<iterations;j++){
-                    getServer().getIndividualsIterationList()[i%populationLength][j]=new IndividualV1(population[i%populationLength]);
+            } else {
+                for (int j = 0; j < iterations; j++) {
+                    getServer().getIndividualsIterationList()[i % populationLength][j] = new IndividualV1(population[i % populationLength]);
                 }
             }
             getServer().getJobList().getFinishedJobs().size();
         }
-       int jobSize=getServer().getJobList().size();
-       int finishedJobSize=getServer().getJobList().getFinishedJobs().size();
-        while (jobSize!=finishedJobSize  && !cancel) {
-   
-          
-                finishedJobSize=getServer().getJobList().getFinishedJobs().size();
-                if (getServer().getNumAvailableThreads() > 0 && !server.isLock()) {
-                    OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
+        int jobSize = getServer().getJobList().size();
+        int finishedJobSize = getServer().getJobList().getFinishedJobs().size();
+        while (jobSize != finishedJobSize && !cancel) {
 
-                    double load = osBean.getSystemCpuLoad();
-                    if (!cancel && load < 0.86 && getServer().getJobList().getRemainingJobs().size()>0) {
-                        int id;
 
-                        id = getServer().getJobList().getRemainingJobs().get(0);
-                        runMatch(botsGUIMainWindow, id);
-                        logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
-                  
-                        getServer().enableTimedLock(1 * 60 * 1000);
-                      
+            finishedJobSize = getServer().getJobList().getFinishedJobs().size();
+            if (getServer().getNumAvailableThreads() > 0 && !server.isLock()) {
+                OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
-                    }
+                double load = osBean.getSystemCpuLoad();
+                if (!cancel && load < 0.86 && getServer().getJobList().getRemainingJobs().size() > 0) {
+                    int id;
+
+                    id = getServer().getJobList().getRemainingJobs().get(0);
+                    runMatch(botsGUIMainWindow, id);
+                    logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
+
+                    getServer().enableTimedLock(1 * 60 * 1000);
+
 
                 }
-                try {
-                    Thread.sleep(500);
-                   
-                } catch (InterruptedException ex) {
-                    if (BotsGUIMainWindow.logger.isDebugEnabled()) {
-                        BotsGUIMainWindow.logger.debug("iterateOnce() - " + ex); //$NON-NLS-1$
-                    }
-             
+
+            }
+            try {
+                Thread.sleep(500);
+
+            } catch (InterruptedException ex) {
+                if (BotsGUIMainWindow.logger.isDebugEnabled()) {
+                    BotsGUIMainWindow.logger.debug("iterateOnce() - " + ex); //$NON-NLS-1$
+                }
+
 
             }
             //          getServer().updateRemainingList(true);
         }
 //        jobList.removeDeadThreads();
         jobList.clear();
-        getServer().getFinishedJobList().clear();
-        
+
 
         if (BotsGUIMainWindow.logger.isDebugEnabled()) {
             BotsGUIMainWindow.logger.debug("iterateOnce() - end"); //$NON-NLS-1$

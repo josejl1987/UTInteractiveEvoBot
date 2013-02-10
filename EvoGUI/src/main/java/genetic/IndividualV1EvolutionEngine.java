@@ -31,7 +31,15 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
     private EvolutionMain main;
     private long startTime;
     private int currentGeneration;
+    private int evalNum;
 
+    public int getEvalNum() {
+        return evalNum;
+    }
+
+    public void setEvalNum(int evalNum) {
+        this.evalNum = evalNum;
+    }
     public long getStartTime() {
         return startTime;
     }
@@ -77,7 +85,8 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
         int count = 0;
         for (EvaluatedCandidate<IndividualV1> c : evaluatedPopulation) {
-            c.getCandidate().resetStats();
+           
+            if(c.getCandidate().shouldEvaluate)c.getCandidate().resetStats();
             ;
             main.getPopulation()[count] = c.getCandidate();
 
@@ -127,6 +136,9 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
         }
 
+        evalNum+=main.getServer().getJobList().getFinishedJobs().size();
+        main.getServer().getFinishedJobList().clear();
+        
         //  main.setPopulation(main.getMem().loadPoblacion(26));
         main.setPopulation(PopulationAverage.meanAverage(main.getServer().getIndividualsIterationList(), main.getServer().getPopulation_size(), main.getServer().getInterations()));
         main.saveXML("./backup.xml");
@@ -152,7 +164,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         }
 
         EvolutionUtils.sortEvaluatedPopulation(newpop, true);
-        main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop, true, eliteCount, currentGeneration, startTime));
+        main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop, true, eliteCount, evalNum, startTime));
 
         //      Collections.reverse(newpop);
         main.getGenerationTableList().add(copyList);

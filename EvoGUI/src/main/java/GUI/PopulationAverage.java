@@ -19,22 +19,26 @@ public class PopulationAverage {
 
         for (int i = 0; i < populationSize; i++) {
             population[i] = new IndividualV1(populationArray[i][0]);
+            if(population[i].shouldEvaluate)
             population[i].resetStats();
-            population[i].shouldEvaluate=false;
+  
         }
 
 
         for (int j = 0; j < iterations; j++) {
 
             for (int i = 0; i < populationSize; i++) {
-           double weight=1.0/(double)iterations;
-            population[i].getStats().add(populationArray[i][j].getStats(),weight);
+                if (population[i].shouldEvaluate) {
+                    double weight = 1.0 / (double) iterations;
+                    population[i].getStats().add(populationArray[i][j].getStats(), weight);
+                }
+                          population[i].shouldEvaluate=false;
             }
         }
 
 
-return population;
-        
-        
+        return population;
+
+
     }
 }
