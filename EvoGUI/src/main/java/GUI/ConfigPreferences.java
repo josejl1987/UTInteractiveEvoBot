@@ -17,8 +17,17 @@ public class ConfigPreferences {
 
     List<Individual[]> generationTableList;
     HashMap<String, String> parameters;
-    int currentGeneration;
+    HashMap<Integer,Integer> evaluationsMap;
 
+    public HashMap<Integer, Integer> getEvaluationsMap() {
+        return evaluationsMap;
+    }
+
+    public void setEvaluationsMap(HashMap<Integer, Integer> evaluationsMap) {
+        this.evaluationsMap = evaluationsMap;
+    }
+    int currentGeneration;
+    int currentEval;
     public int getCurrentGeneration() {
         return currentGeneration;
     }

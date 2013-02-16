@@ -9,6 +9,8 @@ import evolutionaryComputation.Individual;
 import org.apache.log4j.Logger;
 
 import java.sql.Timestamp;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 
 /**
@@ -144,5 +146,24 @@ public class Job implements Runnable {
 
     public void setStartTime(Timestamp startTime) {
         this.startTime = startTime;
+    }
+        public void enableTimedLock(long W) {
+
+
+       
+        // Clase en la que está el código a ejecutar
+        TimerTask timerTask = new TimerTask() {
+            public void run() {
+                if(status.equals(Estado.WaitingID)){
+                    status=Estado.Init;
+                }
+                
+            }
+        };
+        // Aquí se pone en marcha el timer cada segundo.
+        // Dentro de 0 milisegundos avísame cada 1000 milisegundos
+        Timer lockTimer = new Timer();
+        lockTimer.schedule(timerTask, W);
+
     }
 }

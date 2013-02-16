@@ -139,7 +139,7 @@ public class Memoria {
                 }
 
                 stat.execute("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null,  primary key(id, mapa) )");
-                String genetico = "CREATE TABLE Genetico (posicion int not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null";
+                String genetico = "CREATE TABLE Genetico (posicion int not null,evaluated BOOL not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null";
                 for (int i = 0; i < nGenes; ++i) {
                     genetico = genetico.concat(",chromosome" + i + " int not null");
                 }
@@ -220,19 +220,18 @@ public class Memoria {
 
                 conn.close();
                 ok = true;
+            } catch (Exception e) {
+
+                if (logger.isDebugEnabled()) {
+                    logger.debug("storeBestIndividuo(String, Individual, boolean) - OCURRIO UN ERROR EN LA CREACIÓN DE LA TABLA PARA EL MEJOR INDIVIDUO"); //$NON-NLS-1$
+                }
+                logger.error("storeBestIndividuo(String, Individual, boolean)", e); //$NON-NLS-1$
             }
-             catch (Exception e) {
-            
-            if (logger.isDebugEnabled()) {
-                logger.debug("storeBestIndividuo(String, Individual, boolean) - OCURRIO UN ERROR EN LA CREACIÓN DE LA TABLA PARA EL MEJOR INDIVIDUO"); //$NON-NLS-1$
-            }
-            logger.error("storeBestIndividuo(String, Individual, boolean)", e); //$NON-NLS-1$
-             }
         }
         if (logger.isDebugEnabled()) {
             logger.debug("storeBestIndividuo(String, Individual, boolean) - end"); //$NON-NLS-1$
         }
-    
+
     }
 
     /**
@@ -286,14 +285,18 @@ public class Memoria {
                     Individual v1;
                     v1 = new IndividualV1(false, (Class<? extends IndividualStats>) Class.forName(resultados.getString("FitnessClass")));
                     population[i] = v1;
-                    population[i].setDeaths(resultados.getInt("deaths"));
-                    population[i].setKills(resultados.getInt("kills"));
-                    population[i].setTotalDamageGiven(resultados.getInt("totalDamageGiven"));
-                    population[i].setTotalDamageTaken(resultados.getInt("totalDamageTaken"));
-                    population[i].setNSuperShields(resultados.getInt("nSuperShields"));
-                    population[i].setNShields(resultados.getInt("nShields"));
-                    population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
-                    population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
+                    population[i].shouldEvaluate = false;
+                    if (resultados.getInt("evaluated") > 0) {
+                        population[i].shouldEvaluate = true;
+                    }
+                    population[i].setDeaths(resultados.getDouble("deaths"));
+                    population[i].setKills(resultados.getDouble("kills"));
+                    population[i].setTotalDamageGiven(resultados.getDouble("totalDamageGiven"));
+                    population[i].setTotalDamageTaken(resultados.getDouble("totalDamageTaken"));
+                    population[i].setNSuperShields(resultados.getDouble("nSuperShields"));
+                    population[i].setNShields(resultados.getDouble("nShields"));
+                    population[i].setTotalTimeShock(resultados.getDouble("totalTimeShock"));
+                    population[i].setTotalTimeSniper(resultados.getDouble("totalTimeSniper"));
                     logger.debug("Cromosoma 0 " + v1.getGene(0));
                     for (int j = 0; j < nGenes; ++j) {
                         population[i].setGene(j, resultados.getInt("chromosome" + j));
@@ -432,7 +435,7 @@ public class Memoria {
                 stat.executeUpdate("UPDATE Genetico SET current = 1 WHERE posicion = " + "'" + salida + "' ");
 
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -477,7 +480,7 @@ public class Memoria {
                 resultados.updateInt("current", 0);
 
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -519,7 +522,7 @@ public class Memoria {
                     remainingList.add(salida);
                 }
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -562,7 +565,7 @@ public class Memoria {
 
 
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -598,7 +601,7 @@ public class Memoria {
                 salida = resultados.getInt("generacion");
 
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -642,9 +645,13 @@ public class Memoria {
                 String insert;
 
                 int i = individualID;
+                int evaluate = 0;
+                if (population[i].shouldEvaluate) {
+                    evaluate = 1;
+                }
 
                 insert = "INSERT INTO Genetico VALUES";
-                insert = insert.concat("('" + i + "', '" + generation2 + "', '" + currentIndividual.getDeaths() + "', '"
+                insert = insert.concat("('" + i + "', '" + evaluate + "', '" + generation2 + "', '" + currentIndividual.getDeaths() + "', '"
                         + currentIndividual.getKills() + "', '" + currentIndividual.getTotalDamageGiven() + "', '"
                         + currentIndividual.getTotalDamageTaken() + "', '" + currentIndividual.getNSuperShields() + "', '"
                         + currentIndividual.getNShields() + "', '" + currentIndividual.getTotalTimeShock() + "' ,'" + currentIndividual.getTotalTimeSniper() + "'");
@@ -681,7 +688,7 @@ public class Memoria {
 
 
                 conn.close();
-                      ok = true;
+                ok = true;
             } catch (Exception e) {
 
                 if (logger.isDebugEnabled()) {
@@ -724,10 +731,15 @@ public class Memoria {
 
                 String insert;
 
+
                 int i = currentIndividual;
+                int evaluate = 0;
+                if (population[i].shouldEvaluate) {
+                    evaluate = 1;
+                }
 
                 insert = "INSERT INTO Genetico VALUES";
-                insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
+                insert = insert.concat("('" + i + "', '" + evaluate + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
                         + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
                         + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
                         + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");
@@ -803,8 +815,8 @@ public class Memoria {
                     Class.forName("org.sqlite.JDBC");
                     conn = DriverManager.getConnection("jdbc:sqlite:" + BDNAME);
                     Statement stat = conn.createStatement();
-
-
+                    conn.prepareStatement("PRAGMA temp_store = MEMORY;").execute();
+                    conn.prepareStatement("PRAGMA synchronous = OFF;").execute();
                     stat.execute("DELETE FROM Genetico WHERE posicion != '-1';");
                     if (iteration == 0) {
                         stat.execute("DELETE FROM Auxiliar WHERE posicion != '-1';");
@@ -815,9 +827,12 @@ public class Memoria {
                     int currentIndividual = -1;
                     for (int i = 0; i < population.length; i++) {
 
-
+                        int evaluate = 0;
+                        if (population[i].shouldEvaluate) {
+                            evaluate = 1;
+                        }
                         insert = "INSERT INTO Genetico VALUES";
-                        insert = insert.concat("('" + i + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
+                        insert = insert.concat("('" + i + "', '" + evaluate + "', '" + generation + "', '" + population[i].getDeaths() + "', '"
                                 + population[i].getKills() + "', '" + population[i].getTotalDamageGiven() + "', '"
                                 + population[i].getTotalDamageTaken() + "', '" + population[i].getNSuperShields() + "', '"
                                 + population[i].getNShields() + "', '" + population[i].getTotalTimeShock() + "' ,'" + population[i].getTotalTimeSniper() + "'");

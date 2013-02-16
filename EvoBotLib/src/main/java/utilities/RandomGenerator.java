@@ -11,7 +11,7 @@ import java.util.Random;
  * @author jose
  */
 public class RandomGenerator {
-              private static     final  Random rnd=new Random(1);
+              private static     final  Random rnd=new Random(2);
 
     public static Random getRnd() {
         return rnd;

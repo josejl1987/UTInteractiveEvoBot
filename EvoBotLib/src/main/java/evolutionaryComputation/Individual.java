@@ -231,7 +231,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
      * Set the number of kills, it ONLY should be used by the DB
      * @param kills Number of kills to set
      */
-    public void setKills (int kills) {
+    public void setKills (double kills) {
         stats.setKills (kills);
     }
 
@@ -245,23 +245,23 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     //__________________________________________________________________________
 
     /** Set the number of the deaths, it ONLY should be used by the DB */
-    public void setDeaths (int deaths) {
+    public void setDeaths (double deaths) {
         stats.setDeaths (deaths);
     }
 
-    public void setNSuperShields (int nSuperShields) {
+    public void setNSuperShields (double nSuperShields) {
         stats.setNSuperShields(nSuperShields);
     }
 
-    public void setNShields (int nShields) {
+    public void setNShields (double nShields) {
         stats.setNShields(nShields);
     }
 
-    public void setTotalTimeShock (int totalTimeShock) {
+    public void setTotalTimeShock (double totalTimeShock) {
         stats.setTotalTimeShock(totalTimeShock);
     }
 
-    public void setTotalTimeSniper (int totalTimeSniper) {
+    public void setTotalTimeSniper (double totalTimeSniper) {
         stats.setTotalTimeSniper(totalTimeSniper);
     }
 
@@ -295,7 +295,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
      * Set the total amount of damage given, it ONLY should be used by the DB
      * @param damage Total amount of damage given
      */
-    public void setTotalDamageGiven (int damage) {
+    public void setTotalDamageGiven (double damage) {
         stats.setTotalDamageGiven (damage);
     }
 
@@ -312,7 +312,7 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
      * Set the total amount of damage taken, it ONLY should be used by the DB
      * @param damage Total amount of damage taken
      */
-    public void setTotalDamageTaken (int damage) {
+    public void setTotalDamageTaken (double damage) {
         stats.setTotalDamageTaken (damage);
     }
 

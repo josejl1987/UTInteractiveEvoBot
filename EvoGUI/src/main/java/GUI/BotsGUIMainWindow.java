@@ -723,7 +723,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         openDB(botfolder + "Memoria.db");
         populateTable(newpopulation);
         main.getServer().setMemoria(main.getMem());
-
+        main.setEngine(null);
         if (logger.isDebugEnabled()) {
             logger.debug("nrunButton1ActionPerformed(java.awt.event.ActionEvent) - end"); //$NON-NLS-1$
         }

@@ -15,6 +15,16 @@ import java.util.concurrent.CopyOnWriteArrayList;
  */
 public class JobList extends HashMap<Integer, Job> {
     
+    
+ public void resetWaitingIDJobs(){
+         
+     for(Job job:this.values()){
+         if(job.status.equals(Job.Estado.WaitingID)){
+             job.status=Job.Estado.Init;
+         }
+     }
+ }   
+    
  public   List<Integer> getRemainingJobs(){
         
        CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());

@@ -479,7 +479,7 @@ public class UT2004DeathMatch extends UT2004Match<UT2004DeathMatchConfig, UT2004
 			bots = startBots(ucc, server);
 			
 			// STEP 6
-			analyzer = startAnalyzer(ucc, bots, getOutputPath("bots"));
+		//	analyzer = startAnalyzer(ucc, bots, getOutputPath("bots"));
 			
 			// STEP 7
 			matchIsAboutToBegin(ucc, server, analyzer, bots);

@@ -58,6 +58,15 @@ public class EvolutionMain {
     public EvolutionMonitor<IndividualV1> observer;
     private IndividualV1EvolutionEngine engine;
     private IndividualV1ChromosomeCopy chromosomeCopyOperator = new IndividualV1ChromosomeCopy();
+    HashMap<Integer, Integer> evaluations = new HashMap<Integer, Integer>();
+
+    public HashMap<Integer, Integer> getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(HashMap<Integer, Integer> evaluations) {
+        this.evaluations = evaluations;
+    }
 
     public boolean isCancel() {
         return cancel;
@@ -102,10 +111,15 @@ public class EvolutionMain {
                 if (load == JOptionPane.NO_OPTION) {
                     preferences.generationTableList.clear();
                     preferences.currentGeneration = 0;
+
                 } else {
                     updateDialogs();
-                    createGenerationGraph();
+                    this.evaluations = preferences.evaluationsMap;
+                    if (evaluations != null) {
+                        createGenerationGraph();
+                    }
                     this.updateGenerationComboBox();
+
                     initMemoria();
                     this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
                     this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
@@ -125,7 +139,9 @@ public class EvolutionMain {
 
     public void saveXML(String filename) {
         updateParameters();
+        preferences.evaluationsMap = this.evaluations;
         preferences.currentGeneration = engine.getCurrentGeneration();
+
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
@@ -151,7 +167,12 @@ public class EvolutionMain {
 
     public void saveXML() {
         updateParameters();
-        preferences.currentGeneration = engine.getCurrentGeneration();
+        preferences.evaluationsMap = this.evaluations;
+        if (engine == null) {
+            preferences.currentGeneration = 0;
+        } else {
+            preferences.currentGeneration = engine.getCurrentGeneration();
+        }
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
         final JFileChooser fc = new JFileChooser();
@@ -336,7 +357,7 @@ public class EvolutionMain {
 //                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
 //                    //                } catch (IllegalAccessException ex) {
 //                    //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
-//                    //                }
+//                    //                }r
 //                    this.setPopulation(this.getMem().loadPoblacion(26));
 //                    this.getMem().storeGenes(this.getMem().getCurrentGeneration(), -1, this.getPopulation());
 //                    botsGUIMainWindow.initMemoria();
@@ -388,10 +409,12 @@ public class EvolutionMain {
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
         SelectionStrategy<Object> selection = initSelectionStrategy();
         Random rng = new MersenneTwisterRNG();
-
+if(engine==null){
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
         engine.setCurrentGeneration(preferences.currentGeneration);
+        engine.setEvalNum(preferences.currentEval);
         engine.setSingleThreaded(true);
+}
         if (observer == null) {
             observer = new EvolutionMonitor<IndividualV1>();
         }
@@ -413,6 +436,14 @@ public class EvolutionMain {
             count++;
         }
         this.preferences.setCurrentGeneration(engine.getCurrentGeneration());
+    }
+
+    public IndividualV1EvolutionEngine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(IndividualV1EvolutionEngine engine) {
+        this.engine = engine;
     }
 
     public IndividualV1ChromosomeCopy getChromosomeCopyOperator() {
@@ -481,14 +512,14 @@ public class EvolutionMain {
                     runMatch(botsGUIMainWindow, id);
                     logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
 
-                    getServer().enableTimedLock(1 * 60 * 1000);
+  ///                  getServer().enableTimedLock(1 * 60 * 1000);
 
 
                 }
 
             }
             try {
-                Thread.sleep(500);
+                Thread.sleep(1700);
 
             } catch (InterruptedException ex) {
                 if (BotsGUIMainWindow.logger.isDebugEnabled()) {
@@ -502,6 +533,17 @@ public class EvolutionMain {
 //        jobList.removeDeadThreads();
         jobList.clear();
 
+        if(cancel){
+            try {
+                this.killUCCServers();
+            } catch (IOException ex) {
+                java.util.logging.Logger.getLogger(EvolutionMain.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            for(Job job:server.getJobList().values()){
+                job.getThread().stop();
+            }
+           // throw new Exception("Se ha parado el programa");
+        }
 
         if (BotsGUIMainWindow.logger.isDebugEnabled()) {
             BotsGUIMainWindow.logger.debug("iterateOnce() - end"); //$NON-NLS-1$
@@ -566,12 +608,15 @@ public class EvolutionMain {
         Random rng = new MersenneTwisterRNG();
 
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
+              engine.setCurrentGeneration(preferences.currentGeneration);
+        engine.setEvalNum(preferences.currentEval);
         int generation = 0;
         for (Individual[] v : preferences.generationTableList) {
             IndividualV1[] v2 = (IndividualV1[]) v;
             List<EvaluatedCandidate<IndividualV1>> x = engine.evaluatePopulationArray(v2);
             EvolutionUtils.sortEvaluatedPopulation(x, true);
-            observer.populationUpdate(EvolutionUtils.getPopulationData(x, true, Integer.parseInt(this.preferences.parameters.get("elitismNum")), generation, System.currentTimeMillis()));
+            final Integer evalNum = evaluations.get(generation);
+            observer.populationUpdate(EvolutionUtils.getPopulationData(x, true, Integer.parseInt(this.preferences.parameters.get("elitismNum")), evalNum, System.currentTimeMillis()));
             generation++;
         }
     }
@@ -604,6 +649,7 @@ public class EvolutionMain {
         newJob.setStartTime(new Timestamp(System.currentTimeMillis()));
         newJob.setThread((new Thread(match)));
         newJob.getThread().setName(match.getMatchName());
+        newJob.enableTimedLock(1 * 60 * 1000);
         newJob.setIndividual(new IndividualV1(this.getPopulation()[id % this.populationLength]));
         newJob.backupIndividual = new IndividualV1(this.getPopulation()[id % this.populationLength]);
         newJob.setServer(getServer());

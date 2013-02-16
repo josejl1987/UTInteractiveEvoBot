@@ -173,10 +173,7 @@ public class T800 extends UT2004BotModuleController {
 
 
 
-        // Initialize the Data Base controller
-        memory = new Memoria(false, false, 26, false);
-    //    memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
-        memory.debug(false);
+
 
         //geneticAlg = new ExtremeElitism(50, 30, new UniformCrossover(), memory);
 
@@ -214,7 +211,10 @@ public class T800 extends UT2004BotModuleController {
 
         enemyInfo = new EnemyInfo(body);
         skynet = new Skynet(body, testIndividual);
-
+        // Initialize the Data Base controller
+        memory = new Memoria(false, false, 26, false);
+    //    memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
+        memory.debug(false);
         // Initialize all primary states
         primaryStateArray = new PrimaryState[5];
         primaryStateArray[PrimaryState.States.ATTACK.ordinal()] = new Attack(body, act, world, game, items, info, weaponry, pathPlanner, pathExecutor, move, raycasting, cardinalRayArray, shoot, testIndividual);

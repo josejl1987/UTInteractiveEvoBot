@@ -227,7 +227,7 @@ public abstract class IndividualStats implements Serializable {
      * Set the total amount of damage taken, it ONLY should be used by the DB
      * @param damage Total amount of damage taken
      */
-    void setTotalDamageTaken (int damage) {
+    void setTotalDamageTaken (double damage) {
         totalDamageTaken = damage;
     }
 
@@ -237,7 +237,7 @@ public abstract class IndividualStats implements Serializable {
      * Set the total amount of damage given, it ONLY should be used by the DB
      * @param damage Total amount of damage given
      */
-    void setTotalDamageGiven (int damage) {
+    void setTotalDamageGiven (double damage) {
         totalDamageGiven = damage;
     }
 
@@ -247,42 +247,42 @@ public abstract class IndividualStats implements Serializable {
      * Set the number of kills, it ONLY should be used by the DB
      * @param kills Number of kills to set
      */
-    void setKills (int kills) {
+    void setKills (double kills) {
         this.kills = kills;
     }
 
     //__________________________________________________________________________
 
     /** Set the number of the deaths, it should ONLY be used by the DB */
-    void setDeaths (int deaths) {
+    void setDeaths (double deaths) {
         this.deaths = deaths;
     }
 
     //__________________________________________________________________________
 
     /** Set the number of the super shields taken, it should ONLY be used by the DB */
-    void setNSuperShields (int nSuperShields) {
+    void setNSuperShields (double nSuperShields) {
         this.nSuperShields = nSuperShields;
     }
 
     //__________________________________________________________________________
 
     /** Set the number of the shields taken, it should ONLY be used by the DB */
-    void setNShields (int nShields) {
+    void setNShields (double nShields) {
         this.nShields = nShields;
     }
 
     //__________________________________________________________________________
 
     /** Set the total time the shock has been in ours, it should ONLY be used by the DB */
-    void setTotalTimeShock (int totalTimeShock) {
+    void setTotalTimeShock (double totalTimeShock) {
         this.totalTimeShock = totalTimeShock;
     }
 
     //__________________________________________________________________________
 
     /** Set the number of the sniper has been ours, it should ONLY be used by the DB */
-    void setTotalTimeSniper (int totalTimeSniper) {
+    void setTotalTimeSniper (double totalTimeSniper) {
         this.totalTimeSniper = totalTimeSniper;
     }
 

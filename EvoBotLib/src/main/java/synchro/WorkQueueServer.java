@@ -77,7 +77,9 @@ public class WorkQueueServer implements Runnable {
         // Clase en la que está el código a ejecutar
         TimerTask timerTask = new TimerTask() {
             public void run() {
+                
                 lock = false;
+                
             }
         };
 

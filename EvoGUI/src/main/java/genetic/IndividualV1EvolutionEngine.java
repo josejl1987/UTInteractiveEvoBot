@@ -93,7 +93,9 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
             count++;
         }
         main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
-
+        if(this.main.getEvaluations().get(this.currentGeneration-1)!=null){
+        evalNum=this.main.getEvaluations().get(this.currentGeneration-1);
+        }
         String fitnessName = main.getPopulation()[0].getFitnessClass().getSimpleName();
         if (fitnessName.equals("RandomFitness")) {
         } else {
@@ -141,6 +143,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         
         //  main.setPopulation(main.getMem().loadPoblacion(26));
         main.setPopulation(PopulationAverage.meanAverage(main.getServer().getIndividualsIterationList(), main.getServer().getPopulation_size(), main.getServer().getInterations()));
+        main.getEvaluations().put(currentGeneration, evalNum);
         main.saveXML("./backup.xml");
         Collection<Individual> oldpop = Arrays.asList(main.getPopulation().clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
@@ -171,14 +174,21 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         main.updateGenerationComboBox();
 
         newpop = super.nextEvolutionStep(newpop, eliteCount, rng);
-        count = 0;
-        main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+        count=0;
+       for (EvaluatedCandidate<IndividualV1> c : newpop) {
+            main.getPopulation()[count] = c.getCandidate();
+
+            count++;
+        }
+       
+       main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
         main.initMemoria();
 
 
         if (logger.isDebugEnabled()) {
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
         }
+        
         currentGeneration++;
 
         return newpop;
