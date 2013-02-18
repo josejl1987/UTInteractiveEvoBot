@@ -9,12 +9,14 @@ import evolutionaryComputation.Individual;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 /**
  * @author Jose
  */
 public class ConfigPreferences {
 
+	Random rnd=null;
     List<Individual[]> generationTableList;
     HashMap<String, String> parameters;
     HashMap<Integer,Integer> evaluationsMap;
@@ -31,7 +33,9 @@ public class ConfigPreferences {
     public int getCurrentGeneration() {
         return currentGeneration;
     }
-
+    public Random getRandomGenerator(){
+        return rnd;
+    }
     public void setCurrentGeneration(int currentGeneration) {
         this.currentGeneration = currentGeneration;
     }

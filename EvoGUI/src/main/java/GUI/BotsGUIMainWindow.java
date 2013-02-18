@@ -36,6 +36,7 @@ import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
+import utilities.RandomGenerator;
 
 /**
  * @author Jose
@@ -138,8 +139,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         panel = new JPanel();
         jPanel3.add(panel, "flowx,cell 0 0,grow");
-        panel.setLayout(new MigLayout("", "[pref!,grow][][pref!,grow]",
-                "[][][][][][][][][grow][]"));
+        panel.setLayout(new MigLayout("", "[pref!,grow][][pref!,grow]", "[][][][][][][][][][grow][]"));
 
         lblMutacin = new JLabel("Mutaci�n");
         panel.add(lblMutacin, "cell 0 0");
@@ -182,10 +182,19 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         elitismotextField.setMaximumSize(new Dimension(25, 25));
         elitismotextField.setColumns(10);
         panel.add(elitismotextField, "cell 2 7,growx");
+        
+        lblSemilla = new JLabel("Semilla");
+        panel.add(lblSemilla, "cell 0 8");
+        
+        randomSeedtextField = new JTextField();
+        randomSeedtextField.setText("1");
+        randomSeedtextField.setMaximumSize(new Dimension(25, 25));
+        randomSeedtextField.setColumns(10);
+        panel.add(randomSeedtextField, "cell 2 8,growx");
 
         separator_2 = new JSeparator();
         separator_2.setBackground(Color.GREEN);
-        panel.add(separator_2, "cell 1 9");
+        panel.add(separator_2, "cell 1 10");
 
         panel_1 = new JPanel();
         jTabbedPane1.addTab("Salida", null, panel_1, null);
@@ -599,16 +608,16 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             }
         });
         jPanel1.add(runButton, "cell 0 15,alignx left,aligny top");
-        runButton1 = new javax.swing.JButton();
+        initializeButton = new javax.swing.JButton();
 
-        runButton1.setText("Inicializar");
-        runButton1.addActionListener(new java.awt.event.ActionListener() {
+        initializeButton.setText("Inicializar");
+        initializeButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runButton1ActionPerformed(evt);
             }
         });
         getContentPane().setLayout(new MigLayout("", "[1251px]", "[491px]"));
-        jPanel1.add(runButton1, "cell 1 15,alignx left,aligny top");
+        jPanel1.add(initializeButton, "cell 1 15,alignx left,aligny top");
 
         btnParar = new JButton();
         btnParar.addActionListener(new ActionListener() {
@@ -706,7 +715,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
         Memoria.setBDNAME(botfolder + "Memoria.db");
         main.setMem(new Memoria(true, true, 26, true));
-
+        RandomGenerator.setRandomSeed(Integer.parseInt(this.randomSeedtextField.getText()));
         int num_individuals = Integer.parseInt(JOptionPane
                 .showInputDialog("N�mero de individuos"));
         // TODO add your handling code here:1111
@@ -731,14 +740,14 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
     private void enableButtonsCompleted() {
         this.runButton.setEnabled(true);
-        this.runButton1.setEnabled(true);
+        this.initializeButton.setEnabled(true);
         this.btnParar.setEnabled(false);
     }
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {
 
         this.runButton.setEnabled(false);
-        this.runButton1.setEnabled(false);
+        this.initializeButton.setEnabled(false);
         this.btnParar.setEnabled(true);
 
         worker = new SwingWorker<Void, Void>() {
@@ -891,7 +900,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     javax.swing.JTextField mapNameField;
     javax.swing.JTextField pathUTField;
     private javax.swing.JButton runButton;
-    private javax.swing.JButton runButton1;
+    private javax.swing.JButton initializeButton;
     javax.swing.JTextField threadsNumberField;
     javax.swing.JTextField timeLimitField;
     private JButton btnAadir;
@@ -923,8 +932,26 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JLabel lblThreadsDisponibles;
     private JTextField textField_3;
     private JCheckBox chckbxDistancia;
+    private JLabel lblSemilla;
+    private JTextField randomSeedtextField;
 
     // End of variables declaration//GEN-END:variables
+
+    public JLabel getLblVariacinRelativa() {
+        return lblVariacinRelativa;
+    }
+
+    public void setLblVariacinRelativa(JLabel lblVariacinRelativa) {
+        this.lblVariacinRelativa = lblVariacinRelativa;
+    }
+
+    public JTextField getRandomSeedtextField() {
+        return randomSeedtextField;
+    }
+
+    public void setRandomSeedtextField(JTextField randomSeedtextField) {
+        this.randomSeedtextField = randomSeedtextField;
+    }
     public JTextField getCrossoverPointsText() {
         return crossoverPointsText;
     }

@@ -94,6 +94,7 @@ public class EvolutionMain {
 
     public void loadXML() {
         updateParameters();
+    
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
         final JFileChooser fc = new JFileChooser();
@@ -115,6 +116,7 @@ public class EvolutionMain {
                 } else {
                     updateDialogs();
                     this.evaluations = preferences.evaluationsMap;
+                        RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
                     if (evaluations != null) {
                         createGenerationGraph();
                     }
@@ -141,7 +143,7 @@ public class EvolutionMain {
         updateParameters();
         preferences.evaluationsMap = this.evaluations;
         preferences.currentGeneration = engine.getCurrentGeneration();
-
+        preferences.rnd=RandomGenerator.getRnd();       
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
@@ -168,6 +170,7 @@ public class EvolutionMain {
     public void saveXML() {
         updateParameters();
         preferences.evaluationsMap = this.evaluations;
+        preferences.rnd=RandomGenerator.getRnd();  
         if (engine == null) {
             preferences.currentGeneration = 0;
         } else {
@@ -199,7 +202,7 @@ public class EvolutionMain {
     }
 
     private void updateParameters() {
-
+    	preferences.parameters.put("randomSeed", this.botsGUIMainWindow.getRandomSeedtextField().getText());
         preferences.parameters.put("evoBotPath", this.botsGUIMainWindow.bot1PathField.getText());
         preferences.parameters.put("expertBotPath", this.botsGUIMainWindow.bot2PathField.getText());
         preferences.parameters.put("mapName", this.botsGUIMainWindow.mapNameField.getText());
@@ -232,6 +235,7 @@ public class EvolutionMain {
         botsGUIMainWindow.getMutationProbabilityField().setText(preferences.parameters.get("mutationProbability"));
         botsGUIMainWindow.getCrossoverPointsText().setText(preferences.parameters.get("crossoverPoints"));
         botsGUIMainWindow.getElitismotextField().setText(preferences.parameters.get("elitismNum"));
+         botsGUIMainWindow.getRandomSeedtextField().setText(preferences.parameters.get("randomSeed"));
     }
 
     public WorkQueueServer getServer() {

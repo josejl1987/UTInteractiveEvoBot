@@ -11,8 +11,18 @@ import java.util.Random;
  * @author jose
  */
 public class RandomGenerator {
-              private static     final  Random rnd=new Random(2);
+              private static       Random rnd=new Random(3);
 
+    static int currentSeed;
+     
+    public static void setRandom(Random newRnd,int seed){
+             rnd=newRnd;
+        currentSeed=seed;
+    }
+    public static void setRandomSeed(int seed){
+        rnd=new Random(seed);
+        currentSeed=seed;
+    }         
     public static Random getRnd() {
         return rnd;
     }
