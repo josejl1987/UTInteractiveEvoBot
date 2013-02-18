@@ -165,6 +165,7 @@ public class EvolutionMain {
 
 
         updateParameters();
+       
     }
 
     public void saveXML() {

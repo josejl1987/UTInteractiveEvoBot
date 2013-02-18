@@ -24,7 +24,21 @@ public class JobList extends HashMap<Integer, Job> {
          }
      }
  }   
-    
+ 
+  public   List<Integer> getJobsbyStatus(Job.Estado status){
+        
+       CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());
+       ArrayList<Integer> remainingList=new ArrayList<Integer>();
+       for(Job job:jobArray){
+        if(job.getStatus().equals(status))
+                {
+            remainingList.add(job.getId());
+        }
+       
+       }
+       
+        return remainingList;
+    }
  public   List<Integer> getRemainingJobs(){
         
        CopyOnWriteArrayList<Job> jobArray=new CopyOnWriteArrayList(this.values());

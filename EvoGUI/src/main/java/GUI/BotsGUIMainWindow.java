@@ -36,6 +36,7 @@ import org.jdesktop.beansbinding.AutoBinding;
 import org.jdesktop.beansbinding.Bindings;
 import org.jdesktop.beansbinding.AutoBinding.UpdateStrategy;
 import org.uncommons.watchmaker.swing.evolutionmonitor.EvolutionMonitor;
+import synchro.Job;
 import utilities.RandomGenerator;
 
 /**
@@ -90,7 +91,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         panel_2 = new JPanel();
         jTabbedPane1.addTab("New tab", null, panel_2, null);
-        panel_2.setLayout(new MigLayout("", "[grow,fill]", "[pref!,grow,fill][354.00][42.00]"));
 
         generationsComboBox = new JComboBox();
         generationsComboBox.addActionListener(new ActionListener() {
@@ -102,10 +102,11 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 }
             }
         });
+        panel_2.setLayout(new MigLayout("", "[1220px,grow]", "[22px][354px][grow]"));
         generationsComboBox.setModel(new DefaultComboBoxModel(new String[]{"Actual"}));
-        panel_2.add(generationsComboBox, "cell 0 0,alignx left,aligny center");
+        panel_2.add(generationsComboBox, "cell 0 0,alignx left,aligny center,grow");
         jScrollPane1 = new javax.swing.JScrollPane();
-        panel_2.add(jScrollPane1, "cell 0 1,alignx right,growy");
+        panel_2.add(jScrollPane1, "cell 0 1,grow");
         jTable1 = new javax.swing.JTable();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
@@ -116,11 +117,63 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         jScrollPane1.setViewportView(jTable1);
+        
+        panel_3 = new JPanel();
+        panel_2.add(panel_3, "cell 0 2,grow");
+        panel_3.setLayout(new MigLayout("", "[]", "[]"));
         chkboxArray = new JCheckBox[IndividualV1.chromosomeGroup.values().length];
         for (int i = 0; i < chkboxArray.length; i++) {
             chkboxArray[i] = new JCheckBox(IndividualV1.chromosomeGroup.values()[i].name());
-            panel_2.add(chkboxArray[i], "cell " + i + " 2");
+            panel_3.add(chkboxArray[i], "cell " + i + " 0");
         }
+        
+                panel_1 = new JPanel();
+                jTabbedPane1.addTab("Salida", null, panel_1, null);
+                panel_1.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][][bottom][][][][][][]"));
+                
+                        lblTrabajosEnCurso = new JLabel("Trabajos en espera");
+                        panel_1.add(lblTrabajosEnCurso, "cell 0 0,alignx trailing");
+                        
+                                initJobListText = new JTextField();
+                                panel_1.add(initJobListText, "cell 1 0,growx");
+                                initJobListText.setColumns(10);
+                                
+                                        lblTrabajosPendientes = new JLabel("Trabajos esperando ID");
+                                        panel_1.add(lblTrabajosPendientes, "cell 0 2,alignx trailing");
+                                        
+                                                waitingIDJobListText = new JTextField();
+                                                waitingIDJobListText.setColumns(10);
+                                                panel_1.add(waitingIDJobListText, "cell 1 2,growx");
+                                                                                                
+                                                                                                lblTrabajosEnEjecucin = new JLabel("Trabajos en ejecución");
+                                                                                                panel_1.add(lblTrabajosEnEjecucin, "cell 0 4,alignx trailing");
+                                                                                                
+                                                                                                runningJobListText = new JTextField();
+                                                                                                runningJobListText.setColumns(10);
+                                                                                                panel_1.add(runningJobListText, "cell 1 4,growx");
+                                                                                        
+                                                                                                lblTrabajosLanzados = new JLabel("Trabajos terminados");
+                                                                                                panel_1.add(lblTrabajosLanzados, "cell 0 6,alignx trailing");
+                                                                                        
+                                                                                                finishedJobListText = new JTextField();
+                                                                                                finishedJobListText.setColumns(10);
+                                                                                                panel_1.add(finishedJobListText, "cell 1 6,growx");
+                                                                                                
+                                                                                                        lblThreadsDisponibles = new JLabel("Threads disponibles");
+                                                                                                        panel_1.add(lblThreadsDisponibles, "cell 0 8,alignx trailing");
+                                                                                                
+                                                                                                        textField_3 = new JTextField();
+                                                                                                        textField_3.setColumns(10);
+                                                                                                        panel_1.add(textField_3, "cell 1 8,growx");
+                                                                                                        
+                                                                                                        btnNewButton = new JButton("New button");
+                                                                                                        btnNewButton.addActionListener(new ActionListener() {
+                                                                                                        	public void actionPerformed(ActionEvent arg0) {
+                                                                                                        		updateJobInfo();
+                                                                                                        	}
+                                                                                                        });
+                                                                                                        btnNewButton.setAction(action);
+                                                                                                        panel_1.add(btnNewButton, "cell 0 15");
 
 
 
@@ -195,38 +248,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         separator_2 = new JSeparator();
         separator_2.setBackground(Color.GREEN);
         panel.add(separator_2, "cell 1 10");
-
-        panel_1 = new JPanel();
-        jTabbedPane1.addTab("Salida", null, panel_1, null);
-        panel_1.setLayout(new MigLayout("", "[][grow]", "[][][][][][][]"));
-
-        lblTrabajosEnCurso = new JLabel("Trabajos en curso");
-        panel_1.add(lblTrabajosEnCurso, "cell 0 0,alignx trailing");
-
-        textField = new JTextField();
-        panel_1.add(textField, "cell 1 0,growx");
-        textField.setColumns(10);
-
-        lblTrabajosPendientes = new JLabel("Trabajos pendientes");
-        panel_1.add(lblTrabajosPendientes, "cell 0 2,alignx trailing");
-
-        textField_1 = new JTextField();
-        textField_1.setColumns(10);
-        panel_1.add(textField_1, "cell 1 2,growx");
-
-        lblTrabajosLanzados = new JLabel("Trabajos lanzados");
-        panel_1.add(lblTrabajosLanzados, "cell 0 4,alignx trailing");
-
-        textField_2 = new JTextField();
-        textField_2.setColumns(10);
-        panel_1.add(textField_2, "cell 1 4,growx");
-
-        lblThreadsDisponibles = new JLabel("Threads disponibles");
-        panel_1.add(lblThreadsDisponibles, "cell 0 6,alignx trailing");
-
-        textField_3 = new JTextField();
-        textField_3.setColumns(10);
-        panel_1.add(textField_3, "cell 1 6,growx");
 
         String botpath = this.bot1PathField.getText();
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
@@ -925,15 +946,20 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JButton btnCargar;
     private JLabel lblTrabajosEnCurso;
     private JLabel lblTrabajosPendientes;
-    private JTextField textField;
-    private JTextField textField_1;
+    private JTextField initJobListText;
+    private JTextField waitingIDJobListText;
     private JLabel lblTrabajosLanzados;
-    private JTextField textField_2;
+    private JTextField finishedJobListText;
     private JLabel lblThreadsDisponibles;
     private JTextField textField_3;
     private JCheckBox chckbxDistancia;
     private JLabel lblSemilla;
     private JTextField randomSeedtextField;
+    private JPanel panel_3;
+    private JLabel lblTrabajosEnEjecucin;
+    private JTextField runningJobListText;
+    private JButton btnNewButton;
+    private final Action action = new SwingAction();
 
     // End of variables declaration//GEN-END:variables
 
@@ -996,6 +1022,24 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         return elitismotextField;
     }
 
+    public void updateJobInfo(){
+        
+       synchro.JobList jobList=this.main.getServer().getJobList();
+       
+       jobList.getRemainingJobs();
+      this.initJobListText.setText( jobList.getRemainingJobs().toString());
+      this.waitingIDJobListText.setText(jobList.getJobsbyStatus(Job.Estado.WaitingID).toString());
+      this.finishedJobListText.setText(jobList.getFinishedJobs().toString());
+      this.runningJobListText.setText(jobList.getJobsbyStatus(Job.Estado.Running).toString());
+    }
     protected void initDataBindings() {
     }
+	private class SwingAction extends AbstractAction {
+		public SwingAction() {
+			putValue(NAME, "SwingAction");
+			putValue(SHORT_DESCRIPTION, "Some short description");
+		}
+		public void actionPerformed(ActionEvent e) {
+		}
+	}
 }
