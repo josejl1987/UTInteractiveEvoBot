@@ -119,7 +119,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
       //              main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
       //              main.initMemoria();
                 }
-                main.iterateOnce();
+                main.iterateOnce(main.getPopulation());
                 try {
                     main.killUCCServers();
                 } catch (IOException ex) {

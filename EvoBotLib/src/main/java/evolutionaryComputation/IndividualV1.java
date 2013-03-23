@@ -15,6 +15,8 @@
 package evolutionaryComputation;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 
 import utilities.RandomGenerator;
@@ -131,7 +133,29 @@ public class IndividualV1 extends Individual  implements Serializable{
     public IndividualV1(Individual copy) {
         super(copy);
     }
- 
+
+    public List<IndividualV1> generateHillClimbing(){
+        
+        int amount=1;
+        List<IndividualV1> hillList=new ArrayList<>();
+        
+        int[] newChromosome=this.getChromosome().clone();
+        for (int i = 0; i < this.chromosomeSize(); i++) {
+            int[] currentChromosome = newChromosome.clone();
+            currentChromosome[i] += amount;
+            IndividualV1 newIndividual = new IndividualV1(false, this.getFitnessClass());
+            newIndividual.setChromosome(currentChromosome);
+            hillList.add(newIndividual);
+        }
+                for (int i = 0; i < this.chromosomeSize(); i++) {
+            int[] currentChromosome = newChromosome.clone();
+            currentChromosome[i] -= amount;
+            IndividualV1 newIndividual = new IndividualV1(false, this.getFitnessClass());
+            newIndividual.setChromosome(currentChromosome);
+            hillList.add(newIndividual);
+        }
+        return hillList;
+    }
 
     
 }
