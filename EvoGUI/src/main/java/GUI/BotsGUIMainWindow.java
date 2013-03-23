@@ -265,7 +265,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 final int rowindex = jTable1.getSelectedRow();
                 if (rowindex < 0) {
                     return;
-                }
+                } 
                 if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
                     JPopupMenu popup = new JPopupMenu("Menu");
                     JMenuItem menuItem = new JMenuItem("Seleccionar");

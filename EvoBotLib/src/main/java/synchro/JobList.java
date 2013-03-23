@@ -7,13 +7,14 @@ package synchro;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  *
  * @author jose
  */
-public class JobList extends HashMap<Integer, Job> {
+public class JobList extends TreeMap<Integer, Job> {
     
     
  public void resetWaitingIDJobs(){

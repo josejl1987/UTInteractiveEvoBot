@@ -121,7 +121,6 @@ public class EvolutionMain {
                         createGenerationGraph();
                     }
                     this.updateGenerationComboBox();
-
                     initMemoria();
                     this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
                     this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
@@ -414,12 +413,14 @@ public class EvolutionMain {
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
         SelectionStrategy<Object> selection = initSelectionStrategy();
         Random rng = new MersenneTwisterRNG();
+        engine=null;
 if(engine==null){
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
         engine.setCurrentGeneration(preferences.currentGeneration);
         engine.setEvalNum(preferences.currentEval);
         engine.setSingleThreaded(true);
 }
+
         if (observer == null) {
             observer = new EvolutionMonitor<IndividualV1>();
         }
@@ -510,14 +511,14 @@ if(engine==null){
                 OperatingSystemMXBean osBean = ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class);
 
                 double load = osBean.getSystemCpuLoad();
-                if (!cancel && load < 0.86 && getServer().getJobList().getRemainingJobs().size() > 0) {
+                if (!cancel && load < 0.70 && getServer().getJobList().getRemainingJobs().size() > 0) {
                     int id;
 
                     id = getServer().getJobList().getRemainingJobs().get(0);
                     runMatch(botsGUIMainWindow, id);
                     logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
 
-  ///                  getServer().enableTimedLock(1 * 60 * 1000);
+                    getServer().enableTimedLock(1 * 60 * 1000);
 
 
                 }

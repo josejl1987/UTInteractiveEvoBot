@@ -39,6 +39,7 @@ public class Job implements Runnable {
             server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
          //   server.getMem().storeGenes(id, 0, server.getMem().getCurrentGeneration(), backupIndividual);
             status=Estado.Error;
+            restart();
 //            try {
 //           //     if(!server.remainingJobList.contains(id)){
 //            //    server.remainingJobList.put(id);
@@ -89,6 +90,8 @@ public class Job implements Runnable {
     public void restart(){
                 setThread((new Thread(match)));
        getThread().setName(match.getMatchName());
+       this.status=Estado.WaitingID;
+       this.enableTimedLock(1*60*1000);
        this.run();
     }
     public enum Estado {
