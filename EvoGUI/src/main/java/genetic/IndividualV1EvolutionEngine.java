@@ -63,6 +63,11 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
     }
 
+    
+    public  List<EvaluatedCandidate<IndividualV1>> evaluate(List<IndividualV1> list){
+        
+        return this.evaluatePopulation(list);
+    }
     public IndividualV1EvolutionEngine(
             CandidateFactory<IndividualV1> candidateFactory,
             EvolutionaryOperator<IndividualV1> evolutionScheme,

@@ -94,7 +94,7 @@ public class EvolutionMain {
 
     public void loadXML() {
         updateParameters();
-    
+
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
         final JFileChooser fc = new JFileChooser();
@@ -116,7 +116,7 @@ public class EvolutionMain {
                 } else {
                     updateDialogs();
                     this.evaluations = preferences.evaluationsMap;
-                        RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
+                    RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
                     if (evaluations != null) {
                         createGenerationGraph();
                     }
@@ -142,7 +142,7 @@ public class EvolutionMain {
         updateParameters();
         preferences.evaluationsMap = this.evaluations;
         preferences.currentGeneration = engine.getCurrentGeneration();
-        preferences.rnd=RandomGenerator.getRnd();       
+        preferences.rnd = RandomGenerator.getRnd();
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
@@ -164,13 +164,13 @@ public class EvolutionMain {
 
 
         updateParameters();
-       
+
     }
 
     public void saveXML() {
         updateParameters();
         preferences.evaluationsMap = this.evaluations;
-        preferences.rnd=RandomGenerator.getRnd();  
+        preferences.rnd = RandomGenerator.getRnd();
         if (engine == null) {
             preferences.currentGeneration = 0;
         } else {
@@ -202,7 +202,7 @@ public class EvolutionMain {
     }
 
     private void updateParameters() {
-    	preferences.parameters.put("randomSeed", this.botsGUIMainWindow.getRandomSeedtextField().getText());
+        preferences.parameters.put("randomSeed", this.botsGUIMainWindow.getRandomSeedtextField().getText());
         preferences.parameters.put("evoBotPath", this.botsGUIMainWindow.bot1PathField.getText());
         preferences.parameters.put("expertBotPath", this.botsGUIMainWindow.bot2PathField.getText());
         preferences.parameters.put("mapName", this.botsGUIMainWindow.mapNameField.getText());
@@ -212,7 +212,7 @@ public class EvolutionMain {
         preferences.parameters.put("logPath", this.botsGUIMainWindow.logPathField.getText());
         preferences.parameters.put("timeLimit", this.botsGUIMainWindow.timeLimitField.getText());
         preferences.parameters.put("generationsNum", this.botsGUIMainWindow.getGenerationsField().getText());
-        preferences.parameters.put("iterationsNum",  this.botsGUIMainWindow.getIterationsField().getText());
+        preferences.parameters.put("iterationsNum", this.botsGUIMainWindow.getIterationsField().getText());
         preferences.parameters.put("mutationRatio", this.botsGUIMainWindow.getMutationRatio().getText());
         preferences.parameters.put("mutationProbability", this.botsGUIMainWindow.getMutationProbabilityField().getText());
         preferences.parameters.put("crossoverPoints", this.botsGUIMainWindow.getCrossoverPointsText().getText());
@@ -235,7 +235,7 @@ public class EvolutionMain {
         botsGUIMainWindow.getMutationProbabilityField().setText(preferences.parameters.get("mutationProbability"));
         botsGUIMainWindow.getCrossoverPointsText().setText(preferences.parameters.get("crossoverPoints"));
         botsGUIMainWindow.getElitismotextField().setText(preferences.parameters.get("elitismNum"));
-         botsGUIMainWindow.getRandomSeedtextField().setText(preferences.parameters.get("randomSeed"));
+        botsGUIMainWindow.getRandomSeedtextField().setText(preferences.parameters.get("randomSeed"));
     }
 
     public WorkQueueServer getServer() {
@@ -293,7 +293,6 @@ public class EvolutionMain {
         return selection;
     }
 
-  
     public List<Individual[]> getGenerationTableList() {
         return preferences.generationTableList;
     }
@@ -321,13 +320,13 @@ public class EvolutionMain {
         Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
         SelectionStrategy<Object> selection = initSelectionStrategy();
         Random rng = new MersenneTwisterRNG();
-        engine=null;
-if(engine==null){
-        engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
-        engine.setCurrentGeneration(preferences.currentGeneration);
-        engine.setEvalNum(preferences.currentEval);
-        engine.setSingleThreaded(true);
-}
+        engine = null;
+        if (engine == null) {
+            engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
+            engine.setCurrentGeneration(preferences.currentGeneration);
+            engine.setEvalNum(preferences.currentEval);
+            engine.setSingleThreaded(true);
+        }
 
         if (observer == null) {
             observer = new EvolutionMonitor<IndividualV1>();
@@ -392,22 +391,103 @@ if(engine==null){
         this.jobList = jobList;
     }
 
-    public void hillClimbing(){
+    public void hillClimbing(Individual individual) {
+       
         
+                observer = new EvolutionMonitor<IndividualV1>();
+        observer.showInFrame("Evo", true);
+        List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
+        int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
+        CandidateFactory<IndividualV1> factory = new IndividualV1Factory();
+        if (xoverPoints > 0) {
+            operators.add(new IndividualV1Crossover(xoverPoints));
+        }
+        operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
+        operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
+        EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
+        FitnessEvaluator<IndividualV1> fitnessEvaluator = new IndividualV1Evaluator();
+        Class<?> clazz = (Class<?>) botsGUIMainWindow.getjComboBox1().getSelectedItem();
+        SelectionStrategy<Object> selection = initSelectionStrategy();
+        Random rng = new MersenneTwisterRNG();
+
+        engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
+        engine.setCurrentGeneration(preferences.currentGeneration);
+        engine.setEvalNum(preferences.currentEval);
+        
+        List<IndividualV1> a = ((IndividualV1) individual).generateHillClimbing();
+        IndividualV1[] populationArray = new IndividualV1[a.size()];
+        a.toArray(populationArray);
+        cancel = false;
+        iterateOnce(populationArray);
+
+//        getServer().getFinishedJobList().clear();
+
+        // setPopulation(getMem().loadPoblacion(26));
+
+        IndividualV1[] localArray;
+        localArray = PopulationAverage.meanAverage(getServer().getIndividualsIterationList(), getServer().getPopulation_size(), getServer().getInterations());
+   //     saveXML("./backup.xml");
+
+        List<IndividualV1> oldpop = Arrays.asList(localArray.clone());
+        List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
+
+
+        int count = 0;
+        IndividualV1[] copyList = new IndividualV1[localArray.length];
+        for (IndividualV1 i : Listv1) {
+            IndividualV1 newi;
+            newi = new IndividualV1(i);
+            copyList[count] = newi;
+            count++;
+        }
+
+        count = 0;
+ 
+        List<EvaluatedCandidate<IndividualV1>> newpop = engine.evaluate((List<IndividualV1>) (List<?>) oldpop);
+
+
+        EvolutionUtils.sortEvaluatedPopulation(newpop, true);
+
+        //      Collections.reverse(newpop);
+        getGenerationTableList().add(copyList);
+        updateGenerationComboBox();
+
+        count = 0;
+
+
+
+        for (EvaluatedCandidate<IndividualV1> c : newpop) {
+            getPopulation()[count] = c.getCandidate();
+
+            count++;
+        }
+
+        initMemoria();
+
+
+        if (logger.isDebugEnabled()) {
+            logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
+        }
+
+
+
     }
-    public void iterateOnce(Individual[]  populationArray) throws NumberFormatException {
+
+    public void iterateOnce(Individual[] populationArray) throws NumberFormatException {
 
         getServer().setMaxThreadsNum(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         getServer().setNumAvailableThreads(Integer.parseInt(botsGUIMainWindow.threadsNumberField.getText()));
         int iterations = Integer.parseInt(botsGUIMainWindow.getIterationsField().getText());
-        getServer().init(this.populationLength, iterations);
+        getServer().init(populationArray.length, iterations);
         getServer().getJobList().clear();
-        for (int i = 0; i < iterations * populationLength; i++) {
-            if (populationArray[i % populationLength].ShouldEvaluate()) {
-                this.createJob(i, botsGUIMainWindow);
+        this.populationLength = populationArray.length;
+
+        for (int i = 0; i < iterations * populationArray.length; i++) {
+            if (populationArray[i % populationArray.length].ShouldEvaluate()) {
+                this.createJob(i, botsGUIMainWindow, populationArray);
             } else {
                 for (int j = 0; j < iterations; j++) {
-                    getServer().getIndividualsIterationList()[i % populationLength][j] = new IndividualV1(populationArray[i % populationLength]);
+                    getServer().getIndividualsIterationList()[i % populationArray.length][j] = new IndividualV1(populationArray[i % populationArray.length]);
                 }
             }
             getServer().getJobList().getFinishedJobs().size();
@@ -450,16 +530,16 @@ if(engine==null){
 //        jobList.removeDeadThreads();
         jobList.clear();
 
-        if(cancel){
+        if (cancel) {
             try {
                 this.killUCCServers();
             } catch (IOException ex) {
                 java.util.logging.Logger.getLogger(EvolutionMain.class.getName()).log(Level.SEVERE, null, ex);
             }
-            for(Job job:server.getJobList().values()){
+            for (Job job : server.getJobList().values()) {
                 job.getThread().stop();
             }
-           // throw new Exception("Se ha parado el programa");
+            // throw new Exception("Se ha parado el programa");
         }
 
         if (BotsGUIMainWindow.logger.isDebugEnabled()) {
@@ -525,7 +605,7 @@ if(engine==null){
         Random rng = new MersenneTwisterRNG();
 
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
-              engine.setCurrentGeneration(preferences.currentGeneration);
+        engine.setCurrentGeneration(preferences.currentGeneration);
         engine.setEvalNum(preferences.currentEval);
         int generation = 0;
         for (Individual[] v : preferences.generationTableList) {
@@ -538,7 +618,7 @@ if(engine==null){
         }
     }
 
-    private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow) throws SecurityException, NumberFormatException {
+    private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow, Individual[] populationArray) throws SecurityException, NumberFormatException {
         LogCategory log = new LogCategory("DeathMatch1v1");
         UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
         log.setLevel(Level.ALL);
@@ -567,12 +647,10 @@ if(engine==null){
         newJob.setThread((new Thread(match)));
         newJob.getThread().setName(match.getMatchName());
         newJob.enableTimedLock(1 * 60 * 1000);
-        newJob.setIndividual(new IndividualV1(this.getPopulation()[id % this.populationLength]));
-        newJob.backupIndividual = new IndividualV1(this.getPopulation()[id % this.populationLength]);
+        newJob.setIndividual(new IndividualV1(populationArray[id % this.populationLength]));
+        newJob.backupIndividual = new IndividualV1(populationArray[id % this.populationLength]);
         newJob.setServer(getServer());
         getServer().getJobList().put(id, newJob);
         return newJob;
     }
-
-  
 }

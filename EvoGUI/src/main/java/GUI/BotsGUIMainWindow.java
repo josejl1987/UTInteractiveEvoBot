@@ -275,6 +275,13 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                         }
                     });
                     popup.add(menuItem);
+                    JMenuItem menuItem2 = new JMenuItem("Hill Climbing");
+                    menuItem2.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            main.hillClimbing(main.getPopulation()[rowindex]);
+                        }
+                    });
+                    popup.add(menuItem2);
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
@@ -301,6 +308,13 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                         }
                     });
                     popup.add(menuItem);
+                    JMenuItem menuItem2 = new JMenuItem("Hill Climbing");
+                    menuItem2.addActionListener(new java.awt.event.ActionListener() {
+                        public void actionPerformed(java.awt.event.ActionEvent evt) {
+                            main.hillClimbing(main.getPopulation()[rowindex]);
+                        }
+                    });
+                    popup.add(menuItem2);
                     popup.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
