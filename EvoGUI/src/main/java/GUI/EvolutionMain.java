@@ -456,14 +456,6 @@ public class EvolutionMain {
 
 
 
-        for (EvaluatedCandidate<IndividualV1> c : newpop) {
-            getPopulation()[count] = c.getCandidate();
-
-            count++;
-        }
-
-        initMemoria();
-
 
         if (logger.isDebugEnabled()) {
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
