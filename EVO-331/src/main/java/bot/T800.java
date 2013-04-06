@@ -213,7 +213,7 @@ public class T800 extends UT2004BotModuleController {
         skynet = new Skynet(body, testIndividual);
         // Initialize the Data Base controller
         memory = new Memoria(false, false, 26, false);
-    //    memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
+        //    memory.storeBestIndividuo(IndividualV1.class.getSimpleName(), null, true);
         memory.debug(false);
         // Initialize all primary states
         primaryStateArray = new PrimaryState[5];
@@ -287,6 +287,19 @@ public class T800 extends UT2004BotModuleController {
         // examine 'self' to examine current bot's location and other stuff
         // receive logs from the path executor so you can get a grasp on how it is working
         pathExecutor.getLog().setLevel(Level.INFO);
+        testIndividual.setDeaths(0);
+        testIndividual.setDeaths(0);
+        testIndividual.setKills(0);
+        testIndividual.setTotalDamageGiven(0);
+        testIndividual.setTotalDamageTaken(0);
+        testIndividual.setTotalTimeShock(0);
+        testIndividual.setTotalTimeSniper(0);
+        testIndividual.setNShields(0);
+
+        testIndividual.setNSuperShields(0);
+        System.out.println("Comienza bot");
+
+
     }
 
     // *************************************************************************
@@ -446,7 +459,7 @@ public class T800 extends UT2004BotModuleController {
         primaryStateArray[primaryState].hearNoise(event, game.getTime(), enemy);
     }
 
-    //__________________________________________________________________________
+    //____________restar______________________________________________________________
     /**
      * Whenever an item is picked up, it gets triggered. Note that it also gets
      * triggered when the bot picks up things (he hears it).
@@ -548,6 +561,28 @@ public class T800 extends UT2004BotModuleController {
         //  saveInfo();
 
         this.bot.stop();
+    }
+    //__________________________________________________________________________
+    /**
+     * Game restart trigger.
+     *
+     * @param event GameRestarted event.
+     */
+    @EventListener(eventClass = GameRestarted.class)
+    protected void gameRestarted(GameRestarted event) {
+   
+        testIndividual.setDeaths(0);
+        testIndividual.setDeaths(0);
+        testIndividual.setKills(0);
+        testIndividual.setTotalDamageGiven(0);
+        testIndividual.setTotalDamageTaken(0);
+        testIndividual.setTotalTimeShock(0);
+        testIndividual.setTotalTimeSniper(0);
+        testIndividual.setNShields(0);
+
+        testIndividual.setNSuperShields(0);
+        System.out.println("Comienza bot");
+   
     }
 
     //__________________________________________________________________________

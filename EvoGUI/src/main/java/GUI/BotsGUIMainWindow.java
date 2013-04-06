@@ -117,7 +117,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jTable1.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         jScrollPane1.setViewportView(jTable1);
-        
+
         panel_3 = new JPanel();
         panel_2.add(panel_3, "cell 0 2,grow");
         panel_3.setLayout(new MigLayout("", "[]", "[]"));
@@ -126,54 +126,54 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
             chkboxArray[i] = new JCheckBox(IndividualV1.chromosomeGroup.values()[i].name());
             panel_3.add(chkboxArray[i], "cell " + i + " 0");
         }
-        
-                panel_1 = new JPanel();
-                jTabbedPane1.addTab("Salida", null, panel_1, null);
-                panel_1.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][][bottom][][][][][][]"));
-                
-                        lblTrabajosEnCurso = new JLabel("Trabajos en espera");
-                        panel_1.add(lblTrabajosEnCurso, "cell 0 0,alignx trailing");
-                        
-                                initJobListText = new JTextField();
-                                panel_1.add(initJobListText, "cell 1 0,growx");
-                                initJobListText.setColumns(10);
-                                
-                                        lblTrabajosPendientes = new JLabel("Trabajos esperando ID");
-                                        panel_1.add(lblTrabajosPendientes, "cell 0 2,alignx trailing");
-                                        
-                                                waitingIDJobListText = new JTextField();
-                                                waitingIDJobListText.setColumns(10);
-                                                panel_1.add(waitingIDJobListText, "cell 1 2,growx");
-                                                                                                
-                                                                                                lblTrabajosEnEjecucin = new JLabel("Trabajos en ejecución");
-                                                                                                panel_1.add(lblTrabajosEnEjecucin, "cell 0 4,alignx trailing");
-                                                                                                
-                                                                                                runningJobListText = new JTextField();
-                                                                                                runningJobListText.setColumns(10);
-                                                                                                panel_1.add(runningJobListText, "cell 1 4,growx");
-                                                                                        
-                                                                                                lblTrabajosLanzados = new JLabel("Trabajos terminados");
-                                                                                                panel_1.add(lblTrabajosLanzados, "cell 0 6,alignx trailing");
-                                                                                        
-                                                                                                finishedJobListText = new JTextField();
-                                                                                                finishedJobListText.setColumns(10);
-                                                                                                panel_1.add(finishedJobListText, "cell 1 6,growx");
-                                                                                                
-                                                                                                        lblThreadsDisponibles = new JLabel("Threads disponibles");
-                                                                                                        panel_1.add(lblThreadsDisponibles, "cell 0 8,alignx trailing");
-                                                                                                
-                                                                                                        textField_3 = new JTextField();
-                                                                                                        textField_3.setColumns(10);
-                                                                                                        panel_1.add(textField_3, "cell 1 8,growx");
-                                                                                                        
-                                                                                                        btnNewButton = new JButton("New button");
-                                                                                                        btnNewButton.addActionListener(new ActionListener() {
-                                                                                                        	public void actionPerformed(ActionEvent arg0) {
-                                                                                                        		updateJobInfo();
-                                                                                                        	}
-                                                                                                        });
-                                                                                                        btnNewButton.setAction(action);
-                                                                                                        panel_1.add(btnNewButton, "cell 0 15");
+
+        panel_1 = new JPanel();
+        jTabbedPane1.addTab("Salida", null, panel_1, null);
+        panel_1.setLayout(new MigLayout("", "[][grow]", "[][][][][][][][][][bottom][][][][][][]"));
+
+        lblTrabajosEnCurso = new JLabel("Trabajos en espera");
+        panel_1.add(lblTrabajosEnCurso, "cell 0 0,alignx trailing");
+
+        initJobListText = new JTextField();
+        panel_1.add(initJobListText, "cell 1 0,growx");
+        initJobListText.setColumns(10);
+
+        lblTrabajosPendientes = new JLabel("Trabajos esperando ID");
+        panel_1.add(lblTrabajosPendientes, "cell 0 2,alignx trailing");
+
+        waitingIDJobListText = new JTextField();
+        waitingIDJobListText.setColumns(10);
+        panel_1.add(waitingIDJobListText, "cell 1 2,growx");
+
+        lblTrabajosEnEjecucin = new JLabel("Trabajos en ejecución");
+        panel_1.add(lblTrabajosEnEjecucin, "cell 0 4,alignx trailing");
+
+        runningJobListText = new JTextField();
+        runningJobListText.setColumns(10);
+        panel_1.add(runningJobListText, "cell 1 4,growx");
+
+        lblTrabajosLanzados = new JLabel("Trabajos terminados");
+        panel_1.add(lblTrabajosLanzados, "cell 0 6,alignx trailing");
+
+        finishedJobListText = new JTextField();
+        finishedJobListText.setColumns(10);
+        panel_1.add(finishedJobListText, "cell 1 6,growx");
+
+        lblThreadsDisponibles = new JLabel("Threads disponibles");
+        panel_1.add(lblThreadsDisponibles, "cell 0 8,alignx trailing");
+
+        textField_3 = new JTextField();
+        textField_3.setColumns(10);
+        panel_1.add(textField_3, "cell 1 8,growx");
+
+        btnNewButton = new JButton("New button");
+        btnNewButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent arg0) {
+                updateJobInfo();
+            }
+        });
+        btnNewButton.setAction(action);
+        panel_1.add(btnNewButton, "cell 0 15");
 
 
 
@@ -235,10 +235,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         elitismotextField.setMaximumSize(new Dimension(25, 25));
         elitismotextField.setColumns(10);
         panel.add(elitismotextField, "cell 2 7,growx");
-        
+
         lblSemilla = new JLabel("Semilla");
         panel.add(lblSemilla, "cell 0 8");
-        
+
         randomSeedtextField = new JTextField();
         randomSeedtextField.setText("1");
         randomSeedtextField.setMaximumSize(new Dimension(25, 25));
@@ -265,7 +265,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 final int rowindex = jTable1.getSelectedRow();
                 if (rowindex < 0) {
                     return;
-                } 
+                }
                 if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
                     JPopupMenu popup = new JPopupMenu("Menu");
                     JMenuItem menuItem = new JMenuItem("Seleccionar");
@@ -295,7 +295,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                     jTable1.clearSelection();
                 }
 
-            final    int rowindex = jTable1.getSelectedRow();
+                final int rowindex = jTable1.getSelectedRow();
                 if (rowindex < 0) {
                     return;
                 }
@@ -753,13 +753,26 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         RandomGenerator.setRandomSeed(Integer.parseInt(this.randomSeedtextField.getText()));
         int num_individuals = Integer.parseInt(JOptionPane
                 .showInputDialog("N�mero de individuos"));
+
         // TODO add your handling code here:1111
         IndividualV1[] newpopulation = new IndividualV1[num_individuals];
+
         for (int i = 0; i < num_individuals; i++) {
             IndividualV1 v1 = new IndividualV1(true, (Class<? extends IndividualStats>) this.jComboBox3.getSelectedItem());
             newpopulation[i] = v1;
         }
+        final int cloneCandidate = Integer.parseInt(JOptionPane
+                .showInputDialog("N�mero de individuos"));
+        boolean cloneIndividual = (cloneCandidate != 0);
+        if (cloneIndividual) {
+            IndividualV1 v1 = newpopulation[cloneCandidate];
 
+            for (int i = 0; i < num_individuals; i++) {
+                if (i != cloneCandidate) {
+                    newpopulation[i] = v1;
+                }
+            }
+        }
         main.setPopulation(newpopulation);
         main.getMem().storeGenes(0, -1, newpopulation);
         main.observer = new EvolutionMonitor<IndividualV1>();
@@ -976,7 +989,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private final Action action = new SwingAction();
 
     // End of variables declaration//GEN-END:variables
-
     public JLabel getLblVariacinRelativa() {
         return lblVariacinRelativa;
     }
@@ -992,6 +1004,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     public void setRandomSeedtextField(JTextField randomSeedtextField) {
         this.randomSeedtextField = randomSeedtextField;
     }
+
     public JTextField getCrossoverPointsText() {
         return crossoverPointsText;
     }
@@ -1036,24 +1049,28 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         return elitismotextField;
     }
 
-    public void updateJobInfo(){
-        
-       synchro.JobList jobList=this.main.getServer().getJobList();
-       
-       jobList.getRemainingJobs();
-      this.initJobListText.setText( jobList.getRemainingJobs().toString());
-      this.waitingIDJobListText.setText(jobList.getJobsbyStatus(Job.Estado.WaitingID).toString());
-      this.finishedJobListText.setText(jobList.getFinishedJobs().toString());
-      this.runningJobListText.setText(jobList.getJobsbyStatus(Job.Estado.Running).toString());
+    public void updateJobInfo() {
+
+        synchro.JobList jobList = this.main.getServer().getJobList();
+
+        jobList.getRemainingJobs();
+        this.initJobListText.setText(jobList.getRemainingJobs().toString());
+        this.waitingIDJobListText.setText(jobList.getJobsbyStatus(Job.Estado.WaitingID).toString());
+        this.finishedJobListText.setText(jobList.getFinishedJobs().toString());
+        this.runningJobListText.setText(jobList.getJobsbyStatus(Job.Estado.Running).toString());
     }
+
     protected void initDataBindings() {
     }
-	private class SwingAction extends AbstractAction {
-		public SwingAction() {
-			putValue(NAME, "SwingAction");
-			putValue(SHORT_DESCRIPTION, "Some short description");
-		}
-		public void actionPerformed(ActionEvent e) {
-		}
-	}
+
+    private class SwingAction extends AbstractAction {
+
+        public SwingAction() {
+            putValue(NAME, "SwingAction");
+            putValue(SHORT_DESCRIPTION, "Some short description");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+        }
+    }
 }
