@@ -2,7 +2,7 @@
   <rnd serialization="custom">
     <java.util.Random>
       <default>
-        <seed>157279070888656</seed>
+        <seed>102155697354104</seed>
         <nextNextGaussian>0.0</nextNextGaussian>
         <haveNextNextGaussian>false</haveNextNextGaussian>
       </default>
@@ -24,11 +24,11 @@
     </entry>
     <entry>
       <string>randomSeed</string>
-      <string>5</string>
+      <string>1</string>
     </entry>
     <entry>
       <string>mutationProbability</string>
-      <string>3.33333333333333333</string>
+      <string>10</string>
     </entry>
     <entry>
       <string>utPath</string>
@@ -36,7 +36,7 @@
     </entry>
     <entry>
       <string>logPath</string>
-      <string>/tmp/tx/</string>
+      <string>/tmp/</string>
     </entry>
     <entry>
       <string>crossoverPoints</string>
@@ -44,7 +44,7 @@
     </entry>
     <entry>
       <string>mapName</string>
-      <string>DM-DE-Ironic</string>
+      <string>DM-TrainingDay</string>
     </entry>
     <entry>
       <string>expertBotPath</string>
@@ -68,13 +68,13 @@
     </entry>
     <entry>
       <string>elitismNum</string>
-      <string>15</string>
+      <string>1</string>
     </entry>
   </parameters>
   <evaluationsMap>
     <entry>
       <int>0</int>
-      <int>100</int>
+      <int>30</int>
     </entry>
   </evaluationsMap>
   <currentGeneration>0</currentGeneration>
