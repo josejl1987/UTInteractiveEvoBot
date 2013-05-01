@@ -80,14 +80,11 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
      */
     public BotsGUIMainWindow() {
         main = new EvolutionMain(this);
-
-
-        setResizable(false);
         initComponents();
         initComboBox();
 
-        jPanel2.setLayout(new MigLayout("", "[1237px]", "[477px]"));
-        jPanel2.add(jTabbedPane1, "cell 0 0,grow");
+        jPanel2.setLayout(new MigLayout("fill", "", ""));
+        jPanel2.add(jTabbedPane1, "cell 0 0,growx,aligny top");
 
         panel_2 = new JPanel();
         jTabbedPane1.addTab("New tab", null, panel_2, null);
@@ -102,7 +99,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 }
             }
         });
-        panel_2.setLayout(new MigLayout("", "[1220px,grow]", "[22px][354px][grow]"));
+        panel_2.setLayout(new MigLayout("", "[1920px,grow]", "[22px][600px,grow,fill][::100px,shrink 0,bottom]"));
         generationsComboBox.setModel(new DefaultComboBoxModel(new String[]{"Actual"}));
         panel_2.add(generationsComboBox, "cell 0 0,alignx left,aligny center,grow");
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -119,7 +116,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTable1);
 
         panel_3 = new JPanel();
-        panel_2.add(panel_3, "cell 0 2,grow");
+        panel_2.add(panel_3, "cell 0 2,growx,aligny bottom");
         panel_3.setLayout(new MigLayout("", "[]", "[]"));
         chkboxArray = new JCheckBox[IndividualV1.chromosomeGroup.values().length];
         for (int i = 0; i < chkboxArray.length; i++) {
@@ -549,9 +546,6 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel2.setAlignmentX(0.0F);
-        jPanel2.setAlignmentY(0.0F);
-
         jTabbedPane1
                 .setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setAlignmentX(0.0F);
@@ -651,7 +645,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 runButton1ActionPerformed(evt);
             }
         });
-        getContentPane().setLayout(new MigLayout("", "[1251px]", "[491px]"));
+        getContentPane().setLayout(new MigLayout("", "[1251px,grow]", "[491px,grow,top]"));
         jPanel1.add(initializeButton, "cell 1 15,alignx left,aligny top");
 
         btnParar = new JButton();
@@ -690,7 +684,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         btnGuardar.setText("Guardar");
         jPanel1.add(btnGuardar, "cell 5 15");
 
-        getContentPane().add(jPanel2, "cell 0 0,grow");
+        getContentPane().add(jPanel2, "cell 0 0,growx,aligny top");
 
         jMenu3.setText("File");
 

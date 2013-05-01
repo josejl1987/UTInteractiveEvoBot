@@ -599,6 +599,7 @@ public class EvolutionMain {
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
         engine.setCurrentGeneration(preferences.currentGeneration);
         engine.setEvalNum(preferences.currentEval);
+        engine.setSingleThreaded(true);
         int generation = 0;
         for (Individual[] v : preferences.generationTableList) {
             IndividualV1[] v2 = (IndividualV1[]) v;

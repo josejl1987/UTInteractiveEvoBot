@@ -17,11 +17,7 @@ and open the template in the editor.
                 <group></group>
             </attribute>
             <attribute>
-                <name>Generación</name>
-                <group></group>
-            </attribute>
-            <attribute>
-                <name>Victorias</name>
+                <name>Fitness</name>
                 <group></group>
             </attribute>
             <attribute>
@@ -29,11 +25,15 @@ and open the template in the editor.
                 <group></group>
             </attribute>
             <attribute>
-                <name>Daño recibido</name>
+                <name>Victorias</name>
                 <group></group>
             </attribute>
             <attribute>
                 <name>Daño ocasionado</name>
+                <group></group>
+            </attribute>
+            <attribute>
+                <name>Daño recibido</name>
                 <group></group>
             </attribute>
             <attribute>
