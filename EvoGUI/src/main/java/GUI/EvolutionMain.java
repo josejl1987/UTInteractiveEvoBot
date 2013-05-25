@@ -508,7 +508,7 @@ public class EvolutionMain {
 
             }
             try {
-                Thread.sleep(1700);
+                Thread.sleep(2500);
 
             } catch (InterruptedException ex) {
                 if (BotsGUIMainWindow.logger.isDebugEnabled()) {
@@ -626,6 +626,7 @@ public class EvolutionMain {
         match.setBot1Name("Bot evolutivo");
         match.setBot1JarPath(botsGUIMainWindow.bot1PathField.getText());
         // BOT 2 CONFIGURATION
+     
         match.setBot2Name("Bot experto");
         match.setBot2JarPath(botsGUIMainWindow.bot2PathField.getText());
         // OUTPUT RESULT

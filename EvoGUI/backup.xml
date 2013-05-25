@@ -12,7 +12,7 @@
   <parameters>
     <entry>
       <string>timeLimit</string>
-      <string>1</string>
+      <string>5</string>
     </entry>
     <entry>
       <string>generationsNum</string>
@@ -28,7 +28,7 @@
     </entry>
     <entry>
       <string>mutationProbability</string>
-      <string>10</string>
+      <string>3.33333333333333333</string>
     </entry>
     <entry>
       <string>utPath</string>
@@ -44,11 +44,11 @@
     </entry>
     <entry>
       <string>mapName</string>
-      <string>DM-TrainingDay</string>
+      <string>DM-Flux2</string>
     </entry>
     <entry>
       <string>expertBotPath</string>
-      <string>/home/jose/NetBeansProjects/UTInteractiveEvoBot/EXPERT-331/target/HunterBot.jar</string>
+      <string>/home/jose/NetBeansProjects/UTInteractiveEvoBot/EXPERT-331/target/EXPERT-331-1.0-SNAPSHOT.jar</string>
     </entry>
     <entry>
       <string>fragLimit</string>
@@ -68,7 +68,7 @@
     </entry>
     <entry>
       <string>elitismNum</string>
-      <string>1</string>
+      <string>15</string>
     </entry>
   </parameters>
   <evaluationsMap>
