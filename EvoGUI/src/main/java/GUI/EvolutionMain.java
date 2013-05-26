@@ -631,6 +631,8 @@ public class EvolutionMain {
         match.setBot2JarPath(botsGUIMainWindow.bot2PathField.getText());
         // OUTPUT RESULT
         match.setOutputDir(botsGUIMainWindow.logPathField.getText());
+       match.setNativeBot2(botsGUIMainWindow.getChckbxNativeBot2().isSelected());
+       
         botsGUIMainWindow.initMemoria();
 
         Job newJob = new Job();

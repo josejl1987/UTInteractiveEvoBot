@@ -13,21 +13,10 @@ public class NewFitness  extends IndividualStats {
     @Override
     public double fitness() {
         
-       double A=0;
-       if(kills==deaths) {
-            A=0.5;
-        }
-       else if (kills>deaths) {
-            A=1;
-        }
-       else {
-            A=0;
-        }
-        
-        
-       double fitness= 10*(kills-deaths)+(totalDamageGiven-totalDamageTaken);
-       if(fitness<=0) fitness=0.0001;
+          double fitness= (this.totalDamageGiven-this.totalDamageTaken/10)+(this.kills*50-this.deaths*5);
+       if(fitness<=0) fitness=0;
        return fitness;
     }
+
     
 }

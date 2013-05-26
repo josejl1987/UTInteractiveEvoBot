@@ -153,6 +153,7 @@ public class Greedy extends PrimaryState {
                     newDestination = Bot.pathNodes [i].getLocation ();
                 }
             }
+            if(newDestination!=null){
 
             if (visitedSpots.size () == 5) {
                 visitedSpots.remove (0);
@@ -163,6 +164,10 @@ public class Greedy extends PrimaryState {
 
             IPathFuture <ILocated> pathHandle = pathPlanner.computePath (info.getLocation (), newDestination);
             pathExecutor.followPath (pathHandle);
+            
+            }
+            
+            
         }
     }
 

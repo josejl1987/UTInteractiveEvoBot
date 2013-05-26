@@ -91,8 +91,16 @@ public class Skynet {
      * Resets all the temporary information hosted in skynet.
      */
     public void resetTempInfo () {
+		if (logger.isDebugEnabled()) {
+			logger.debug("resetTempInfo() - start"); //$NON-NLS-1$
+		}
+
         comboLocation = null;
         spamLocation = null;
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("resetTempInfo() - end"); //$NON-NLS-1$
+		}
     }
 
     //__________________________________________________________________________
@@ -104,6 +112,10 @@ public class Skynet {
      * @return The priority of the given item.
      */
     private int estimateItemPriority (final Item item, final Weaponry weaponry) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateItemPriority(Item, Weaponry) - start"); //$NON-NLS-1$
+		}
+
         int priority = -1;
         ItemType type = item.getType ();
 
@@ -134,6 +146,9 @@ public class Skynet {
             }
         }
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateItemPriority(Item, Weaponry) - end"); //$NON-NLS-1$
+		}
         return priority;
     }
 
@@ -151,6 +166,10 @@ public class Skynet {
      * it returns null.
      */
     public Location estimateDestination (final AgentInfo info, final Player enemy, final Weaponry weaponry, final Items items) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateDestination(AgentInfo, Player, Weaponry, Items) - start"); //$NON-NLS-1$
+		}
+
         Location newDestination = null;
         int currentPriority;
         int maximumPriority = 0;
@@ -218,6 +237,9 @@ public class Skynet {
             }
         }
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateDestination(AgentInfo, Player, Weaponry, Items) - end"); //$NON-NLS-1$
+		}
         return newDestination;
     }
 
@@ -233,6 +255,10 @@ public class Skynet {
      * the same, 4 our arsenal is better, 5 our arsenal is far better.
      */
     private int [] compareArsenals (final Weaponry weaponry, final boolean enemyArsenal []) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("compareArsenals(Weaponry, boolean[]) - start"); //$NON-NLS-1$
+		}
+
         int arsenalProfit [] = new int [3];
         int enemyTotalProfit [] = new int [3];
         int ownTotalProfit [] = new int [3];
@@ -481,6 +507,9 @@ public class Skynet {
             }
         }
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("compareArsenals(Weaponry, boolean[]) - end"); //$NON-NLS-1$
+		}
         return arsenalProfit;
     }
 
@@ -498,6 +527,10 @@ public class Skynet {
      * If the risk is too high or we are already in the range, it returns "disabled".
      */
     private int estimateProfile (double enemyDistance, int maximumProfit, int risk, int sweetSpot) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateProfile(double, int, int, int) - start"); //$NON-NLS-1$
+		}
+
         // If our arsenal is more or less the same or better than the enemy's
         if (maximumProfit >= risk) {
             // Check which is the best range
@@ -505,27 +538,47 @@ public class Skynet {
             // SHORT DISTANCE
             if (sweetSpot == 0) {
                if (enemyDistance > PrimaryState.getShortRange () / 2) {
-                   return SecondaryState.States.OFENSIVE_PROFILE.ordinal ();
+					int returnint = SecondaryState.States.OFENSIVE_PROFILE.ordinal();
+					if (logger.isDebugEnabled()) {
+						logger.debug("estimateProfile(double, int, int, int) - end"); //$NON-NLS-1$
+					}
+                   return returnint;
                }
             }
             // AVERAGE DISTANCE
             else if (sweetSpot == 1) {
                 if (enemyDistance > PrimaryState.getFarRange ()) {
-                   return SecondaryState.States.OFENSIVE_PROFILE.ordinal ();
+					int returnint = SecondaryState.States.OFENSIVE_PROFILE.ordinal();
+					if (logger.isDebugEnabled()) {
+						logger.debug("estimateProfile(double, int, int, int) - end"); //$NON-NLS-1$
+					}
+                   return returnint;
                 }
                 else if (enemyDistance < PrimaryState.getMediumRange () / 3) {
-                    return SecondaryState.States.DEFENSIVE_PROFILE.ordinal ();
+					int returnint = SecondaryState.States.DEFENSIVE_PROFILE.ordinal();
+					if (logger.isDebugEnabled()) {
+						logger.debug("estimateProfile(double, int, int, int) - end"); //$NON-NLS-1$
+					}
+                    return returnint;
                 }
             }
             // FAR DISTANCE
             else if (sweetSpot == 2) {
                 if (enemyDistance < PrimaryState.getFarRange () / 2) {
-                   return SecondaryState.States.DEFENSIVE_PROFILE.ordinal ();
+					int returnint = SecondaryState.States.DEFENSIVE_PROFILE.ordinal();
+					if (logger.isDebugEnabled()) {
+						logger.debug("estimateProfile(double, int, int, int) - end"); //$NON-NLS-1$
+					}
+                   return returnint;
                 }
             }
         }
 
-        return SecondaryState.States.DISABLED.ordinal ();
+		int returnint = SecondaryState.States.DISABLED.ordinal();
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateProfile(double, int, int, int) - end"); //$NON-NLS-1$
+		}
+        return returnint;
     }
 
     //__________________________________________________________________________
@@ -544,6 +597,10 @@ public class Skynet {
      * in T800 (@see T800.class).
      */
     public int [] behave (final AgentInfo info, final Weaponry weaponry, final Player enemy, final EnemyInfo enemyInfo, final Game game) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("behave(AgentInfo, Weaponry, Player, EnemyInfo, Game) - start"); //$NON-NLS-1$
+		}
+
         int maximumProfit, bestDefensiveRange, bestOfensiveRange;
         int arsenalStatus [] = compareArsenals (weaponry, enemyInfo.getArsenal ());
 
@@ -593,6 +650,7 @@ public class Skynet {
                     // If we are seeing the enemy
                     if (enemy != null) {
                         nextPrimaryState = PrimaryState.States.ATTACK.ordinal ();
+                       
                         nextSecondaryState = estimateProfile (enemyDistance, maximumProfit, 3, bestDefensiveRange);
                     }
                     // If we can't see him
@@ -946,6 +1004,13 @@ public class Skynet {
         }
 
         int behaviorArray [] = {nextPrimaryState, nextSecondaryState};
+        
+		if (logger.isDebugEnabled()) {
+			logger.debug("behave(AgentInfo, Weaponry, Player, EnemyInfo, Game) - end"); //$NON-NLS-1$
+		}
+		
+               
+		logger.info(info.getName()+":"+ PrimaryState.States.values()[behaviorArray[0]].name()+","+ SecondaryState.States.values()[behaviorArray[1]].name());
         return behaviorArray;
     }
 
@@ -958,15 +1023,25 @@ public class Skynet {
      * case.
      */
     public Location estimateTarget () {
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateTarget() - start"); //$NON-NLS-1$
+		}
+
         if (comboLocation != null) {
             PrimaryState.feasibleCombo ();
 
+			if (logger.isDebugEnabled()) {
+				logger.debug("estimateTarget() - end"); //$NON-NLS-1$
+			}
             return comboLocation;
         }
 
         // Check if we should spam. If we should spam, then we should return the spam
         // Location.
 
+		if (logger.isDebugEnabled()) {
+			logger.debug("estimateTarget() - end"); //$NON-NLS-1$
+		}
         return null;
     }
 
@@ -979,6 +1054,10 @@ public class Skynet {
      * @param enemy Enemy
      */
     public void incomingProjectile (final IncomingProjectile projectile, final Player enemy) {
+		if (logger.isDebugEnabled()) {
+			logger.debug("incomingProjectile(IncomingProjectile, Player) - start"); //$NON-NLS-1$
+		}
+
         // If the projectile is a feasible combo, we update the combo Location.
         // spamLocation indicates if the spot where we want to blow the combo is a spam.
         if (projectile.getType().equals ("XWeapons.ShockProjectile")) {
@@ -997,5 +1076,9 @@ public class Skynet {
                 }
             }
         }
+
+		if (logger.isDebugEnabled()) {
+			logger.debug("incomingProjectile(IncomingProjectile, Player) - end"); //$NON-NLS-1$
+		}
     }
 }

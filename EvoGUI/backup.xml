@@ -2,7 +2,7 @@
   <rnd serialization="custom">
     <java.util.Random>
       <default>
-        <seed>102155697354104</seed>
+        <seed>240393640453936</seed>
         <nextNextGaussian>0.0</nextNextGaussian>
         <haveNextNextGaussian>false</haveNextNextGaussian>
       </default>
@@ -12,7 +12,7 @@
   <parameters>
     <entry>
       <string>timeLimit</string>
-      <string>5</string>
+      <string>2</string>
     </entry>
     <entry>
       <string>generationsNum</string>
@@ -28,27 +28,27 @@
     </entry>
     <entry>
       <string>mutationProbability</string>
-      <string>3.33333333333333333</string>
+      <string>10</string>
     </entry>
     <entry>
       <string>utPath</string>
-      <string>/home/jose/ut2004/</string>
+      <string>c:\ut2004</string>
     </entry>
     <entry>
       <string>logPath</string>
-      <string>/tmp/</string>
+      <string>C:\UT2004-Match-Results</string>
     </entry>
     <entry>
       <string>crossoverPoints</string>
-      <string>26</string>
+      <string>1</string>
     </entry>
     <entry>
       <string>mapName</string>
-      <string>DM-Flux2</string>
+      <string>DM-TrainingDay</string>
     </entry>
     <entry>
       <string>expertBotPath</string>
-      <string>/home/jose/NetBeansProjects/UTInteractiveEvoBot/EXPERT-331/target/EXPERT-331-1.0-SNAPSHOT.jar</string>
+      <string>C:\Users\Jose\Documents\utevobots\utinteractiveevobot\UT2004Tournament\bots\HunterBot\HunterBot.jar</string>
     </entry>
     <entry>
       <string>fragLimit</string>
@@ -56,25 +56,25 @@
     </entry>
     <entry>
       <string>threadsNum</string>
-      <string>30</string>
+      <string>55</string>
     </entry>
     <entry>
       <string>evoBotPath</string>
-      <string>/home/jose/NetBeansProjects/UTInteractiveEvoBot/EVO-331/target/EVO-331-1.0-SNAPSHOT.jar</string>
+      <string>C:\Users\Jose\Documents\utevobots\utinteractiveevobot\evo-331\target\EVO-331-1.0-SNAPSHOT.jar</string>
     </entry>
     <entry>
       <string>iterationsNum</string>
-      <string>1</string>
+      <string>15</string>
     </entry>
     <entry>
       <string>elitismNum</string>
-      <string>15</string>
+      <string>1</string>
     </entry>
   </parameters>
   <evaluationsMap>
     <entry>
       <int>0</int>
-      <int>30</int>
+      <int>150</int>
     </entry>
   </evaluationsMap>
   <currentGeneration>0</currentGeneration>

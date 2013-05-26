@@ -252,8 +252,9 @@ public class T800 extends UT2004BotModuleController {
         } else {
             name = name + memory.getCurrentGeneration() + currentIndv;
         }
-
+       
         return new Initialize().setName(name);
+       
     }
 
     //__________________________________________________________________________

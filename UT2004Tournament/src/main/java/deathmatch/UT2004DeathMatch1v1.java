@@ -14,6 +14,7 @@ import cz.cuni.amis.pogamut.ut2004.utils.UCCWrapper;
 import cz.cuni.amis.pogamut.ut2004.utils.UCCWrapperConf;
 import cz.cuni.amis.utils.ExceptionToString;
 import cz.cuni.amis.utils.exception.PogamutException;
+import match.UT2004NativeBotConfig;
 
 /**
  * Performs 1v1 death-match for two Pogamut bots (no native bots here).
@@ -32,6 +33,16 @@ import cz.cuni.amis.utils.exception.PogamutException;
  */
 public class UT2004DeathMatch1v1 implements Callable<UT2004DeathMatchResult>, Runnable {
 	
+    
+    private boolean nativeBot2=false;
+
+    public boolean isNativeBot2() {
+        return nativeBot2;
+    }
+
+    public void setNativeBot2(boolean nativeBot2) {
+        this.nativeBot2 = nativeBot2;
+    }
 	/**
 	 * Used as {@link UT2004DeathMatchConfig#setFragLimit(int)}.
 	 */
@@ -367,6 +378,17 @@ public class UT2004DeathMatch1v1 implements Callable<UT2004DeathMatchResult>, Ru
 		botConfig.setRedirectStdOut(true);		
 		matchConfig.addBot(botConfig);
 		
+                if(this.nativeBot2){
+                UT2004NativeBotConfig     nativeBotConfig=new UT2004NativeBotConfig();
+                nativeBotConfig.setBotId("NativeBot");
+		nativeBotConfig.setSkillLevel(7);
+		nativeBotConfig.setTeamNumber(255);
+            
+		matchConfig.addNativeBot(nativeBotConfig);   
+                }
+                else{
+                    
+           
 		botConfig = new UT2004BotConfig();
 		botConfig.setBotId(getBot2Name());
 		botConfig.setPathToBotJar(getBot2JarPath());
@@ -374,7 +396,7 @@ public class UT2004DeathMatch1v1 implements Callable<UT2004DeathMatchResult>, Ru
 		botConfig.setRedirectStdErr(true);
 		botConfig.setRedirectStdOut(true);		
 		matchConfig.addBot(botConfig);
-		
+		     }
 		return matchConfig;
 	}
 	

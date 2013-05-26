@@ -245,6 +245,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         separator_2 = new JSeparator();
         separator_2.setBackground(Color.GREEN);
         panel.add(separator_2, "cell 1 10");
+        
+        label_1 = new JLabel();
+        label_1.setText("Ruta bot experto");
+        jTabbedPane1.addTab("New tab", null, label_1, null);
 
         String botpath = this.bot1PathField.getText();
         String botfolder = botpath.substring(0, botpath.lastIndexOf(File.separator) + 1);
@@ -604,6 +608,9 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jPanel1.setLayout(new MigLayout("", "[74px][40px][46px][][][1044px]", "[22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][25px][][]"));
         jPanel1.add(jLabel6, "cell 0 1,alignx left,aligny center");
         jPanel1.add(mapNameField, "cell 5 1,growx,aligny top");
+        
+        chckbxNativeBot2 = new JCheckBox("Nativo");
+        jPanel1.add(chckbxNativeBot2, "cell 2 3");
         jPanel1.add(jLabel7, "cell 0 8 2 1,alignx left,aligny center");
         jPanel1.add(fragLimitField, "cell 5 8,growx,aligny top");
         jPanel1.add(jLabel4, "cell 0 7 2 1,alignx left,aligny center");
@@ -981,8 +988,14 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private JTextField runningJobListText;
     private JButton btnNewButton;
     private final Action action = new SwingAction();
+    private JLabel label_1;
+    private JCheckBox chckbxNativeBot2;
 
     // End of variables declaration//GEN-END:variables
+
+    public JCheckBox getChckbxNativeBot2() {
+        return chckbxNativeBot2;
+    }
     public JLabel getLblVariacinRelativa() {
         return lblVariacinRelativa;
     }
