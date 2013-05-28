@@ -157,14 +157,16 @@ public class Hunt extends PrimaryState {
             int pos = 0;
 
             boolean success = false;
-            while (!success) {
+            int count=T800.areas.length;
+            while (!success&&count>0) {
                 pos = rand.nextInt(T800.areas.length);
+                count--;
                 if (!visitedSpots.contains (T800.areas [pos].getLocation ())) {
                     success = true;
                     newDestination = T800.areas [pos].getLocation ();
                 }
             }
-
+                    newDestination = T800.areas [pos].getLocation ();
             if (visitedSpots.size() >= 6) {
                 visitedSpots.remove (0);
             }

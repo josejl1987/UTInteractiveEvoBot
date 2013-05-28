@@ -501,14 +501,14 @@ public class EvolutionMain {
                     runMatch(botsGUIMainWindow, id);
                     logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
 
-                    getServer().enableTimedLock(1 * 60 * 1000);
+                getServer().enableTimedLock(1 * 60 * 1000);
 
 
                 }
 
             }
             try {
-                Thread.sleep(2500);
+                Thread.sleep(500);
 
             } catch (InterruptedException ex) {
                 if (BotsGUIMainWindow.logger.isDebugEnabled()) {
