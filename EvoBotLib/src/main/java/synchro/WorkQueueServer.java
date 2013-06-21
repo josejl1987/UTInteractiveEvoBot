@@ -211,7 +211,7 @@ public class WorkQueueServer implements Runnable {
 
             while (true) {
                 Socket clientSocket = this.server.accept();
-                clientSocket.setSoTimeout(matchTime * 60 * 1700);
+                clientSocket.setSoTimeout(matchTime * 60 * 4000);
 
                 if (!remainingJobList.isEmpty()||jobList.getWaitingIdJob()!=-1) {
 

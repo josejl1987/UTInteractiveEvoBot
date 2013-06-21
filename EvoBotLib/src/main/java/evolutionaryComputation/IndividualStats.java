@@ -14,6 +14,7 @@
 
 package evolutionaryComputation;
 
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentStats;
 import org.apache.log4j.Logger;
 
 import java.awt.event.ActionEvent;
@@ -36,7 +37,7 @@ import javax.swing.Timer;
  * That is the main reason why the derived classes should have names of fitness techniques
  * (to allow clients to know rapidly which kind of fitness they are using).
  */
-public abstract class IndividualStats implements Serializable {
+public abstract class IndividualStats implements Serializable  {
 	/**
 	 * Logger for this class
 	 */
@@ -45,6 +46,8 @@ public abstract class IndividualStats implements Serializable {
     // *************************************************************************
     //                             INSTANCE FIELDS
     // *************************************************************************
+        
+
 
 
     /** Number of times the individual has killed */
@@ -68,8 +71,9 @@ public abstract class IndividualStats implements Serializable {
     private Timer shockClock;
     /** Clock to time out how much time we spent with the sniper rifle */
     private Timer sniperClock;
+    /** Time that this individual has been playing*/
 
-
+    private double matchTime;
     // *************************************************************************
     //                                METHODS
     // *************************************************************************
@@ -101,6 +105,31 @@ public abstract class IndividualStats implements Serializable {
         sniperClock = new Timer(delay, taskPerformer2);
     }
 
+    public double averageFitness;
+
+    
+    public double updateAverageFitness(double newFitness){
+        
+        if(evaluations==0){
+            evaluations=1;
+            averageFitness=newFitness;
+        }
+        else{
+            evaluations++;
+            averageFitness=(evaluations-1)*averageFitness/evaluations+newFitness/evaluations;
+            
+        }
+        return averageFitness;
+    }
+    
+    public double getAverageFitness() {
+        return averageFitness;
+    }
+
+    public void setAverageFitness(double averageFitness) {
+        this.averageFitness = averageFitness;
+    }
+    public int evaluations=0;
     //__________________________________________________________________________
 
     /** Estimate fitness */
@@ -178,6 +207,7 @@ public abstract class IndividualStats implements Serializable {
     public void timeout () {
         shockClock.stop ();
         sniperClock.stop ();
+ 
     }
 
     //__________________________________________________________________________
@@ -219,6 +249,15 @@ public abstract class IndividualStats implements Serializable {
         totalTimeShock = totalTimeSniper = 0;
         shockClock.stop ();
         sniperClock.stop();
+       matchTime=0;
+    }
+
+    public double getMatchTime() {
+        return matchTime;
+    }
+
+    public void setMatchTime(double matchTime) {
+        this.matchTime = matchTime;
     }
 
     //__________________________________________________________________________
@@ -347,5 +386,6 @@ public abstract class IndividualStats implements Serializable {
       totalTimeShock+=other.getTotalTimeShock()*weight;;
     /** Total time we had the sniper rifle */
       totalTimeSniper+=other.getTotalTimeSniper()*weight;;
+      this.matchTime+=other.matchTime*weight;
     }
 }

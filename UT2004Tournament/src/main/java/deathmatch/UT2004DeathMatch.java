@@ -159,7 +159,7 @@ public class UT2004DeathMatch extends UT2004Match<UT2004DeathMatchConfig, UT2004
 			if (oneOfBotsDiedOut.get()) {
 				// check whether the server is down as well... but let GB2004 to process it
 				try {
-					Thread.sleep(15000);
+					Thread.sleep(22000);
 				} catch (InterruptedException e) {
 					throw new PogamutInterruptedException("Interrupted while giving GB2004 time to tear down its connection.", log, this);
 				}
@@ -174,7 +174,7 @@ public class UT2004DeathMatch extends UT2004Match<UT2004DeathMatchConfig, UT2004
 					log.warning("ONE OF BOTS HAS DIED OUT, BUT SERVER IS STILL RUNNING ... POSSIBLE MATCH FAILURE!");
 				}
 			}
-//                        Thread.sleep(50000);
+                        Thread.sleep(50000);
 			if (!serverDiedOut.get() && server.inState(IAgentStateUp.class)) {
 				// server is still running? Kill it...
 				server.kill();
@@ -184,6 +184,8 @@ public class UT2004DeathMatch extends UT2004Match<UT2004DeathMatchConfig, UT2004
 			// KILL UCC TO ENSURE NOTHING WILL CHANGE AFTER THAT
 			if (ucc != null) {
 				try {
+                                    					Thread.sleep(22000);
+
 					if (log != null && log.isLoggable(Level.INFO)) {
 						log.info(config.getMatchId().getToken() + ": Killing UCC...");
 					} 

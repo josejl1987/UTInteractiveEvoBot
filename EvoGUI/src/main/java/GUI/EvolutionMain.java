@@ -94,7 +94,7 @@ public class EvolutionMain {
 
     public void loadXML() {
         updateParameters();
-
+        
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
         final JFileChooser fc = new JFileChooser();
@@ -335,7 +335,7 @@ public class EvolutionMain {
 
             observer.showInFrame("Monitor", false);
         }
-        this.setPopulation(this.getMem().loadPoblacion(26));
+   //     this.setPopulation(this.getMem().loadPoblacion(26));
         populationLength = getPopulation().length;
         Collection<Individual> oldpop = Arrays.asList(this.getPopulation());
         List<EvaluatedCandidate<IndividualV1>> newpop;
@@ -475,7 +475,10 @@ public class EvolutionMain {
         this.populationLength = populationArray.length;
 
         for (int i = 0; i < iterations * populationArray.length; i++) {
-            if (populationArray[i % populationArray.length].ShouldEvaluate()) {
+            boolean forceEvaluation=true;
+            
+            if (populationArray[i % populationArray.length].ShouldEvaluate()||forceEvaluation) {
+                populationArray[i % populationArray.length].setShouldEvaluate(forceEvaluation);
                 this.createJob(i, botsGUIMainWindow, populationArray);
             } else {
                 for (int j = 0; j < iterations; j++) {
@@ -614,8 +617,9 @@ public class EvolutionMain {
     private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow, Individual[] populationArray) throws SecurityException, NumberFormatException {
         LogCategory log = new LogCategory("DeathMatch1v1");
         UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-        log.setLevel(Level.ALL);
+        log.setLevel(Level.INFO);
         match.setLog(log);
+
         // GAME CONFIGURATION
         match.setMatchName("TX-" + this.getServer().getMem().getCurrentGeneration() + "-" + id);
         match.setUnrealHome(botsGUIMainWindow.pathUTField.getText());

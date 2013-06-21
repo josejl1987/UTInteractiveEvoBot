@@ -20,6 +20,14 @@ and open the template in the editor.
                 <name>Fitness</name>
                 <group></group>
             </attribute>
+                        <attribute>
+                <name>Fitness medio</name>
+                <group></group>
+            </attribute>
+                        <attribute>
+                <name>Evaluaciones</name>
+                <group></group>
+            </attribute>
             <attribute>
                 <name>Derrotas</name>
                 <group></group>

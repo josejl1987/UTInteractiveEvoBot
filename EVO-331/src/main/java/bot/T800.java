@@ -557,10 +557,13 @@ public class T800 extends UT2004BotModuleController {
         if (pathExecutor.isExecuting()) {
             pathExecutor.stop();
         }
+        
         // Stop the clocks
+        testIndividual.setMatchTime(stats.getCurrentMatchTime());
         testIndividual.timeout();
         //  saveInfo();
-
+        //testIndividual.setPogamutStats(stats);
+        
         this.bot.stop();
     }
     //__________________________________________________________________________
@@ -580,7 +583,7 @@ public class T800 extends UT2004BotModuleController {
         testIndividual.setTotalTimeShock(0);
         testIndividual.setTotalTimeSniper(0);
         testIndividual.setNShields(0);
-
+        stats.resetMatchTime();
         testIndividual.setNSuperShields(0);
         System.out.println("Comienza bot");
    
@@ -797,12 +800,13 @@ public class T800 extends UT2004BotModuleController {
         if (logger.isDebugEnabled()) {
             logger.info("saveInfo() - Grabando genes"); //$NON-NLS-1$
         }
+        
 
         try {
 
             SyncMessage msg = new synchro.SyncMessage(this.number, Job.Estado.Finished);
             msg.data = ((IndividualV1) testIndividual);
-            logger.info("Daño recibido-FINAL" + ((Individual) (msg.getData())).getTotalDamageTaken());
+       //     logger.info("Daño recibido-FINAL" + ((Individual) (msg.getData())).getTotalDamageTaken());
             workClient.sendMessage(msg);
             msg.data = ((IndividualStats) testIndividual.getStats());
             msg.setStatus(Job.Estado.Init);

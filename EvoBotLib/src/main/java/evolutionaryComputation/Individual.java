@@ -14,6 +14,7 @@
 
 package evolutionaryComputation;
 
+import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentStats;
 import java.io.Serializable;
 import org.apache.log4j.Logger;
 
@@ -77,6 +78,15 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         return stats;
     }
 
+        public double getMatchTime() {
+        return stats.getMatchTime();
+    }
+
+    public void setMatchTime(double matchTime) {
+        stats.setMatchTime(matchTime);
+    }
+
+    
     public void setStats(T stats) {
         this.stats = stats;
     }
@@ -122,8 +132,11 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
             this.stats.totalDamageTaken=copy.stats.totalDamageTaken;
             this.stats.totalTimeShock=copy.stats.totalTimeShock;
             this.stats.totalTimeSniper=copy.stats.totalTimeSniper;
+            this.stats.averageFitness=copy.stats.averageFitness;
+            this.stats.evaluations=copy.stats.evaluations;
             this.fitnessClass=copy.fitnessClass;
             this.shouldEvaluate=copy.shouldEvaluate;
+            this.stats.setMatchTime(copy.getMatchTime());
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Individual.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -341,8 +354,19 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     /**
      * Resets the individual's temporary information about the match
      */
-    public void resetStats () {
+    public void resetStats(){
+        resetStats(true);
+    }
+    public void resetStats (boolean keepAverage) {
+        int evaluations=0;
+        double averageFitness=0;
+        if(keepAverage){
+            averageFitness=stats.averageFitness;
+            evaluations=stats.evaluations;
+        }
         stats.reset ();
+        stats.evaluations=evaluations;
+        stats.averageFitness=averageFitness;
     }
 
     @Override

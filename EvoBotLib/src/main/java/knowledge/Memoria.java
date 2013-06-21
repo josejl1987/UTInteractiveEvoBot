@@ -139,7 +139,7 @@ public class Memoria {
                 }
 
                 stat.execute("CREATE TABLE Item (id char(50) not null, tipo char(15) not null, nombre char(15) not null, mapa char(20) not null,  primary key(id, mapa) )");
-                String genetico = "CREATE TABLE Genetico (posicion int not null,evaluated BOOL not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null";
+                String genetico = "CREATE TABLE Genetico (posicion int not null,evaluated BOOL not null, generacion int not null, deaths int not null, kills int not null, totalDamageGiven int not null, totalDamageTaken int not null, nSuperShields int not null, nShields int not null, totalTimeShock int not null, totalTimeSniper int not null, current int not null , FitnessClass char(50) not null,averageFtiness double not null,evaluations int not null";
                 for (int i = 0; i < nGenes; ++i) {
                     genetico = genetico.concat(",chromosome" + i + " int not null");
                 }
@@ -297,6 +297,8 @@ public class Memoria {
                     population[i].setNShields(resultados.getDouble("nShields"));
                     population[i].setTotalTimeShock(resultados.getDouble("totalTimeShock"));
                     population[i].setTotalTimeSniper(resultados.getDouble("totalTimeSniper"));
+                    population[i].getStats().averageFitness=(resultados.getDouble("averageFitness"));
+                       population[i].getStats().evaluations=(resultados.getInt("evaluations"));
                     logger.debug("Cromosoma 0 " + v1.getGene(0));
                     for (int j = 0; j < nGenes; ++j) {
                         population[i].setGene(j, resultados.getInt("chromosome" + j));
@@ -378,7 +380,8 @@ public class Memoria {
                     population[i].setNShields(resultados.getInt("nShields"));
                     population[i].setTotalTimeShock(resultados.getInt("totalTimeShock"));
                     population[i].setTotalTimeSniper(resultados.getInt("totalTimeSniper"));
-
+                    population[i].getStats().averageFitness=(resultados.getDouble("averageFitness"));
+                       population[i].getStats().evaluations=(resultados.getInt("evaluations"));
                     for (int j = 0; j < nGenes; ++j) {
                         population[i].setGene(j, resultados.getInt("chromosome" + j));
                     }
@@ -659,6 +662,9 @@ public class Memoria {
                 insert = insert.concat(", '1'");
                 insert = insert.concat(", '" + currentIndividual.getFitnessClass().getCanonicalName()
                         + "' ");
+                    insert = insert.concat(",' " + currentIndividual.getStats().averageFitness + "'");
+                                        insert = insert.concat(",' " + currentIndividual.getStats().evaluations+ "'");
+
                 for (int j = 0; j < currentIndividual.chromosomeSize(); ++j) {
                     insert = insert.concat(",' " + currentIndividual.getGene(j) + "'");
                 }
@@ -751,6 +757,8 @@ public class Memoria {
                 }
                 insert = insert.concat(", '" + population[i].getFitnessClass().getCanonicalName()
                         + "' ");
+                                    insert = insert.concat(",' " + population[i].getStats().averageFitness + "'");
+                                        insert = insert.concat(",' " + population[i].getStats().evaluations+ "'");
                 for (int j = 0; j < population[i].chromosomeSize(); ++j) {
                     insert = insert.concat(",' " + population[i].getGene(j) + "'");
                 }
@@ -843,7 +851,10 @@ public class Memoria {
                             insert = insert.concat(", '-1'");
                         }
                         insert = insert.concat(", '" + population[i].getFitnessClass().getCanonicalName()
+
                                 + "' ");
+                                            insert = insert.concat(",' " + population[i].getStats().averageFitness + "'");
+                                        insert = insert.concat(",' " + population[i].getStats().evaluations+ "'");
                         for (int j = 0; j < population[i].chromosomeSize(); ++j) {
                             insert = insert.concat(",' " + population[i].getGene(j) + "'");
                         }

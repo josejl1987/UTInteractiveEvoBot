@@ -151,7 +151,7 @@ public class UT2004BotExecution {
                     ? (linux ? "java" : "java.exe")
                     : javaHome + (linux ? "/bin/java" : "\\bin\\java.exe"));
 
-            String fullCommand = command + " \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host + "\""
+            String fullCommand = command + "-Djava.awt.headless=true” \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host + "\""
                     + " \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port + "\""
                     + " -jar \"" + config.getJarFile().getAbsolutePath() + "\"";
 
@@ -168,6 +168,8 @@ public class UT2004BotExecution {
                 procBuilder =
                         new ProcessBuilder(
                         command,
+                        "-XX:+UseCompressedStrings",
+                        "-Djava.awt.headless=true",
                         "-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host,
                         "-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port,
                         "-jar",

@@ -400,17 +400,19 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                     Object[] fila = new Object[tagsList.size()];
                     fila[0] = count;
                     fila[1] = i.fitness();
-                    fila[2] = i.getDeaths();
-                    fila[3] = i.getKills();
-                    fila[4] = i.getTotalDamageGiven();
-                    fila[5] = i.getTotalDamageTaken();
-                    fila[6] = i.getNSuperShields();
-                    fila[7] = i.getNShields();
-                    fila[8] = i.getTotalTimeShock();
-                    fila[9] = i.getTotalTimeSniper();
-                    fila[10] = 0;
+                    fila[2] = i.getStats().averageFitness;
+                    fila[3] = i.getStats().evaluations;
+                    fila[4] = i.getDeaths();
+                    fila[5] = i.getKills();
+                    fila[6] = i.getTotalDamageGiven();
+                    fila[7] = i.getTotalDamageTaken();
+                    fila[8] = i.getNSuperShields();
+                    fila[9] = i.getNShields();
+                    fila[10] = i.getTotalTimeShock();
+                    fila[11] = i.getTotalTimeSniper();
+                    fila[12] = i.getStats().getMatchTime();
                     for (int j = 0; j < i.chromosomeSize(); j++) {
-                        fila[j + 11] = i.getGene(j);
+                        fila[j + 13] = i.getGene(j);
                     }
                     model.addRow(fila);
                     count++;

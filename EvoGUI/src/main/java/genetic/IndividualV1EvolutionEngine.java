@@ -91,7 +91,8 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         int count = 0;
         for (EvaluatedCandidate<IndividualV1> c : evaluatedPopulation) {
            
-            if(c.getCandidate().shouldEvaluate)c.getCandidate().resetStats();
+            if(!c.getCandidate().shouldEvaluate)c.getCandidate().resetStats();
+            else c.getCandidate().resetStats(false);
             ;
             main.getPopulation()[count] = c.getCandidate();
 

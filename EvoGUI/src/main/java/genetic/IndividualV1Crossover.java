@@ -62,7 +62,7 @@ public class IndividualV1Crossover extends AbstractCrossover<IndividualV1> {
         i2.setChromosome(evolvedChromList.get(1));
         evolvedIndividuals.add(i1);
         evolvedIndividuals.add(i2);
-
+         
         if (logger.isDebugEnabled()) {
             logger.debug("mate(IndividualV1, IndividualV1, int, Random) - end"); //$NON-NLS-1$
         }

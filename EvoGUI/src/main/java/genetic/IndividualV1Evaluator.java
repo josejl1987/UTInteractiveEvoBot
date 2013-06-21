@@ -25,7 +25,7 @@ public class IndividualV1Evaluator implements FitnessEvaluator<IndividualV1> {
             logger.debug("getFitness(IndividualV1, List<? extends IndividualV1>) - start"); //$NON-NLS-1$
         }
 
-        double returndouble = t.fitness();
+        double returndouble = t.getStats().getAverageFitness();
         if (logger.isDebugEnabled()) {
             logger.debug("getFitness(IndividualV1, List<? extends IndividualV1>) - end"); //$NON-NLS-1$
         }

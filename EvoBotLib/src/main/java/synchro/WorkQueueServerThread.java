@@ -15,6 +15,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.SocketTimeoutException;
 import knowledge.Memoria;
 
 /**
@@ -85,7 +86,7 @@ public class WorkQueueServerThread implements Runnable {
                 server.individualsIterationList[index][index2] = (IndividualV1) msg2.data;
                 //  server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
                 logger.info("Thread para individuo " + id + ". Guardado en posición " + msg2.id % 30);
-            } catch (SocketException ex) {
+            } catch (    SocketException | SocketTimeoutException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
                 server.getJobList().get(id).setStatus(Job.Estado.Error);
@@ -95,7 +96,7 @@ public class WorkQueueServerThread implements Runnable {
                 logger.error("run()", ex); //$NON-NLS-1$
                 server.getJobList().get(id).setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-            }
+            } 
 
             //}
             output.close();
