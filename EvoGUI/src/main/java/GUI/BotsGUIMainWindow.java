@@ -607,7 +607,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         jLabel13.setText("Iteraciones");
 
         jTabbedPane1.addTab("Principal", jPanel1);
-        jPanel1.setLayout(new MigLayout("", "[74px][40px][46px][][][1044px]", "[22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][25px][][]"));
+        jPanel1.setLayout(new MigLayout("", "[74px][40px][46px][][][1044px,grow]", "[22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][22px][25px][][]"));
         jPanel1.add(jLabel6, "cell 0 1,alignx left,aligny center");
         jPanel1.add(mapNameField, "cell 5 1,growx,aligny top");
         
@@ -645,6 +645,14 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                 runButtonActionPerformed(evt);
             }
         });
+        
+        lblEvaluacionesInteractivas = new JLabel();
+        lblEvaluacionesInteractivas.setText("Evaluaciones interactivas");
+        jPanel1.add(lblEvaluacionesInteractivas, "cell 0 13");
+        
+        setHumanEvaluationsField(new JTextField());
+        getHumanEvaluationsField().setText("1");
+        jPanel1.add(getHumanEvaluationsField(), "cell 5 13,growx");
         jPanel1.add(runButton, "cell 0 15,alignx left,aligny top");
         initializeButton = new javax.swing.JButton();
 
@@ -992,6 +1000,8 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     private final Action action = new SwingAction();
     private JLabel label_1;
     private JCheckBox chckbxNativeBot2;
+    private JLabel lblEvaluacionesInteractivas;
+    private JTextField humanEvaluationsField;
 
     // End of variables declaration//GEN-END:variables
 
@@ -1072,7 +1082,15 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
     protected void initDataBindings() {
     }
 
-    private class SwingAction extends AbstractAction {
+    public JTextField getHumanEvaluationsField() {
+		return humanEvaluationsField;
+	}
+
+	private void setHumanEvaluationsField(JTextField humanEvaluationsField) {
+		this.humanEvaluationsField = humanEvaluationsField;
+	}
+
+	private class SwingAction extends AbstractAction {
 
         public SwingAction() {
             putValue(NAME, "SwingAction");

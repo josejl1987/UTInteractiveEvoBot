@@ -312,6 +312,8 @@ public class EvolutionMain {
         if (xoverPoints > 0) {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
+        
+        int humanSelections=Integer.parseInt(botsGUIMainWindow.getHumanEvaluationsField().getText());
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
         operators.add(chromosomeCopyOperator);
         //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
