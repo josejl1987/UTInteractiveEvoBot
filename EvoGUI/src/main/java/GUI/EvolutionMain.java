@@ -59,6 +59,7 @@ public class EvolutionMain {
     private IndividualV1EvolutionEngine engine;
     private IndividualV1ChromosomeCopy chromosomeCopyOperator = new IndividualV1ChromosomeCopy();
     HashMap<Integer, Integer> evaluations = new HashMap<Integer, Integer>();
+    private   IndividualV1HumanEvaluation humanEva=null;
 
     public HashMap<Integer, Integer> getEvaluations() {
         return evaluations;
@@ -313,7 +314,12 @@ public class EvolutionMain {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
         
-        int humanSelections=Integer.parseInt(botsGUIMainWindow.getHumanEvaluationsField().getText());
+        
+        String humanEvoStr=botsGUIMainWindow.getHumanEvaluationsField().getText();
+        if(humanEvoStr!=""){
+            humanEva=new IndividualV1HumanEvaluation();
+            humanEva.setGenerations(humanEvoStr);
+        }
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
         operators.add(chromosomeCopyOperator);
         //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
