@@ -53,4 +53,4 @@ public class IndividualV1HumanEvaluation {
     public boolean shouldEvaluate(Integer currentGeneration){
        return generations.contains(currentGeneration);
     }
-}
+    }
