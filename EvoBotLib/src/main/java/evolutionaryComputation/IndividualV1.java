@@ -32,6 +32,9 @@ import utilities.RandomGenerator;
 
 
 public class IndividualV1 extends Individual  implements Serializable{
+    public static final int CLOSEDISTANCE = 1200;
+    public static final int MEDIUMDISTANCE = 2000;
+    public static final int FARDISTANCE = 2800;
 
 
    public  enum chromosomeGroup{Distancia,PrioridadArmas,Salud,Riesgo,Tiempo,Items};
@@ -72,9 +75,9 @@ public class IndividualV1 extends Individual  implements Serializable{
 
         // CLOSE, AVERAGE AND FAR DISTANCE
 
-        chromosome [0] = RandomGenerator.doRandomNumber (0, 1200);
-        chromosome [1] = RandomGenerator.doRandomNumber (chromosome [0], 2000);
-        chromosome [2] = RandomGenerator.doRandomNumber (chromosome [1], 2800);
+        chromosome [0] = RandomGenerator.doRandomNumber (0, CLOSEDISTANCE);
+        chromosome [1] = RandomGenerator.doRandomNumber (chromosome [0], MEDIUMDISTANCE);
+        chromosome [2] = RandomGenerator.doRandomNumber (chromosome [1], FARDISTANCE);
 
         // ALLELES FOR WEAPON CHOICE. THERE ARE 12 GENES FOR EACH WEAPON (3 GENES PER
         // HEIGHT AND 4 HEIGHTS PER DISTANCE = 12 GENES).

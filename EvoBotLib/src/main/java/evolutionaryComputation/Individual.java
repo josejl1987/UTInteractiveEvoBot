@@ -11,7 +11,6 @@
  *
  * Copyright © 2011-2012 Francisco Aisa Garcia and Ricardo Caballero Moral
  */
-
 package evolutionaryComputation;
 
 import cz.cuni.amis.pogamut.ut2004.agent.module.sensor.AgentStats;
@@ -21,48 +20,71 @@ import org.apache.log4j.Logger;
 import java.util.Arrays;
 import java.util.logging.Level;
 
-
 /**
- * This class is meant to hide all the details of a chromosome. Because it contains
- * an IndividualStats object, it can be combined with different fitness functions.
+ * This class is meant to hide all the details of a chromosome. Because it
+ * contains an IndividualStats object, it can be combined with different fitness
+ * functions.
  *
  * @author Francisco Aisa Garcia
  */
+public abstract class Individual<T extends IndividualStats> implements Serializable, Cloneable, Comparable<Individual> {
 
-public abstract class Individual<T extends IndividualStats> implements Serializable,Cloneable{
-	/**
-	 * Logger for this class
-	 */
-	private static final Logger logger = Logger.getLogger(Individual.class);
-
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger.getLogger(Individual.class);
     // *************************************************************************
     //                             INSTANCE FIELDS
     // *************************************************************************
-
     private Class<T> fitnessClass;
-
-    public boolean shouldEvaluate=true;
+    public boolean shouldEvaluate = true;
 
     public boolean ShouldEvaluate() {
         return shouldEvaluate;
     }
 
+    @Override
+    public int compareTo(Individual i) {
+        final double fitness = this.getStats().getAverageFitness();
+        final double fitness1 = i.getStats().getAverageFitness();
+        final double name1 = fitness - fitness1;
+        int name;
+        if (name1 < 0) {
+            name = (int) (Math.floor(name1));
+
+        } else {
+            name = (int) (Math.ceil(name1));
+        }
+        return name;
+    }
+
     public void setShouldEvaluate(boolean shouldEvaluate) {
         this.shouldEvaluate = shouldEvaluate;
     }
+
     public Class<T> getFitnessClass() {
         return fitnessClass;
     }
-    
-    	@Override
-	public String toString() {
-		return "IndividualV1 [Number()="
-				+ (getChromosome()[0]) + ", Kills="
-				+ getKills() + ", Deaths=" + getDeaths() + "]";
-	}
-    
-    /** Individual chromosome */
-    protected int chromosome [];
+
+    @Override
+    public String toString() {
+        return "IndividualV1 [Number()="
+                + (getChromosome()[0]) + ", Kills="
+                + getKills() + ", Deaths=" + getDeaths() + "]";
+    }
+    /**
+     * Individual chromosome
+     */
+    protected int chromosome[];
+    protected int backupChromosome[];
+
+    public int[] getBackupChromosome() {
+        return backupChromosome;
+    }
+
+    public void setBackupChromosome(int[] backupChromosome) {
+        this.backupChromosome = backupChromosome;
+    }
 
     public int[] getChromosome() {
         return chromosome;
@@ -71,14 +93,16 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
     public void setChromosome(int[] chromosome) {
         this.chromosome = chromosome;
     }
-    /** Individual stats */
+    /**
+     * Individual stats
+     */
     private T stats; // Must be initialized in the derived classes
 
     public T getStats() {
         return stats;
     }
 
-        public double getMatchTime() {
+    public double getMatchTime() {
         return stats.getMatchTime();
     }
 
@@ -86,29 +110,26 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         stats.setMatchTime(matchTime);
     }
 
-    
     public void setStats(T stats) {
         this.stats = stats;
     }
 
-
     // *************************************************************************
     //                                METHODS
     // *************************************************************************
-
-
     /**
      * Argument based constructor.
+     *
      * @param nGenes Size of the chromosome.
-     * @param stats IndividualStats object, it is meant to facilitate the association
-     * of an Individual with different stats and fitness techniques. Stats can't be
-     * a NULL object.
+     * @param stats IndividualStats object, it is meant to facilitate the
+     * association of an Individual with different stats and fitness techniques.
+     * Stats can't be a NULL object.
      */
-    public Individual (int nGenes,Class<T> clazz) {
-        chromosome = new int [nGenes];
-        fitnessClass=clazz;
+    public Individual(int nGenes, Class<T> clazz) {
+        chromosome = new int[nGenes];
+        fitnessClass = clazz;
         try {
-            this.stats=clazz.newInstance();
+            this.stats = clazz.newInstance();
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Individual.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
@@ -116,26 +137,23 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         }
     }
 
-    
     //__________________________________________________________________________
-
-    
-    public Individual(Individual<T> copy){
+    public Individual(Individual<T> copy) {
         try {
-            this.chromosome=Arrays.copyOf(copy.chromosome,copy.chromosome.length);
-            this.stats=(T) copy.stats.getClass().newInstance();
-            this.stats.deaths=copy.stats.deaths;
-            this.stats.kills=copy.stats.kills;
-            this.stats.nShields=copy.stats.nShields;
-            this.stats.nSuperShields=copy.stats.nSuperShields;
-            this.stats.totalDamageGiven=copy.stats.totalDamageGiven;
-            this.stats.totalDamageTaken=copy.stats.totalDamageTaken;
-            this.stats.totalTimeShock=copy.stats.totalTimeShock;
-            this.stats.totalTimeSniper=copy.stats.totalTimeSniper;
-            this.stats.averageFitness=copy.stats.averageFitness;
-            this.stats.evaluations=copy.stats.evaluations;
-            this.fitnessClass=copy.fitnessClass;
-            this.shouldEvaluate=copy.shouldEvaluate;
+            this.chromosome = Arrays.copyOf(copy.chromosome, copy.chromosome.length);
+            this.stats = (T) copy.stats.getClass().newInstance();
+            this.stats.deaths = copy.stats.deaths;
+            this.stats.kills = copy.stats.kills;
+            this.stats.nShields = copy.stats.nShields;
+            this.stats.nSuperShields = copy.stats.nSuperShields;
+            this.stats.totalDamageGiven = copy.stats.totalDamageGiven;
+            this.stats.totalDamageTaken = copy.stats.totalDamageTaken;
+            this.stats.totalTimeShock = copy.stats.totalTimeShock;
+            this.stats.totalTimeSniper = copy.stats.totalTimeSniper;
+            this.stats.averageFitness = copy.stats.averageFitness;
+            this.stats.evaluations = copy.stats.evaluations;
+            this.fitnessClass = copy.fitnessClass;
+            this.shouldEvaluate = copy.shouldEvaluate;
             this.stats.setMatchTime(copy.getMatchTime());
         } catch (InstantiationException ex) {
             java.util.logging.Logger.getLogger(Individual.class.getName()).log(Level.SEVERE, null, ex);
@@ -143,230 +161,247 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
             java.util.logging.Logger.getLogger(Individual.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     /**
      * Set the value of a gene.
+     *
      * @param locus Position in the chromosome.
      * @param value Value to which we want to set the gene.
      */
-    public void setGene (int locus, int value) {
-        chromosome [locus] = value;
+    public void setGene(int locus, int value) {
+        chromosome[locus] = value;
     }
 
     //__________________________________________________________________________
-
     /**
      * Get the value of a chromosome's gene.
+     *
      * @param locus Position of the gene in the chromosome.
      * @return The gene's value.
      */
-    public int getGene (int locus) {
-        return chromosome [locus];
+    public int getGene(int locus) {
+        return chromosome[locus];
     }
 
     //__________________________________________________________________________
-
-    /** Chromosome's size */
-    public int chromosomeSize () {
+    /**
+     * Chromosome's size
+     */
+    public int chromosomeSize() {
         return chromosome.length;
     }
 
     //__________________________________________________________________________
-
-    /** Create an individual with random genes */
-    public abstract void createRandomIndividual ();
+    /**
+     * Create an individual with random genes
+     */
+    public abstract void createRandomIndividual();
 
     //__________________________________________________________________________
-
-    /** Estimate fitness */
-    public double fitness () {
-        return stats.fitness ();
+    /**
+     * Estimate fitness
+     */
+    public double fitness() {
+        return stats.fitness();
     }
 
     //__________________________________________________________________________
-
-    /** Increment the number of kills */
-    public void incrementKills () {
-        stats.incrementKills ();
+    /**
+     * Increment the number of kills
+     */
+    public void incrementKills() {
+        stats.incrementKills();
     }
 
     //__________________________________________________________________________
-
-    /** Increment the number of deaths */
-    public void incrementDeaths () {
-        stats.incrementDeaths ();
+    /**
+     * Increment the number of deaths
+     */
+    public void incrementDeaths() {
+        stats.incrementDeaths();
     }
 
     //__________________________________________________________________________
-
-    /** Increment the total number of super shields picked up */
-    public void superShieldPickedUp () {
-        stats.superShieldPickedUp ();
+    /**
+     * Increment the total number of super shields picked up
+     */
+    public void superShieldPickedUp() {
+        stats.superShieldPickedUp();
     }
 
     //__________________________________________________________________________
-
-    /** Increment the total number of shields picked up */
-    public void shieldPickedUp () {
-        stats.shieldPickedUp ();
+    /**
+     * Increment the total number of shields picked up
+     */
+    public void shieldPickedUp() {
+        stats.shieldPickedUp();
     }
 
     //__________________________________________________________________________
-
-    /** Time out time with the shock rifle */
-    public void shockPickedUp () {
-        stats.shockPickedUp ();
+    /**
+     * Time out time with the shock rifle
+     */
+    public void shockPickedUp() {
+        stats.shockPickedUp();
     }
 
     //__________________________________________________________________________
-
-    /** Time out time with the sniper rifle */
-    public void sniperPickedUp () {
-        stats.sniperPickedUp ();
+    /**
+     * Time out time with the sniper rifle
+     */
+    public void sniperPickedUp() {
+        stats.sniperPickedUp();
     }
 
     //__________________________________________________________________________
-
-    /** Stop the clocks */
-    public void timeout () {
-        stats.timeout ();
+    /**
+     * Stop the clocks
+     */
+    public void timeout() {
+        stats.timeout();
     }
 
     //__________________________________________________________________________
-
-    /** Get the number of kills */
-    public double getKills () {
-        return stats.getKills ();
+    /**
+     * Get the number of kills
+     */
+    public double getKills() {
+        return stats.getKills();
     }
 
     //__________________________________________________________________________
-
     /**
      * Set the number of kills, it ONLY should be used by the DB
+     *
      * @param kills Number of kills to set
      */
-    public void setKills (double kills) {
-        stats.setKills (kills);
+    public void setKills(double kills) {
+        stats.setKills(kills);
     }
 
     //__________________________________________________________________________
-
-    /** Get the number of the deaths */
-    public double getDeaths () {
-        return stats.getDeaths ();
+    /**
+     * Get the number of the deaths
+     */
+    public double getDeaths() {
+        return stats.getDeaths();
     }
 
     //__________________________________________________________________________
-
-    /** Set the number of the deaths, it ONLY should be used by the DB */
-    public void setDeaths (double deaths) {
-        stats.setDeaths (deaths);
+    /**
+     * Set the number of the deaths, it ONLY should be used by the DB
+     */
+    public void setDeaths(double deaths) {
+        stats.setDeaths(deaths);
     }
 
-    public void setNSuperShields (double nSuperShields) {
+    public void setNSuperShields(double nSuperShields) {
         stats.setNSuperShields(nSuperShields);
     }
 
-    public void setNShields (double nShields) {
+    public void setNShields(double nShields) {
         stats.setNShields(nShields);
     }
 
-    public void setTotalTimeShock (double totalTimeShock) {
+    public void setTotalTimeShock(double totalTimeShock) {
         stats.setTotalTimeShock(totalTimeShock);
     }
 
-    public void setTotalTimeSniper (double totalTimeSniper) {
+    public void setTotalTimeSniper(double totalTimeSniper) {
         stats.setTotalTimeSniper(totalTimeSniper);
     }
 
-    public double getNSuperShields () {
+    public double getNSuperShields() {
 
         return stats.getNSuperShields();
     }
 
-    public double getNShields () {
+    public double getNShields() {
         return stats.getNShields();
     }
 
-    public double getTotalTimeShock () {
+    public double getTotalTimeShock() {
         return stats.getTotalTimeShock();
     }
 
-    public double getTotalTimeSniper () {
+    public double getTotalTimeSniper() {
         return stats.getTotalTimeSniper();
     }
 
     //__________________________________________________________________________
-
-    /** Get the total amount of damage given */
-    public int getTotalDamageGiven () {
-        return (int) stats.getTotalDamageGiven ();
+    /**
+     * Get the total amount of damage given
+     */
+    public int getTotalDamageGiven() {
+        return (int) stats.getTotalDamageGiven();
     }
 
     //__________________________________________________________________________
-
     /**
      * Set the total amount of damage given, it ONLY should be used by the DB
+     *
      * @param damage Total amount of damage given
      */
-    public void setTotalDamageGiven (double damage) {
-        stats.setTotalDamageGiven (damage);
+    public void setTotalDamageGiven(double damage) {
+        stats.setTotalDamageGiven(damage);
     }
 
     //__________________________________________________________________________
-
-    /** Get the total amount of damage taken */
-    public double getTotalDamageTaken () {
-        return stats.getTotalDamageTaken ();
+    /**
+     * Get the total amount of damage taken
+     */
+    public double getTotalDamageTaken() {
+        return stats.getTotalDamageTaken();
     }
 
     //__________________________________________________________________________
-
     /**
      * Set the total amount of damage taken, it ONLY should be used by the DB
+     *
      * @param damage Total amount of damage taken
      */
-    public void setTotalDamageTaken (double damage) {
-        stats.setTotalDamageTaken (damage);
+    public void setTotalDamageTaken(double damage) {
+        stats.setTotalDamageTaken(damage);
     }
 
     //__________________________________________________________________________
-
     /**
      * Increment the total amount of damage given.
+     *
      * @param amount Amount to be incremented.
      */
-    public void incrementDamageGiven (int amount) {
-        stats.incrementDamageGiven (amount);
+    public void incrementDamageGiven(int amount) {
+        stats.incrementDamageGiven(amount);
     }
 
     //__________________________________________________________________________
-
     /**
      * Increment the total amount of damage taken.
+     *
      * @param amount Amount to be incremented.
      */
-    public void incrementDamageTaken (int amount) {
-        stats.incrementDamageTaken (amount);
+    public void incrementDamageTaken(int amount) {
+        stats.incrementDamageTaken(amount);
     }
 
     //__________________________________________________________________________
-
     /**
      * Resets the individual's temporary information about the match
      */
-    public void resetStats(){
+    public void resetStats() {
         resetStats(true);
     }
-    public void resetStats (boolean keepAverage) {
-        int evaluations=0;
-        double averageFitness=0;
-        if(keepAverage){
-            averageFitness=stats.averageFitness;
-            evaluations=stats.evaluations;
+
+    public void resetStats(boolean keepAverage) {
+        int evaluations = 0;
+        double averageFitness = 0;
+        if (keepAverage) {
+            averageFitness = stats.averageFitness;
+            evaluations = stats.evaluations;
         }
-        stats.reset ();
-        stats.evaluations=evaluations;
-        stats.averageFitness=averageFitness;
+        stats.reset();
+        stats.evaluations = evaluations;
+        stats.averageFitness = averageFitness;
     }
 
     @Override
@@ -390,6 +425,4 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         }
         return true;
     }
-    
 }
-
