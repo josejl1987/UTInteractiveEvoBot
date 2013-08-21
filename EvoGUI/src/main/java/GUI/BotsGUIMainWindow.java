@@ -93,9 +93,9 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         generationsComboBox.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent arg0) {
                 if (generationsComboBox.getSelectedIndex() == 0) {
-                    populateTable(main.getPopulation());
+                    populateTable(main.getPopulation(), jTable1);
                 } else {
-                    populateTable(main.getGenerationTableList().get(generationsComboBox.getSelectedIndex() - 1));
+                    populateTable(main.getGenerationTableList().get(generationsComboBox.getSelectedIndex() - 1), jTable1);
                 }
             }
         });
@@ -341,7 +341,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         return generationsComboBox;
     }
 
-    public void populateTable(Individual[] population) {
+    public static void populateTable(Individual[] population, JTable currentjTable) {
         try {
 
             SAXBuilder builder = new SAXBuilder();
@@ -391,7 +391,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                     }
 
                 }
-                jTable1.removeAll();
+				currentjTable.removeAll();
                 DefaultTableModel model = new DefaultTableModel();
                 model
                         .setColumnIdentifiers(tagsList.toArray());
@@ -417,10 +417,10 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
                     model.addRow(fila);
                     count++;
                 }
-                jTable1.setModel(model);
+                currentjTable.setModel(model);
 
 
-                TableColumnAdjuster tca = new TableColumnAdjuster(jTable1);
+                TableColumnAdjuster tca = new TableColumnAdjuster(currentjTable);
                 tca.adjustColumns();
             } catch (IOException io) {
                 System.out.println(io.getMessage());
@@ -789,7 +789,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         main.observer = new EvolutionMonitor<IndividualV1>();
         main.preferences.currentGeneration = 0;
         openDB(botfolder + "Memoria.db");
-        populateTable(newpopulation);
+        populateTable(newpopulation, jTable1);
         main.getServer().setMemoria(main.getMem());
         main.setEngine(null);
         if (logger.isDebugEnabled()) {

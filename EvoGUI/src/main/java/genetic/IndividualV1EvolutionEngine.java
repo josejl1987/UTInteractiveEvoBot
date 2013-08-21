@@ -5,12 +5,13 @@
 package genetic;
 
 import GUI.EvolutionMain;
+import GUI.HumanEvaluationGUI;
 import GUI.PopulationAverage;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
 import org.apache.log4j.Logger;
 import org.uncommons.watchmaker.framework.*;
-
+import org.apache.commons.lang.ArrayUtils;
 import java.io.IOException;
 import java.security.Timestamp;
 import java.util.Arrays;
@@ -32,6 +33,15 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
     private long startTime;
     private int currentGeneration;
     private int evalNum;
+    private IndividualV1HumanEvaluation humanEvaluation;
+
+    public IndividualV1HumanEvaluation getHumanEvaluation() {
+        return humanEvaluation;
+    }
+
+    public void setHumanEvaluation(IndividualV1HumanEvaluation humanEvaluation) {
+        this.humanEvaluation = humanEvaluation;
+    }
 
     public int getEvalNum() {
         return evalNum;
@@ -40,6 +50,7 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
     public void setEvalNum(int evalNum) {
         this.evalNum = evalNum;
     }
+
     public long getStartTime() {
         return startTime;
     }
@@ -63,11 +74,11 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
     }
 
-    
-    public  List<EvaluatedCandidate<IndividualV1>> evaluate(List<IndividualV1> list){
-        
+    public List<EvaluatedCandidate<IndividualV1>> evaluate(List<IndividualV1> list) {
+
         return this.evaluatePopulation(list);
     }
+
     public IndividualV1EvolutionEngine(
             CandidateFactory<IndividualV1> candidateFactory,
             EvolutionaryOperator<IndividualV1> evolutionScheme,
@@ -90,17 +101,20 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
 
         int count = 0;
         for (EvaluatedCandidate<IndividualV1> c : evaluatedPopulation) {
-           
-            if(!c.getCandidate().shouldEvaluate)c.getCandidate().resetStats();
-            else c.getCandidate().resetStats(false);
+
+            if (!c.getCandidate().shouldEvaluate) {
+                c.getCandidate().resetStats();
+            } else {
+                c.getCandidate().resetStats(false);
+            }
             ;
             main.getPopulation()[count] = c.getCandidate();
 
             count++;
         }
         main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
-        if(this.main.getEvaluations().get(this.currentGeneration-1)!=null){
-        evalNum=this.main.getEvaluations().get(this.currentGeneration-1);
+        if (this.main.getEvaluations().get(this.currentGeneration - 1) != null) {
+            evalNum = this.main.getEvaluations().get(this.currentGeneration - 1);
         }
         String fitnessName = main.getPopulation()[0].getFitnessClass().getSimpleName();
         if (fitnessName.equals("RandomFitness")) {
@@ -121,9 +135,9 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
                     //                } catch (IllegalAccessException ex) {
                     //                    java.util.logging.Logger.getLogger(BotsGUIMainWindow.class.getName()).log(Level.SEVERE, null, ex);
                     //                }
-      //              main.setPopulation(main.getMem().loadPoblacion(26));
-      //              main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
-      //              main.initMemoria();
+                    //              main.setPopulation(main.getMem().loadPoblacion(26));
+                    //              main.getMem().storeGenes(main.getMem().getCurrentGeneration(), -1, main.getPopulation());
+                    //              main.initMemoria();
                 }
                 main.iterateOnce(main.getPopulation());
                 try {
@@ -143,18 +157,14 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
             }
 
         }
-
-        evalNum+=main.getServer().getJobList().getFinishedJobs().size();
+        evalNum += main.getServer().getJobList().getFinishedJobs().size();
         main.getServer().getFinishedJobList().clear();
-        
         //  main.setPopulation(main.getMem().loadPoblacion(26));
         main.setPopulation(PopulationAverage.meanAverage(main.getServer().getIndividualsIterationList(), main.getServer().getPopulation_size(), main.getServer().getInterations()));
         main.getEvaluations().put(currentGeneration, evalNum);
         main.saveXML("./backup.xml");
         Collection<Individual> oldpop = Arrays.asList(main.getPopulation().clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
-
-
         List<EvaluatedCandidate<IndividualV1>> newpop = evaluatePopulation((List<IndividualV1>) (List<?>) oldpop);
         count = 0;
         IndividualV1[] copyList = new IndividualV1[main.getPopulation().length];
@@ -164,15 +174,24 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
             copyList[count] = newi;
             count++;
         }
-
         count = 0;
         for (EvaluatedCandidate<IndividualV1> c : newpop) {
             main.getPopulation()[count] = c.getCandidate();
-
             count++;
         }
-
         EvolutionUtils.sortEvaluatedPopulation(newpop, true);
+        Individual i = this.humanEvaluation.getRandomIndividual(main.getPopulation());
+        if (humanEvaluation.shouldEvaluate(this.currentGeneration)) {
+            final int indexOfIndividual = ArrayUtils.indexOf(main.getPopulation(), i);
+            HumanEvaluationGUI gui = new HumanEvaluationGUI(i, indexOfIndividual);
+            gui.setModal(true);
+            gui.setVisible(true);
+            for (int j = 0; j < IndividualV1.chromosomeGroup.values().length; j++) {
+                this.main.getChromosomeCopyOperator().setLockGroupValue(IndividualV1.chromosomeGroup.values()[j], gui.getSelectedGroups().get(j));
+            }
+            main.getChromosomeCopyOperator().selectedCandidate = new IndividualV1((IndividualV1) this.main.getPopulation()[indexOfIndividual]);
+            
+        }
         main.observer.populationUpdate(EvolutionUtils.getPopulationData(newpop, true, eliteCount, evalNum, startTime));
 
         //      Collections.reverse(newpop);
@@ -180,21 +199,21 @@ public class IndividualV1EvolutionEngine extends GenerationalEvolutionEngine<Ind
         main.updateGenerationComboBox();
 
         newpop = super.nextEvolutionStep(newpop, eliteCount, rng);
-        count=0;
-       for (EvaluatedCandidate<IndividualV1> c : newpop) {
+        count = 0;
+        for (EvaluatedCandidate<IndividualV1> c : newpop) {
             main.getPopulation()[count] = c.getCandidate();
 
             count++;
         }
-       
-       main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
+
+        main.getMem().storeGenes(main.getMem().getCurrentGeneration() + 1, -1, main.getPopulation());
         main.initMemoria();
 
 
         if (logger.isDebugEnabled()) {
             logger.debug("nextEvolutionStep(List<EvaluatedCandidate<IndividualV1>>, int, Random) - end"); //$NON-NLS-1$
         }
-        
+
         currentGeneration++;
 
         return newpop;

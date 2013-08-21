@@ -94,7 +94,7 @@ public class EvolutionMain {
 
     public void loadXML() {
         updateParameters();
-        
+
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
         final JFileChooser fc = new JFileChooser();
@@ -102,7 +102,6 @@ public class EvolutionMain {
         fc.setFileFilter(xmlFilter);
         // In response to a button click:
         int returnVal = fc.showOpenDialog(null);
-
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
             try {
@@ -115,6 +114,7 @@ public class EvolutionMain {
 
                 } else {
                     updateDialogs();
+               
                     this.evaluations = preferences.evaluationsMap;
                     RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
                     if (evaluations != null) {
@@ -124,6 +124,8 @@ public class EvolutionMain {
                     initMemoria();
                     this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
                     this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
+                         engine.setHumanEvaluation(preferences.getHumanEvaluation());
+                         this.setChromosomeCopyOperator(preferences.chromosomeCopy);
                 }
             } catch (Exception ex) {
                 if (logger.isDebugEnabled()) {
@@ -143,6 +145,7 @@ public class EvolutionMain {
         preferences.evaluationsMap = this.evaluations;
         preferences.currentGeneration = engine.getCurrentGeneration();
         preferences.rnd = RandomGenerator.getRnd();
+        preferences.chromosomeCopy=this.getChromosomeCopyOperator();
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
@@ -171,10 +174,12 @@ public class EvolutionMain {
         updateParameters();
         preferences.evaluationsMap = this.evaluations;
         preferences.rnd = RandomGenerator.getRnd();
+
         if (engine == null) {
             preferences.currentGeneration = 0;
         } else {
             preferences.currentGeneration = engine.getCurrentGeneration();
+                    preferences.humanEvaluation=engine.getHumanEvaluation();
         }
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
@@ -312,8 +317,10 @@ public class EvolutionMain {
         if (xoverPoints > 0) {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
+
         
-        int humanSelections=Integer.parseInt(botsGUIMainWindow.getHumanEvaluationsField().getText());
+                String humanEvoStr = botsGUIMainWindow.getHumanEvaluationsField().getText();
+
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
         operators.add(chromosomeCopyOperator);
         //    operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
@@ -337,10 +344,17 @@ public class EvolutionMain {
 
             observer.showInFrame("Monitor", false);
         }
-   //     this.setPopulation(this.getMem().loadPoblacion(26));
+        //     this.setPopulation(this.getMem().loadPoblacion(26));
         populationLength = getPopulation().length;
+        
+        
         Collection<Individual> oldpop = Arrays.asList(this.getPopulation());
         List<EvaluatedCandidate<IndividualV1>> newpop;
+                        if (humanEvoStr != "") {
+            IndividualV1HumanEvaluation humanEva = new IndividualV1HumanEvaluation();
+            humanEva.setGenerations(humanEvoStr);
+            engine.setHumanEvaluation(humanEva);
+        }
         newpop = engine.evolvePopulation(this.getPopulation().length, Integer.parseInt(botsGUIMainWindow.getElitismotextField().getText()), (List<IndividualV1>) (List<?>) oldpop, new GenerationCount(Integer.parseInt(botsGUIMainWindow.getGenerationsField().getText())));
         int count = 0;
         Collections.sort(newpop);
@@ -350,6 +364,7 @@ public class EvolutionMain {
             this.getPopulation()[count].resetStats();
             count++;
         }
+
         this.preferences.setCurrentGeneration(engine.getCurrentGeneration());
     }
 
@@ -394,9 +409,9 @@ public class EvolutionMain {
     }
 
     public void hillClimbing(Individual individual) {
-       
-        
-                observer = new EvolutionMonitor<IndividualV1>();
+
+
+        observer = new EvolutionMonitor<IndividualV1>();
         observer.showInFrame("Evo", true);
         List<EvolutionaryOperator<IndividualV1>> operators = new LinkedList<EvolutionaryOperator<IndividualV1>>();
         int xoverPoints = Integer.parseInt(botsGUIMainWindow.getCrossoverPointsText().getText());
@@ -415,7 +430,7 @@ public class EvolutionMain {
         engine = new IndividualV1EvolutionEngine(factory, pipeline, fitnessEvaluator, selection, rng, this);
         engine.setCurrentGeneration(preferences.currentGeneration);
         engine.setEvalNum(preferences.currentEval);
-        
+
         List<IndividualV1> a = ((IndividualV1) individual).generateHillClimbing();
         IndividualV1[] populationArray = new IndividualV1[a.size()];
         a.toArray(populationArray);
@@ -428,7 +443,7 @@ public class EvolutionMain {
 
         IndividualV1[] localArray;
         localArray = PopulationAverage.meanAverage(getServer().getIndividualsIterationList(), getServer().getPopulation_size(), getServer().getInterations());
-   //     saveXML("./backup.xml");
+        //     saveXML("./backup.xml");
 
         List<IndividualV1> oldpop = Arrays.asList(localArray.clone());
         List<IndividualV1> Listv1 = (List<IndividualV1>) (List<?>) oldpop;
@@ -444,7 +459,7 @@ public class EvolutionMain {
         }
 
         count = 0;
- 
+
         List<EvaluatedCandidate<IndividualV1>> newpop = engine.evaluate((List<IndividualV1>) (List<?>) oldpop);
 
 
@@ -477,9 +492,9 @@ public class EvolutionMain {
         this.populationLength = populationArray.length;
 
         for (int i = 0; i < iterations * populationArray.length; i++) {
-            boolean forceEvaluation=true;
-            
-            if (populationArray[i % populationArray.length].ShouldEvaluate()||forceEvaluation) {
+            boolean forceEvaluation = true;
+
+            if (populationArray[i % populationArray.length].ShouldEvaluate() || forceEvaluation) {
                 populationArray[i % populationArray.length].setShouldEvaluate(forceEvaluation);
                 this.createJob(i, botsGUIMainWindow, populationArray);
             } else {
@@ -506,7 +521,7 @@ public class EvolutionMain {
                     runMatch(botsGUIMainWindow, id);
                     logger.info("Lanzada partida de Individuo TX" + getServer().getMem().getCurrentGeneration() + id + " .");
 
-                getServer().enableTimedLock(1 * 60 * 1000);
+                    getServer().enableTimedLock(1 * 60 * 1000);
 
 
                 }
@@ -593,6 +608,7 @@ public class EvolutionMain {
         if (xoverPoints > 0) {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
+
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
         operators.add(new Replacement<IndividualV1>(factory, new Probability(1)));
         EvolutionaryOperator<IndividualV1> pipeline = new EvolutionPipeline<IndividualV1>(operators);
@@ -632,13 +648,13 @@ public class EvolutionMain {
         match.setBot1Name("Bot evolutivo");
         match.setBot1JarPath(botsGUIMainWindow.bot1PathField.getText());
         // BOT 2 CONFIGURATION
-     
+
         match.setBot2Name("Bot experto");
         match.setBot2JarPath(botsGUIMainWindow.bot2PathField.getText());
         // OUTPUT RESULT
         match.setOutputDir(botsGUIMainWindow.logPathField.getText());
-       match.setNativeBot2(botsGUIMainWindow.getChckbxNativeBot2().isSelected());
-       
+        match.setNativeBot2(botsGUIMainWindow.getChckbxNativeBot2().isSelected());
+
         botsGUIMainWindow.initMemoria();
 
         Job newJob = new Job();
