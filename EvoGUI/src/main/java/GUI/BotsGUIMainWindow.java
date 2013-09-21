@@ -67,6 +67,7 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
 
 
         this.jComboBox3.addItem(ComplexFitness.class);
+        this.jComboBox3.addItem(HumanityFitness.class);
         //  this.jComboBox3.addItem(KadlecFitness.class);
         this.jComboBox3.addItem(RandomFitness.class);
         this.jComboBox3.addItem(NewFitness.class);

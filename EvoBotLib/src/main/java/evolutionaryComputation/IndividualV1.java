@@ -17,7 +17,11 @@ package evolutionaryComputation;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.math3.linear.ArrayRealVector;
+import org.apache.commons.math3.util.MathArrays;
 import org.apache.log4j.Logger;
+import org.jscience.mathematics.number.Real;
+import org.jscience.mathematics.vector.Vector;
 
 import utilities.RandomGenerator;
 
@@ -33,12 +37,22 @@ import utilities.RandomGenerator;
 
 public class IndividualV1 extends Individual  implements Serializable{
     public static final int CLOSEDISTANCE = 1200;
+    
     public static final int MEDIUMDISTANCE = 2000;
+    
     public static final int FARDISTANCE = 2800;
-
-
-   public  enum chromosomeGroup{Distancia,PrioridadArmas,Salud,Riesgo,Tiempo,Items};
+    
+    public static final double minValues[]={0,1200,2000,0,0,0,0,0,0,0,0,0,0,100,5,15,15,10,20,3,0,0,0,0,0,0};
+    
+    public static final double maxValues[]={1200,2000,2800,100,100,100,100,100,100,100,100,100,100,160,30 ,80,60,120,100,9 ,100,100,100,100,100,100};
+   
+    public static final ArrayRealVector minVector=new ArrayRealVector(minValues);
+    public static final ArrayRealVector maxVector=new ArrayRealVector(maxValues);
+     public static final double distance=MathArrays.distance(minValues, maxValues);
+    public  enum chromosomeGroup{Distancia,PrioridadArmas,Salud,Riesgo,Tiempo,Items};
+    
     public chromosomeGroup getChromosomeGroup(int index){
+       
         if(index>=0 && index<3){
            return chromosomeGroup.Distancia;
         }
@@ -96,12 +110,12 @@ public class IndividualV1 extends Individual  implements Serializable{
         // ALLELES FOR SKYNET DECISIONS
 
         // HEALTH ALLELES
-
+        
         chromosome [12] = RandomGenerator.doRandomNumber (0, 100);
         chromosome [13] = RandomGenerator.doRandomNumber (chromosome [12], 160);
-
+        
         // HEALTH RISK ALLELES
-
+        
         chromosome [14] = RandomGenerator.doRandomNumber (5, 30);
         chromosome [15] = RandomGenerator.doRandomNumber (15, 80);
         chromosome [16] = RandomGenerator.doRandomNumber (15, 60);
@@ -150,7 +164,7 @@ public class IndividualV1 extends Individual  implements Serializable{
             newIndividual.setChromosome(currentChromosome);
             hillList.add(newIndividual);
         }
-                for (int i = 0; i < this.chromosomeSize(); i++) {
+           for (int i = 0; i < this.chromosomeSize(); i++) {
             int[] currentChromosome = newChromosome.clone();
             currentChromosome[i] -= amount;
             IndividualV1 newIndividual = new IndividualV1(false, this.getFitnessClass());
