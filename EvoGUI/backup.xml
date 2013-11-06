@@ -11,7 +11,7 @@
   <generationTableList>
     <evolutionaryComputation.IndividualV1-array>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>65</int>
@@ -85,10 +85,11 @@
           <matchTime>65.46</matchTime>
           <averageFitness>3.0</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>65</int>
@@ -474,10 +475,11 @@
           <matchTime>65.14</matchTime>
           <averageFitness>0.14285714285714285</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>708</int>
@@ -551,10 +553,11 @@
           <matchTime>65.35000000000001</matchTime>
           <averageFitness>2.0</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>1112</int>
@@ -628,10 +631,11 @@
           <matchTime>65.3</matchTime>
           <averageFitness>0.2</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>773</int>
@@ -1095,7 +1099,7 @@
     </evolutionaryComputation.IndividualV1-array>
     <evolutionaryComputation.IndividualV1-array>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>776</int>
@@ -7887,7 +7891,7 @@
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>689</int>
@@ -10046,10 +10050,11 @@
           <matchTime>65.35000000000001</matchTime>
           <averageFitness>5.195899652409233</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
       <evolutionaryComputation.IndividualV1>
-        <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
         <shouldEvaluate>false</shouldEvaluate>
         <chromosome>
           <int>605</int>
@@ -10354,6 +10359,85 @@
           <matchTime>65.11</matchTime>
           <averageFitness>5.238046103128795</averageFitness>
           <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
+        </stats>
+      </evolutionaryComputation.IndividualV1>
+      <evolutionaryComputation.IndividualV1>
+        <fitnessClass>evolutionaryComputation.HumanityFitness</fitnessClass>
+        <shouldEvaluate>false</shouldEvaluate>
+        <chromosome>
+          <int>1063</int>
+          <int>2048</int>
+          <int>2832</int>
+          <int>66</int>
+          <int>33</int>
+          <int>75</int>
+          <int>47</int>
+          <int>64</int>
+          <int>71</int>
+          <int>27</int>
+          <int>70</int>
+          <int>99</int>
+          <int>72</int>
+          <int>157</int>
+          <int>10</int>
+          <int>34</int>
+          <int>22</int>
+          <int>55</int>
+          <int>55</int>
+          <int>6</int>
+          <int>7</int>
+          <int>72</int>
+          <int>42</int>
+          <int>90</int>
+          <int>30</int>
+          <int>92</int>
+        </chromosome>
+        <stats class="evolutionaryComputation.HumanityFitness">
+          <kills>2.0</kills>
+          <deaths>5.0</deaths>
+          <totalDamageGiven>129.0</totalDamageGiven>
+          <totalDamageTaken>742.0</totalDamageTaken>
+          <nSuperShields>0.0</nSuperShields>
+          <nShields>0.0</nShields>
+          <totalTimeShock>0.0</totalTimeShock>
+          <totalTimeSniper>0.0</totalTimeSniper>
+          <shockClock serialization="custom">
+            <javax.swing.Timer>
+              <default>
+                <coalesce>true</coalesce>
+                <delay>1000</delay>
+                <initialDelay>1000</initialDelay>
+                <repeats>true</repeats>
+                <listenerList serialization="custom">
+                  <javax.swing.event.EventListenerList>
+                    <default/>
+                    <null/>
+                  </javax.swing.event.EventListenerList>
+                </listenerList>
+              </default>
+            </javax.swing.Timer>
+          </shockClock>
+          <sniperClock serialization="custom">
+            <javax.swing.Timer>
+              <default>
+                <coalesce>true</coalesce>
+                <delay>1000</delay>
+                <initialDelay>1000</initialDelay>
+                <repeats>true</repeats>
+                <listenerList serialization="custom">
+                  <javax.swing.event.EventListenerList>
+                    <default/>
+                    <null/>
+                  </javax.swing.event.EventListenerList>
+                </listenerList>
+              </default>
+            </javax.swing.Timer>
+          </sniperClock>
+          <matchTime>65.28</matchTime>
+          <averageFitness>0.5</averageFitness>
+          <evaluations>1</evaluations>
+          <humanFitness>1.0</humanFitness>
         </stats>
       </evolutionaryComputation.IndividualV1>
     </evolutionaryComputation.IndividualV1-array>
