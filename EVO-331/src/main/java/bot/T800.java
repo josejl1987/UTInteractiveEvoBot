@@ -174,7 +174,6 @@ public class T800 extends UT2004BotModuleController {
 
 
 
-
         //geneticAlg = new ExtremeElitism(50, 30, new UniformCrossover(), memory);
 
         // Load the genetic algorithm

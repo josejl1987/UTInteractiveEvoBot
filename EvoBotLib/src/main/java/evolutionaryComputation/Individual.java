@@ -43,6 +43,19 @@ public abstract class Individual<T extends IndividualStats> implements Serializa
         return shouldEvaluate;
     }
 
+    public double euclideanDistance(Individual other){
+        
+        if(other.getClass().equals(this.getClass())){
+        
+            double distance=0;
+           for(int i=0;i<this.chromosomeSize();i++){
+               distance+=this.getGene(i)-other.getGene(i);
+           }
+                   return Math.sqrt(distance); 
+        }
+
+    return -1;
+    }
     @Override
     public int compareTo(Individual i) {
         final double fitness = this.getStats().getAverageFitness();
