@@ -137,11 +137,17 @@ public class UT2004BotExecution {
             if (!config.isBotJarExist()) {
                 throw new PogamutException("Could not start the bot according to config " + config + " as the bot jar does not exist at specified place " + config.getJarFile().getAbsolutePath() + "!", this);
             }
+            
+            
 
             String javaHome = System.getProperty("JAVA_HOME");
 
             boolean linux = System.getProperty("os.name").toLowerCase().contains("linux");
 
+            boolean server=true;
+            if(server){
+                javaHome="/home/josejl/jdk1.7.0_45";
+            }
 
             String debug;
 
@@ -151,7 +157,7 @@ public class UT2004BotExecution {
                     ? (linux ? "java" : "java.exe")
                     : javaHome + (linux ? "/bin/java" : "\\bin\\java.exe"));
 
-            String fullCommand = command + "-Djava.awt.headless=true” \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host + "\""
+            String fullCommand = command + "-” \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host + "\""
                     + " \"-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port + "\""
                     + " -jar \"" + config.getJarFile().getAbsolutePath() + "\"";
 
@@ -169,7 +175,7 @@ public class UT2004BotExecution {
                         new ProcessBuilder(
                         command,
                         "-XX:+UseCompressedStrings",
-                        "-Djava.awt.headless=true",
+                       
                         "-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_HOST.getKey() + "=" + host,
                         "-D" + PogamutUT2004Property.POGAMUT_UT2004_BOT_PORT.getKey() + "=" + port,
                         "-jar",

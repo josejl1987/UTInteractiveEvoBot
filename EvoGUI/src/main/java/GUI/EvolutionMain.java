@@ -393,7 +393,7 @@ public class EvolutionMain {
         if (OSValidator.isWindows()) {
             Runtime.getRuntime().exec("Taskkill /im UCC.exe /f");
         } else {
-            Runtime.getRuntime().exec("pkill -f ucc-bin-linux-amd64");
+            Runtime.getRuntime().exec("pkill -f ucc-bin");
         }
     }
 
@@ -640,7 +640,7 @@ public class EvolutionMain {
     private Job createJob(int id, BotsGUIMainWindow botsGUIMainWindow, Individual[] populationArray) throws SecurityException, NumberFormatException {
         LogCategory log = new LogCategory("DeathMatch1v1");
         UT2004DeathMatch1v1 match = new UT2004DeathMatch1v1();
-        log.setLevel(Level.INFO);
+        log.setLevel(Level.ALL);
         match.setLog(log);
 
         // GAME CONFIGURATION
