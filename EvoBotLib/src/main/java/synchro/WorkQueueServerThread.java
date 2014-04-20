@@ -6,6 +6,7 @@ package synchro;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.StaxDriver;
+import evolutionaryComputation.ComplexFitness;
 import evolutionaryComputation.Individual;
 import evolutionaryComputation.IndividualV1;
 import org.apache.log4j.Logger;
@@ -16,6 +17,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.SocketTimeoutException;
+import java.util.logging.Level;
 import knowledge.Memoria;
 
 /**
@@ -48,10 +50,30 @@ public class WorkQueueServerThread implements Runnable {
             ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
             long time = System.currentTimeMillis();
             String confirmation = "1";
+            Job currentJob = this.server.getJobList().get(id);
             // while(confirmation!="OK"){
-            this.server.getJobList().get(id).status = Job.Estado.Running;
+            boolean allSet=false;
+            for(int i=0;i<3&&!allSet;i++){
+                
+                if(currentJob==null){
+                    try {
+                        Thread.sleep(2000*i);
+                        currentJob=server.getJobList().get(id);
+                    } catch (InterruptedException ex) {
+                        java.util.logging.Logger.getLogger(WorkQueueServerThread.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+                else allSet=true;
+            }
+            
+            if(!allSet){
+                throw new IOException("El trabajo no está listo");
+            }
+            
+            currentJob.status = Job.Estado.Running;
             SyncMessage msg = new SyncMessage(id, Job.Estado.Init);
-            msg.data = server.getJobList().get(id).getIndividual();
+            msg.data = currentJob.getIndividual();
             output.writeObject(msg);
             msg = null;
             if (logger.isDebugEnabled()) {
@@ -65,11 +87,11 @@ public class WorkQueueServerThread implements Runnable {
             } catch (IOException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
-                server.getJobList().get(id).setStatus(Job.Estado.Error);
+                currentJob.setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } catch (ClassNotFoundException ex) {
                 logger.error("run()", ex); //$NON-NLS-1$
-                server.getJobList().get(id).setStatus(Job.Estado.Error);
+                currentJob.setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             }
 
@@ -81,7 +103,7 @@ public class WorkQueueServerThread implements Runnable {
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
                 int index = msg2.id % server.getPopulation_size();
                 int index2 = msg2.id / server.getPopulation_size();
-
+                
 //               server.individualsIterationList[index][index2]=(IndividualV1)  xs.fromXML((String)msg.data);
                 server.individualsIterationList[index][index2] = (IndividualV1) msg2.data;
                 //  server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
@@ -89,12 +111,12 @@ public class WorkQueueServerThread implements Runnable {
             } catch (    SocketException | SocketTimeoutException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
-                server.getJobList().get(id).setStatus(Job.Estado.Error);
+                currentJob.setStatus(Job.Estado.Error);
 
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } catch (ClassNotFoundException ex) {
                 logger.error("run()", ex); //$NON-NLS-1$
-                server.getJobList().get(id).setStatus(Job.Estado.Error);
+                currentJob.setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
             } 
 
@@ -104,7 +126,7 @@ public class WorkQueueServerThread implements Runnable {
             if (logger.isDebugEnabled()) {
                 logger.debug("run() - Request processed: " + time); //$NON-NLS-1$
             }
-            this.server.getJobList().get(id).status = Job.Estado.Finished;
+            currentJob.status = Job.Estado.Finished;
             logger.info("Individuo TX-" + server.getMem().getCurrentGeneration() + id + " ha terminado");
             this.clientSocket.close();
 
