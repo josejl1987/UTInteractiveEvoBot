@@ -533,8 +533,12 @@ public class EvolutionMain {
                 }
 
 
+                for (Job job : server.getJobList().values()) {
+                    if (job.getStatus() == Estado.Finished) {
+                        job.getThread().stop();
+                    }
+                }
        
-
 
             }
             try {
