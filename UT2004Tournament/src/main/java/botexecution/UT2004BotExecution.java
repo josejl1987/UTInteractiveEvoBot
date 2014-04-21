@@ -144,7 +144,7 @@ public class UT2004BotExecution {
 
             boolean linux = System.getProperty("os.name").toLowerCase().contains("linux");
 
-            boolean server=true;
+            boolean server=false;
             if(server){
                 javaHome="/home/josejl/jdk1.7.0_45";
             }

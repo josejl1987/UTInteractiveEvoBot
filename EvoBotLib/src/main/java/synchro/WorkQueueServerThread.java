@@ -129,6 +129,7 @@ public class WorkQueueServerThread implements Runnable {
             currentJob.status = Job.Estado.Finished;
             logger.info("Individuo TX-" + server.getMem().getCurrentGeneration() + id + " ha terminado");
             this.clientSocket.close();
+            
 
         } catch (IOException ex) {
             logger.error("run()", ex); //$NON-NLS-1$

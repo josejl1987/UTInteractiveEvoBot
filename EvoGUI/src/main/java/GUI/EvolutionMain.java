@@ -35,6 +35,7 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.logging.Level;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import synchro.Job.Estado;
 import utilities.RandomGenerator;
 
 /**
@@ -59,7 +60,7 @@ public class EvolutionMain {
     private IndividualV1EvolutionEngine engine;
     private IndividualV1ChromosomeCopy chromosomeCopyOperator = new IndividualV1ChromosomeCopy();
     HashMap<Integer, Integer> evaluations = new HashMap<Integer, Integer>();
-    private   IndividualV1HumanEvaluation humanEva=null;
+    private IndividualV1HumanEvaluation humanEva = null;
 
     public HashMap<Integer, Integer> getEvaluations() {
         return evaluations;
@@ -115,7 +116,7 @@ public class EvolutionMain {
 
                 } else {
                     updateDialogs();
-               
+
                     this.evaluations = preferences.evaluationsMap;
                     RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
                     if (evaluations != null) {
@@ -125,8 +126,8 @@ public class EvolutionMain {
                     initMemoria();
                     this.setPopulation(this.preferences.generationTableList.get(preferences.generationTableList.size() - 1));
                     this.getMem().storeGenes(this.preferences.getCurrentGeneration(), -1, this.getPopulation());
-                         engine.setHumanEvaluation(preferences.getHumanEvaluation());
-                         this.setChromosomeCopyOperator(preferences.chromosomeCopy);
+                    engine.setHumanEvaluation(preferences.getHumanEvaluation());
+                    this.setChromosomeCopyOperator(preferences.chromosomeCopy);
                 }
             } catch (Exception ex) {
                 if (logger.isDebugEnabled()) {
@@ -146,7 +147,7 @@ public class EvolutionMain {
         preferences.evaluationsMap = this.evaluations;
         preferences.currentGeneration = engine.getCurrentGeneration();
         preferences.rnd = RandomGenerator.getRnd();
-        preferences.chromosomeCopy=this.getChromosomeCopyOperator();
+        preferences.chromosomeCopy = this.getChromosomeCopyOperator();
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
 
@@ -180,7 +181,7 @@ public class EvolutionMain {
             preferences.currentGeneration = 0;
         } else {
             preferences.currentGeneration = engine.getCurrentGeneration();
-                    preferences.humanEvaluation=engine.getHumanEvaluation();
+            preferences.humanEvaluation = engine.getHumanEvaluation();
         }
         XStream xstream = new XStream(new DomDriver());
         String xml = xstream.toXML(preferences);
@@ -319,11 +320,11 @@ public class EvolutionMain {
             operators.add(new IndividualV1Crossover(xoverPoints));
         }
 
-        
-        
-        String humanEvoStr=botsGUIMainWindow.getHumanEvaluationsField().getText();
-        if(humanEvoStr!=""){
-            humanEva=new IndividualV1HumanEvaluation();
+
+
+        String humanEvoStr = botsGUIMainWindow.getHumanEvaluationsField().getText();
+        if (humanEvoStr != "") {
+            humanEva = new IndividualV1HumanEvaluation();
             humanEva.setGenerations(humanEvoStr);
         }
         operators.add(new IndividualV1Mutation(Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100, Double.parseDouble(botsGUIMainWindow.getMutationRatio().getText()) / 100));
@@ -351,11 +352,11 @@ public class EvolutionMain {
         }
         //     this.setPopulation(this.getMem().loadPoblacion(26));
         populationLength = getPopulation().length;
-        
-        
+
+
         Collection<Individual> oldpop = Arrays.asList(this.getPopulation());
         List<EvaluatedCandidate<IndividualV1>> newpop;
-                        if (humanEvoStr != "") {
+        if (humanEvoStr != "") {
             IndividualV1HumanEvaluation humanEva = new IndividualV1HumanEvaluation();
             humanEva.setGenerations(humanEvoStr);
             engine.setHumanEvaluation(humanEva);
@@ -530,6 +531,10 @@ public class EvolutionMain {
 
 
                 }
+
+
+       
+
 
             }
             try {
