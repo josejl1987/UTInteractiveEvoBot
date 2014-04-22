@@ -53,19 +53,14 @@ public class WorkQueueServerThread implements Runnable {
             Job currentJob = this.server.getJobList().get(id);
             // while(confirmation!="OK"){
             boolean allSet=false;
-            for(int i=0;i<3&&!allSet;i++){
-                
+          
                 if(currentJob==null){
-                    try {
-                        Thread.sleep(2000*i);
+              
                         currentJob=server.getJobList().get(id);
-                    } catch (InterruptedException ex) {
-                        java.util.logging.Logger.getLogger(WorkQueueServerThread.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
+            
                 }
                 else allSet=true;
-            }
+            
             
             if(!allSet){
                 throw new IOException("El trabajo no está listo");
