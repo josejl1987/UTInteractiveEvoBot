@@ -1078,6 +1078,8 @@ public class BotsGUIMainWindow extends javax.swing.JFrame {
         this.waitingIDJobListText.setText(jobList.getJobsbyStatus(Job.Estado.WaitingID).toString());
         this.finishedJobListText.setText(jobList.getFinishedJobs().toString());
         this.runningJobListText.setText(jobList.getJobsbyStatus(Job.Estado.Running).toString());
+        Integer num=main.getServer().getNumAvailableThreads();
+        this.textField_3.setText(num.toString());
     }
 
     protected void initDataBindings() {

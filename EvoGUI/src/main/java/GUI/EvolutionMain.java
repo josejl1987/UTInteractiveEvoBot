@@ -578,13 +578,23 @@ public class EvolutionMain {
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - start"); //$NON-NLS-1$
             }
+            final Job currentJob = server.getJobList().get(id);
             //   Job newJob = createJob(id, botsGUIMainWindow);
-            server.getJobList().get(id).setThread((new Thread(server.getJobList().get(id).getMatch())));
-            server.getJobList().get(id).getThread().setName(server.getJobList().get(id).getMatch().getMatchName());
-            server.getJobList().get(id).run();
-            server.getJobList().get(id).setStatus(Job.Estado.WaitingID);
+            try{
+            currentJob.setThread((new Thread(currentJob.getMatch())));
+            currentJob.getThread().setName(currentJob.getMatch().getMatchName());
+            currentJob.run();
+            currentJob.setStatus(Job.Estado.WaitingID);
             getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
             server.updateRemainingList();
+            }catch (NullPointerException e){
+                EvolutionMain.logger.error("Error al lanzar trabajo "+id, e);
+                currentJob.setStatus(Estado.Error);
+                currentJob.getThread().stop();
+                currentJob.setThread(null);
+           //     currentJob.restart();
+            
+            }
             //  jobList.add(newJob.getThread());
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - end"); //$NON-NLS-1$

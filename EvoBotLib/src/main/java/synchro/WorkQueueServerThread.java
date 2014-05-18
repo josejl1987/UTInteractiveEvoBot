@@ -43,29 +43,30 @@ public class WorkQueueServerThread implements Runnable {
 
     @Override
     public void run() {
-
+Job currentJob=null; 
         try {
 
             ObjectOutputStream output = new ObjectOutputStream(clientSocket.getOutputStream());
             ObjectInputStream input = new ObjectInputStream(clientSocket.getInputStream());
             long time = System.currentTimeMillis();
             String confirmation = "1";
-            Job currentJob = this.server.getJobList().get(id);
+             currentJob = this.server.getJobList().get(id);
             // while(confirmation!="OK"){
-            boolean allSet=false;
-          
-                if(currentJob==null){
-              
-                        currentJob=server.getJobList().get(id);
-            
-                }
-                else allSet=true;
-            
-            
-            if(!allSet){
+            boolean allSet = false;
+
+            if (currentJob == null) {
+
+                currentJob = server.getJobList().get(id);
+
+            } else {
+                allSet = true;
+            }
+
+
+            if (!allSet) {
                 throw new IOException("El trabajo no está listo");
             }
-            
+
             currentJob.status = Job.Estado.Running;
             SyncMessage msg = new SyncMessage(id, Job.Estado.Init);
             msg.data = currentJob.getIndividual();
@@ -88,7 +89,7 @@ public class WorkQueueServerThread implements Runnable {
                 logger.error("run()", ex); //$NON-NLS-1$
                 currentJob.setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-            }
+            }   
 
 
             try {
@@ -98,12 +99,23 @@ public class WorkQueueServerThread implements Runnable {
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
                 int index = msg2.id % server.getPopulation_size();
                 int index2 = msg2.id / server.getPopulation_size();
-                
+
 //               server.individualsIterationList[index][index2]=(IndividualV1)  xs.fromXML((String)msg.data);
                 server.individualsIterationList[index][index2] = (IndividualV1) msg2.data;
                 //  server.getMem().storeGenes(msg.id, 0, server.getMem().getCurrentGeneration(), (Individual) msg.data);
                 logger.info("Thread para individuo " + id + ". Guardado en posición " + msg2.id % 30);
-            } catch (    SocketException | SocketTimeoutException ex) {
+
+                //}
+                output.close();
+                input.close();
+                if (logger.isDebugEnabled()) {
+                    logger.debug("run() - Request processed: " + time); //$NON-NLS-1$
+                }
+                currentJob.status = Job.Estado.Finished;
+                logger.info("Individuo TX-" + server.getMem().getCurrentGeneration() + id + " ha terminado");
+                this.clientSocket.close();
+             
+            } catch (SocketException | SocketTimeoutException ex) {
                 logger.error("Socket ID" + id + " error:" + this.clientSocket.toString(), ex); //$NON-NLS-1$
 
                 currentJob.setStatus(Job.Estado.Error);
@@ -113,22 +125,13 @@ public class WorkQueueServerThread implements Runnable {
                 logger.error("run()", ex); //$NON-NLS-1$
                 currentJob.setStatus(Job.Estado.Error);
                 server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
-            } 
-
-            //}
-            output.close();
-            input.close();
-            if (logger.isDebugEnabled()) {
-                logger.debug("run() - Request processed: " + time); //$NON-NLS-1$
             }
-            currentJob.status = Job.Estado.Finished;
-            logger.info("Individuo TX-" + server.getMem().getCurrentGeneration() + id + " ha terminado");
-            this.clientSocket.close();
-            
+
 
         } catch (IOException ex) {
             logger.error("run()", ex); //$NON-NLS-1$
-
+                currentJob.setStatus(Job.Estado.Error);
+                server.setNumAvailableThreads(server.getNumAvailableThreads() + 1);
 
         }
     }
