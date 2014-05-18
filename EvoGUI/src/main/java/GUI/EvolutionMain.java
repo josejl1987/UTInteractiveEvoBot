@@ -119,7 +119,7 @@ public class EvolutionMain {
 
                     this.evaluations = preferences.evaluationsMap;
                     RandomGenerator.setRandom(preferences.rnd, Integer.parseInt(this.botsGUIMainWindow.getRandomSeedtextField().getText()));
-                    if (evaluations != null) {
+                    if (evaluations != null && !evaluations.isEmpty()) {
                         createGenerationGraph();
                     }
                     this.updateGenerationComboBox();
@@ -394,7 +394,7 @@ public class EvolutionMain {
         if (OSValidator.isWindows()) {
             Runtime.getRuntime().exec("Taskkill /im UCC.exe /f");
         } else {
-            Runtime.getRuntime().exec("pkill -f ucc-bin");
+            Runtime.getRuntime().exec("pkill -9 ucc-bin");
         }
     }
 
@@ -499,7 +499,6 @@ public class EvolutionMain {
 
         for (int i = 0; i < iterations * populationArray.length; i++) {
             boolean forceEvaluation = true;
-
             if (populationArray[i % populationArray.length].ShouldEvaluate() || forceEvaluation) {
                 populationArray[i % populationArray.length].setShouldEvaluate(forceEvaluation);
                 this.createJob(i, botsGUIMainWindow, populationArray);
@@ -538,7 +537,7 @@ public class EvolutionMain {
                         job.setMatch(null);
                     }
                 }
-       
+
 
             }
             try {
@@ -579,22 +578,23 @@ public class EvolutionMain {
                 BotsGUIMainWindow.logger.debug("runMatch() - start"); //$NON-NLS-1$
             }
             final Job currentJob = server.getJobList().get(id);
-            //   Job newJob = createJob(id, botsGUIMainWindow);
-            try{
-            currentJob.setThread((new Thread(currentJob.getMatch())));
-            currentJob.getThread().setName(currentJob.getMatch().getMatchName());
-            currentJob.run();
-            currentJob.setStatus(Job.Estado.WaitingID);
-            getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
-            server.updateRemainingList();
-            }catch (NullPointerException e){
-                EvolutionMain.logger.error("Error al lanzar trabajo "+id, e);
-                currentJob.setStatus(Estado.Error);
-                currentJob.getThread().stop();
-                currentJob.setThread(null);
-           //     currentJob.restart();
-            
+
+            try {
+                currentJob.setThread((new Thread(currentJob.getMatch())));
+                currentJob.getThread().setName(currentJob.getMatch().getMatchName());
+                currentJob.run();
+                currentJob.setStatus(Job.Estado.WaitingID);
+                getServer().setNumAvailableThreads(getServer().getNumAvailableThreads() - 1);
+                server.updateRemainingList();
+            } catch (NullPointerException e) {
+                EvolutionMain.logger.error("Error al lanzar trabajo " + id, e);
+                server.getJobList().remove(id);
+                createJob(id, this.botsGUIMainWindow, this.population);
+
             }
+            //     currentJob.restart();
+
+
             //  jobList.add(newJob.getThread());
             if (BotsGUIMainWindow.logger.isDebugEnabled()) {
                 BotsGUIMainWindow.logger.debug("runMatch() - end"); //$NON-NLS-1$

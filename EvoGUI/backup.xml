@@ -2,7 +2,7 @@
   <rnd serialization="custom">
     <java.util.Random>
       <default>
-        <seed>77414050522848</seed>
+        <seed>102155697354104</seed>
         <nextNextGaussian>0.0</nextNextGaussian>
         <haveNextNextGaussian>false</haveNextNextGaussian>
       </default>
@@ -16,7 +16,7 @@
     </entry>
     <entry>
       <string>generationsNum</string>
-      <string>10</string>
+      <string>2</string>
     </entry>
     <entry>
       <string>mutationRatio</string>
@@ -64,7 +64,7 @@
     </entry>
     <entry>
       <string>iterationsNum</string>
-      <string>30</string>
+      <string>50</string>
     </entry>
     <entry>
       <string>elitismNum</string>
@@ -74,9 +74,14 @@
   <evaluationsMap>
     <entry>
       <int>0</int>
-      <int>60</int>
+      <int>1500</int>
     </entry>
   </evaluationsMap>
+  <humanEvaluation>
+    <generations>
+      <int>1</int>
+    </generations>
+  </humanEvaluation>
   <chromosomeCopy>
     <locked>
       <boolean>false</boolean>

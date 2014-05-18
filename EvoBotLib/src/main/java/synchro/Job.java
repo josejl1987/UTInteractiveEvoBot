@@ -90,10 +90,8 @@ public class Job implements Runnable {
     public void restart(){
        setThread((new Thread(match)));
        getThread().setName(match.getMatchName());
-       this.status=Estado.WaitingID;
-       this.enableTimedLock(1*60*1000);
+       this.status=Estado.Init;
        server.remainingJobList.add(this.id);
-       this.run();
     }
     public enum Estado {
 
