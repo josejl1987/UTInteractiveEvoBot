@@ -53,6 +53,8 @@ import cz.cuni.amis.utils.exception.PogamutException;
 import cz.cuni.amis.utils.flag.FlagListener;
 import enumTypes.rayCardinals;
 import evolutionaryComputation.*;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.logging.Level;
 import javax.vecmath.Vector3d;
@@ -161,22 +163,12 @@ public class T800 extends UT2004BotModuleController {
     private AutoTraceRay cardinalRayArray[] = new AutoTraceRay[8];
     private WorkQueueClient workClient;
     private int number = 0;
+    private boolean standalone = false;
     // *************************************************************************
     //                                METHODS
     // *************************************************************************
 
-    @Override
-    public void prepareBot(UT2004Bot bot) {
-        // TODO used for initialization, initialize agent modules here
-
-
-
-
-
-
-        //geneticAlg = new ExtremeElitism(50, 30, new UniformCrossover(), memory);
-
-        // Load the genetic algorithm
+    public void loadIndividualFromServer() {
 
         try {
             //Get current individual ID from server
@@ -204,6 +196,36 @@ public class T800 extends UT2004BotModuleController {
             logger.error("prepareBot(UT2004Bot)", ex); //$NON-NLS-1$
         }
         logger.info("Using ID " + number);
+
+    }
+
+    @Override
+    public void prepareBot(UT2004Bot bot) {
+        // TODO used for initialization, initialize agent modules here
+
+
+
+
+
+
+        //geneticAlg = new ExtremeElitism(50, 30, new UniformCrossover(), memory);
+
+        // Load the genetic algorithm
+        String name2 = bot.getParams().getAgentId().getName().getFlag();
+
+        if (name2.equalsIgnoreCase("Prueba1")) {
+            loadIndividualFromServer();
+        }
+        else{
+            XStream xs=new XStream(new DomDriver()); 
+            try {
+                testIndividual= (Individual) xs.fromXML(new FileReader("individual.xml"));
+            } catch (FileNotFoundException ex) {
+                java.util.logging.Logger.getLogger(T800.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+
         //      geneticAlg.setCurrentIndividual(number);
         // Get a reference to the individual that is goint to play the current match
         //     testIndividual = memory.getPopulation()[number];
@@ -251,9 +273,9 @@ public class T800 extends UT2004BotModuleController {
         } else {
             name = name + memory.getCurrentGeneration() + currentIndv;
         }
-       
+
         return new Initialize().setName(name);
-       
+
     }
 
     //__________________________________________________________________________
@@ -556,16 +578,17 @@ public class T800 extends UT2004BotModuleController {
         if (pathExecutor.isExecuting()) {
             pathExecutor.stop();
         }
-        
+
         // Stop the clocks
         testIndividual.setMatchTime(stats.getCurrentMatchTime());
         testIndividual.timeout();
         //  saveInfo();
         //testIndividual.setPogamutStats(stats);
-        
+
         this.bot.stop();
     }
     //__________________________________________________________________________
+
     /**
      * Game restart trigger.
      *
@@ -573,7 +596,7 @@ public class T800 extends UT2004BotModuleController {
      */
     @EventListener(eventClass = GameRestarted.class)
     protected void gameRestarted(GameRestarted event) {
-   
+
         testIndividual.setDeaths(0);
         testIndividual.setDeaths(0);
         testIndividual.setKills(0);
@@ -585,7 +608,7 @@ public class T800 extends UT2004BotModuleController {
         stats.resetMatchTime();
         testIndividual.setNSuperShields(0);
         System.out.println("Comienza bot");
-   
+
     }
 
     //__________________________________________________________________________
@@ -780,9 +803,14 @@ public class T800 extends UT2004BotModuleController {
 
 
         UT2004BotRunner bot = new UT2004BotRunner(T800.class, "T800").setMain(true);
-        bot.setName("Prueba");
-        bot.startAgent();
+        String name = "Prueba";
+        if (args.length
+                > 0) {
+            name = args[0];
+        }
 
+        bot.setName(name);
+        bot.startAgent();
         // Launch a remote bot
         //new UT2004BotRunner (T800.class, "T800", "<ip address>", 3000).setMain(true).startAgent();
         // Launch a remote bot
@@ -799,13 +827,13 @@ public class T800 extends UT2004BotModuleController {
         if (logger.isDebugEnabled()) {
             logger.info("saveInfo() - Grabando genes"); //$NON-NLS-1$
         }
-        
+
 
         try {
 
             SyncMessage msg = new synchro.SyncMessage(this.number, Job.Estado.Finished);
             msg.data = ((IndividualV1) testIndividual);
-       //     logger.info("Daño recibido-FINAL" + ((Individual) (msg.getData())).getTotalDamageTaken());
+            //     logger.info("Daño recibido-FINAL" + ((Individual) (msg.getData())).getTotalDamageTaken());
             workClient.sendMessage(msg);
             msg.data = ((IndividualStats) testIndividual.getStats());
             msg.setStatus(Job.Estado.Init);

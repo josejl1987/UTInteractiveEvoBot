@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright (C) 2014 AMIS research group, Faculty of Mathematics and Physics, Charles University in Prague, Czech Republic
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<evolutionaryComputation.IndividualV1>
+    <fitnessClass>evolutionaryComputation.ComplexFitness</fitnessClass>
+    <shouldEvaluate>false</shouldEvaluate>
+    <chromosome>
+        <int>79</int>
+        <int>2397</int>
+        <int>4017</int>
+        <int>63</int>
+        <int>78</int>
+        <int>55</int>
+        <int>0</int>
+        <int>84</int>
+        <int>62</int>
+        <int>64</int>
+        <int>101</int>
+        <int>15</int>
+        <int>54</int>
+        <int>124</int>
+        <int>4</int>
+        <int>46</int>
+        <int>9</int>
+        <int>55</int>
+        <int>23</int>
+        <int>0</int>
+        <int>73</int>
+        <int>37</int>
+        <int>52</int>
+        <int>74</int>
+        <int>70</int>
+        <int>88</int>
+    </chromosome>
+    <stats class="evolutionaryComputation.ComplexFitness">
+        <kills>0.36666666666666664</kills>
+        <deaths>0.1</deaths>
+        <totalDamageGiven>38.06666666666666</totalDamageGiven>
+        <totalDamageTaken>16.066666666666666</totalDamageTaken>
+        <nSuperShields>0.1</nSuperShields>
+        <nShields>0.16666666666666666</nShields>
+        <totalTimeShock>0.0</totalTimeShock>
+        <totalTimeSniper>0.0</totalTimeSniper>
+        <shockClock serialization="custom">
+            <javax.swing.Timer>
+                <default>
+                    <coalesce>true</coalesce>
+                    <delay>1000</delay>
+                    <initialDelay>1000</initialDelay>
+                    <repeats>true</repeats>
+                    <listenerList serialization="custom">
+                        <javax.swing.event.EventListenerList>
+                            <default/>
+                            <null/>
+                        </javax.swing.event.EventListenerList>
+                    </listenerList>
+                </default>
+            </javax.swing.Timer>
+        </shockClock>
+        <sniperClock serialization="custom">
+            <javax.swing.Timer>
+                <default>
+                    <coalesce>true</coalesce>
+                    <delay>1000</delay>
+                    <initialDelay>1000</initialDelay>
+                    <repeats>true</repeats>
+                    <listenerList serialization="custom">
+                        <javax.swing.event.EventListenerList>
+                            <default/>
+                            <null/>
+                        </javax.swing.event.EventListenerList>
+                    </listenerList>
+                </default>
+            </javax.swing.Timer>
+        </sniperClock>
+        <matchTime>10.99</matchTime>
+        <averageFitness>17.32020145948564</averageFitness>
+        <evaluations>1</evaluations>
+    </stats>
+</evolutionaryComputation.IndividualV1>
